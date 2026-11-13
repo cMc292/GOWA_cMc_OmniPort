@@ -1,0 +1,49 @@
+# ---------------------------------------------------------------------------
+# Repositorio de documentación: el juego, el port compilado y el paquete NO van
+# en git. El paquete se publica como asset de Release (límite por asset: 2 GiB;
+# git bloquea archivos de más de 100 MiB).
+# ---------------------------------------------------------------------------
+
+# Paquete y builds (van en Releases, no en el árbol)
+*.zip
+*.7z
+*.rar
+_src/
+dist/
+build/
+build.*/
+build-kit/
+recompiled/
+spu/jobmods/
+vfs/
+gamedata/
+logs/
+analysis/
+
+# Binarios y artefactos de compilación
+*.exe
+*.dll
+*.sys
+*.lib
+*.obj
+*.o
+*.pdb
+*.map
+*.ilk
+*.exp
+*.res
+*.pyc
+*.pyo
+__pycache__/
+
+# Ajustes y estado locales
+local.json
+*.ini
+*.log
+*.tmp
+*.bak
+
+# Sistema
+Thumbs.db
+desktop.ini
+.DS_Store

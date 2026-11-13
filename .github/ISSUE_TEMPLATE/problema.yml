@@ -1,0 +1,41 @@
+name: Problema
+description: Un fallo o un cierre inesperado con el port
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Gracias por reportar. **No adjuntes archivos del juego ni el .exe.**
+  - type: input
+    id: version
+    attributes:
+      label: Versión del paquete
+      placeholder: v0.1.0-alpha.8
+    validations:
+      required: true
+  - type: input
+    id: gpu
+    attributes:
+      label: GPU, driver y CPU
+      placeholder: GTX 1650 Ti (5xx.xx), Ryzen 5 4600H
+    validations:
+      required: true
+  - type: textarea
+    id: que
+    attributes:
+      label: Qué pasa y cómo reproducirlo
+    validations:
+      required: true
+  - type: textarea
+    id: log
+    attributes:
+      label: LOG
+      description: Pega el final del registro (página LOG del launcher o el .log más reciente de _src/GOWA-cMc/logs).
+  - type: checkboxes
+    id: legal
+    attributes:
+      label: Confirmación
+      options:
+        - label: Tengo mi propia copia del juego y no adjunto archivos de él.
+          required: true
