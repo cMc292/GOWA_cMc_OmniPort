@@ -263,8 +263,10 @@ La ventana del juego lleva los créditos en el título:
 
 ## Licencia
 
-El **código propio de este repo** está bajo [MIT](LICENSE). Esa licencia **no** cubre el juego ni lo que se genera
-de él (el ejecutable y las fuentes traducidas). Los componentes de terceros siguen sus licencias.
+El **código propio de este repo** está bajo [MIT](LICENSE) (Copyright (c) 2026 cMc292 / cMc-OmniPort). Esa licencia
+**no** cubre el juego ni lo que se genera de él (el ejecutable y las fuentes traducidas); los componentes de terceros
+siguen sus licencias y los proyectos de origen (Ascension-R y ps3recomp, MIT) se acreditan en
+[LICENSE-NOTES.md](LICENSE-NOTES.md) y [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Aviso legal
 
