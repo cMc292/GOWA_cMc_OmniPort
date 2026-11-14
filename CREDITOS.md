@@ -3,7 +3,7 @@
 **God of War: Ascension [BCUS98232] — port nativo a Windows x64 por recompilación estática.**
 Adaptación a la versión de **disco US `BCUS98232` v1.12** por **cMc-OmniPort (cMc292)**.
 
-Versión: **v0.1.0-alpha.8** · Base: **Ascension-R v0.1.0-alpha.8** (`e2d5d31`) · Rama del port: `bcus` (`5faccc9`)
+Versión: **v0.1.0-alpha.10** · Base: **Ascension-R v0.1.0-alpha.10** (`62a7122`) · Rama del port: `bcus` (`62dfaa1`)
 
 ---
 
@@ -40,6 +40,13 @@ Trabajo realizado:
   panel de ajustes con widgets reales, fuente **Cinzel** (OFL) incrustada, **visor de log** y **galería de trofeos**
   con nombres y descripciones del `TROPHY.TRP` en el idioma del juego y progreso leído del `TROPUSR.DAT`.
   La interfaz clásica sigue disponible con `[launcher] ui = classic`.
+- **Pantalla de precompilación** (lectura de archivos y compilación de shaders) redibujada con el estilo del launcher
+  nuevo (F7): a resolución de ventana, arte opcional, Cinzel y textos en español. Y corrección de la navegación:
+  **LOG** y **TROFEOS** ya se abren con el ratón, y volver a pulsar la pestaña activa pliega el panel a HOME.
+- **Integración de Ascension-R v0.1.0-alpha.9 y v0.1.0-alpha.10**: arreglo del corte de mips en el streaming de
+  texturas del juego (texturas rotas y caídas), revalidación de la copia de texturas en la GPU, relectura completa
+  con **F9** y línea `[tex]`, arreglo del parón tras los logos mientras se compila el *vertex pass*, shaders propios
+  con DXC en Linux y build del código del juego más rápido.
 - Corrección de las ventanas del launcher y del juego cuando se lanzan con la consola oculta.
 - **Lanzadores nativos `.exe`** (sin consola al jugar, icono y créditos embebidos) que calculan sus rutas desde su
   propia carpeta.

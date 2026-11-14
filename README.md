@@ -13,7 +13,7 @@ Adaptación a la **versión de disco US (`BCUS98232`) v1.12** por **cMc-OmniPort
 [![Licencia: MIT](https://img.shields.io/badge/licencia-MIT-blue.svg)](LICENSE)
 ![Plataforma: Windows x64](https://img.shields.io/badge/plataforma-Windows%20x64-lightgrey.svg)
 ![Estado: alpha](https://img.shields.io/badge/estado-alpha-orange.svg)
-![Base: Ascension-R v0.1.0-alpha.8](https://img.shields.io/badge/base-Ascension--R%20v0.1.0--alpha.8-informational.svg)
+![Base: Ascension-R v0.1.0-alpha.10](https://img.shields.io/badge/base-Ascension--R%20v0.1.0--alpha.10-informational.svg)
 
 > [!IMPORTANT]
 > **Este proyecto no contiene archivos del juego**: ni `PS3_GAME`, ni `*.psarc`, ni `EBOOT`, ni vídeos, ni trofeos.
@@ -27,6 +27,7 @@ Adaptación a la **versión de disco US (`BCUS98232`) v1.12** por **cMc-OmniPort
 
 - [Qué es](#qué-es)
 - [Estado](#estado)
+- [Novedades de la v0.1.0-alpha.10](#novedades-de-la-v010-alpha10)
 - [Características](#características)
 - [Descarga](#descarga)
 - [Requisitos](#requisitos)
@@ -59,24 +60,39 @@ otra vez. Lo que cambia es el resto del pipeline:
 - empaquetado **portable** con lanzadores nativos, FFmpeg, MinGit y Python embebido, y **modo de actualización**
   (`Update` / `Promote` / `Rollback`).
 
-Documentación del trabajo: [`docs/`](docs/).
+Documentación del trabajo: [`docs/`](docs/). Historial de versiones: [`docs/CHANGELOG.md`](docs/CHANGELOG.md).
 
 ## Estado
 
 **alpha.** Arranca, reproduce las cinemáticas, pasa por los menús y entra en los niveles; **no** se ha jugado de
-principio a fin. El paquete `v0.1.0-alpha.8` de este repositorio se probó con un *smoke test* de 180 s tras cada
-build (entry OPD `0x8283F8`, backend Direct3D 12, `libavcodec` decodificando, ~41 000 draws por sesión) y con
-sesiones manuales en el launcher.
+principio a fin. Cada build del port pasa un *smoke test* de 180 s (entry OPD `0x8283F8`, backend Direct3D 12,
+`libavcodec` decodificando) y se prueba en sesiones manuales con el launcher.
 
 | | |
 |---|---|
 | Juego | *God of War: Ascension*, **disco US `BCUS98232` v1.12** (disco + parches 1.04–1.12) |
-| Base | Ascension-R **v0.1.0-alpha.8** (`e2d5d31`) + adaptación BCUS |
+| Base | Ascension-R **v0.1.0-alpha.10** (`62a7122`) + adaptación BCUS (`62dfaa1`) |
 | Plataforma | Windows 10/11, 64 bits |
 | Render | Direct3D 12 (RSX → D3D12) |
 | Online | **no soportado** (el port es de un jugador) |
 | Multijugador | no probado |
 | Estado | alpha, sin garantías |
+
+## Novedades de la v0.1.0-alpha.10
+
+- **Texturas rotas arregladas en su causa**: el recorte de mips del streaming de texturas del juego ya no se pasa
+  del bloque (el que provocaba texturas rotas y caídas), y la copia de cada textura en la GPU se revalida antes y
+  después de leerla (adiós a las «mitad viejas, mitad nuevas»).
+- **F9 relee todas las texturas** y el registro distingue con `[tex]` una copia rota del port de datos rotos del
+  juego.
+- **Pantalla de precompilación con el estilo del launcher nuevo (F7)**: a resolución de ventana, arte opcional,
+  Cinzel y textos en español.
+- **Navegación**: LOG y TROFEOS ya se abren con el ratón; la pestaña activa pliega a HOME.
+- Base **Ascension-R v0.1.0-alpha.10** (incluye los cambios de la alpha.9): sin el parón tras los logos, DXC en
+  Linux y build del código del juego más rápido.
+
+Detalle: [release v0.1.0-alpha.10](https://github.com/cMc292/GOWA_cMc_OmniPort/releases/tag/v0.1.0-alpha.10-bcus) y
+[`docs/CHANGELOG.md`](docs/CHANGELOG.md).
 
 ## Características
 
@@ -86,6 +102,7 @@ sesiones manuales en el launcher.
 - **RSX → Direct3D 12**, con los shaders traducidos a HLSL y compilados con DXC.
 - **Cinemáticas y audio comprimido** con FFmpeg (LGPL, DLLs compartidas incluidas).
 - **SPURS y job modules** traducidos; lo que no se tradujo a tiempo corre en intérprete y se añade al siguiente lift.
+- **Texturas**: streaming del juego con el recorte de mips corregido, copia de texturas en la GPU revalidada antes/después de leer, y **F9** para releerlas todas (el log marca `[tex]`).
 
 ### Launcher
 
@@ -104,7 +121,8 @@ La interfaz del port (estilo *SpartanPort*, con la paleta de *Ascension* y texto
 - **CHEATS**: daño recibido y hecho, orbes rojos, magia y objetos infinitos, furia infinita, doble salto.
 - **SISTEMA**: carpeta del juego, `GOWA.elf`, comprobar actualizaciones, informe de problemas, versión.
 - **AVANZADO**: ajustes finos y herramientas del paquete.
-- **LOG**: el registro de la última sesión, con scroll.
+- **LOG**: el registro de la última sesión, con scroll. **F9** relee todas las texturas del juego (útil si aparece una textura rara).
+- **Precompilación** con el estilo del launcher (F7): lectura de archivos, compilación de shaders y errores, en español.
 - **TROFEOS**: la lista completa leída del `TROPHY.TRP` del juego (icono, nombre, descripción y
   PLATINO/ORO/PLATA/BRONCE en el idioma del juego) y el progreso leído del `TROPUSR.DAT` de tus partidas
   (marca dorada y **CONSEGUIDO** en los conseguidos).
@@ -126,7 +144,7 @@ La [página de releases](https://github.com/cMc292/GOWA_cMc_OmniPort/releases) t
 
 | Archivo | Tamaño | Contenido |
 |---|---|---|
-| `GOWA_cMc_OmniPort-0.1.0-alpha.8-release.zip` | 175,8 MB (590 MB descomprimido) | lanzadores, `_src/GOWA-cMc` (fuente `bcus` + build), FFmpeg, `tools/` y documentación |
+| `GOWA_cMc_OmniPort-0.1.0-alpha.10-release.zip` | 177,5 MB (592 MB descomprimido) | lanzadores, `_src/GOWA-cMc` (fuente `bcus` + build), FFmpeg, `tools/` y documentación |
 
 No contiene archivos del juego. Los SHA-256 están en [SHA256SUMS.txt](SHA256SUMS.txt) y en las notas de cada release.
 
@@ -138,7 +156,7 @@ Para **jugar**:
 - CPU con **AVX2** y **FMA**; GPU con **Direct3D 12**.
 - **Tu copia legítima** de *God of War: Ascension* `BCUS98232` **v1.12**: disco + parches **1.04–1.12**
   (instalados en ese orden y fusionados; ver abajo) y su `GOWA.elf` **descifrado**.
-- ~590 MB para el paquete y el espacio de tu copia del juego (la vista fusionada no duplica archivos).
+- ~592 MB para el paquete y el espacio de tu copia del juego (la vista fusionada no duplica archivos).
 
 Para **actualizar o recompilar** (solo el modo `Update`):
 
@@ -242,7 +260,7 @@ gamedata/                 partidas (vacío al publicar)
 
 ## Cómo reportar un problema
 
-Abre un *issue* con: versión del paquete (`v0.1.0-alpha.8`), GPU y driver, CPU, página del launcher donde falla y el
+Abre un *issue* con: versión del paquete (`v0.1.0-alpha.10`), GPU y driver, CPU, página del launcher donde falla y el
 `LOG` (página **LOG** del launcher, o el `.log` más reciente de `_src\GOWA-cMc\logs`). **No adjuntes archivos del
 juego ni el `.exe`.**
 
