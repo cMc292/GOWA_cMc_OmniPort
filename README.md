@@ -28,6 +28,7 @@ Adaptación a la **versión de disco US (`BCUS98232`) v1.12** por **cMc-OmniPort
 - [Qué es](#qué-es)
 - [Estado](#estado)
 - [Novedades de la v0.1.0-alpha.10](#novedades-de-la-v010-alpha10)
+- [Capturas](#capturas)
 - [Características](#características)
 - [Descarga](#descarga)
 - [Requisitos](#requisitos)
@@ -93,6 +94,24 @@ principio a fin. Cada build del port pasa un *smoke test* de 180 s (entry OPD `0
 
 Detalle: [release v0.1.0-alpha.10](https://github.com/cMc292/GOWA_cMc_OmniPort/releases/tag/v0.1.0-alpha.10-bcus) y
 [`docs/CHANGELOG.md`](docs/CHANGELOG.md).
+
+## Capturas
+
+Launcher completo (10 páginas) y pantalla de precompilación. Las capturas de las páginas son de la
+`v0.1.0-alpha.8` (la interfaz es la misma); la de precompilación es de la `v0.1.0-alpha.10`.
+
+| | |
+|---|---|
+| **HOME**<br><img src="docs/capturas/launcher-home.png" alt="HOME: PLAY, presets y estado de la copia del juego" width="100%"> | **GRÁFICOS**<br><img src="docs/capturas/launcher-graficos.png" alt="GRÁFICOS: resolución interna, FSR, generación de fotogramas" width="100%"> |
+| **PANTALLA**<br><img src="docs/capturas/launcher-pantalla.png" alt="PANTALLA: ventana, VSync, límite de FPS, ultrapanorámica" width="100%"> | **CONTROLES**<br><img src="docs/capturas/launcher-controles.png" alt="CONTROLES: mando, API, zona muerta, vibración" width="100%"> |
+| **PARCHES**<br><img src="docs/capturas/launcher-parches.png" alt="PARCHES: MLAA, profundidad de campo, motion blur, sombras" width="100%"> | **CHEATS**<br><img src="docs/capturas/launcher-cheats.png" alt="CHEATS: daño, orbes, magia, furia, doble salto" width="100%"> |
+| **SISTEMA**<br><img src="docs/capturas/launcher-sistema.png" alt="SISTEMA: idioma, guardados, audio, altavoces" width="100%"> | **AVANZADO**<br><img src="docs/capturas/launcher-avanzado.png" alt="AVANZADO: versión, créditos y herramientas del paquete" width="100%"> |
+| **LOG**<br><img src="docs/capturas/launcher-log.png" alt="LOG: registro de la última sesión" width="100%"> | **TROFEOS**<br><img src="docs/capturas/launcher-trofeos.png" alt="TROFEOS: lista del TRP con iconos, nombres y progreso" width="100%"> |
+
+<p align="center">
+  <b>Precompilación (F7)</b><br>
+  <img src="docs/capturas/precompilacion-lectura.png" alt="Pantalla de precompilación: LEYENDO LOS ARCHIVOS DEL JUEGO, Archivo 12 de 48, STAT.PSARC" width="85%">
+</p>
 
 ## Características
 
