@@ -4,6 +4,8 @@
 
 # GOWA_cMc_OmniPort
 
+Repositorio: **https://github.com/cMc292/GOWA_cMc_OmniPort** · Web: **https://cMc292.github.io/GOWA_cMc_OmniPort/**
+
 **God of War: Ascension [BCUS98232] — port nativo a Windows x64 por recompilación estática.**
 Adaptación a la **versión de disco US (`BCUS98232`) v1.12** por **cMc-OmniPort**, sobre
 [Ascension-R](https://github.com/rigaz29/Ascension-R) de **Ryan Bagas** y
