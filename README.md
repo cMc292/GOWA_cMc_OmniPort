@@ -6,6 +6,10 @@
 
 Repositorio: **https://github.com/cMc292/GOWA_cMc_OmniPort** · Web: **https://cMc292.github.io/GOWA_cMc_OmniPort/**
 
+**Última release: [`v0.2.0`](https://github.com/cMc292/GOWA_cMc_OmniPort/releases/tag/v0.2.0)** (paquete de
+ingeniería: parches + código, se compila en tu PC) · **Portable prebuilt: [`v0.1.0-alpha.10`](https://github.com/cMc292/GOWA_cMc_OmniPort/releases/tag/v0.1.0-alpha.10-bcus)**
+(lanzadores y binario listos, base `62dfaa1`)
+
 **God of War: Ascension [BCUS98232] — port nativo a Windows x64 por recompilación estática.**
 Adaptación a la **versión de disco US (`BCUS98232`) v1.12** por **cMc-OmniPort**, sobre
 [Ascension-R](https://github.com/rigaz29/Ascension-R) de **Ryan Bagas** y
@@ -29,7 +33,8 @@ Adaptación a la **versión de disco US (`BCUS98232`) v1.12** por **cMc-OmniPort
 
 - [Qué es](#qué-es)
 - [Estado](#estado)
-- [Novedades de la v0.1.0-alpha.10](#novedades-de-la-v010-alpha10)
+- [Novedades de la v0.2.0](#novedades-de-la-v020)
+- [Novedades del paquete portable (v0.1.0-alpha.10)](#novedades-del-paquete-portable-v010-alpha10)
 - [Capturas](#capturas)
 - [Características](#características)
 - [Descarga](#descarga)
@@ -74,14 +79,38 @@ principio a fin. Cada build del port pasa un *smoke test* de 180 s (entry OPD `0
 | | |
 |---|---|
 | Juego | *God of War: Ascension*, **disco US `BCUS98232` v1.12** (disco + parches 1.04–1.12) |
-| Base | Ascension-R **v0.1.0-alpha.10** (`62a7122`) + adaptación BCUS (`62dfaa1`) |
+| Versión | **v0.2.0** (línea propia) sobre Ascension-R v0.1.0-alpha.10 @ `cc42407`; el portable prebuilt es `v0.1.0-alpha.10` sobre `62dfaa1` |
 | Plataforma | Windows 10/11, 64 bits |
 | Render | Direct3D 12 (RSX → D3D12) |
 | Online | **no soportado** (el port es de un jugador) |
 | Multijugador | no probado |
 | Estado | alpha, sin garantías |
 
-## Novedades de la v0.1.0-alpha.10
+## Novedades de la v0.2.0
+
+Primera versión de **nuestra línea propia**, como **paquete de ingeniería** (parches + código acumulado; el
+binario se compila con `gowa.py build`, no se distribuye). Changelog completo: [`docs/CHANGELOG.md`](docs/CHANGELOG.md)
+y `source_integrated\docs\VERSIONES.md` del paquete.
+
+- **Launcher bilingüe** (español / inglés): las diez páginas, diálogos y avisos, con `[launcher] language = auto | es | en`
+  y un **chip** en HOME que conmuta el idioma y lo guarda. 44 opciones con etiqueta y descripción en los dos idiomas.
+- **RESTAURAR**: deshacer la última partida guardada, con instantánea reversible.
+- **Motor PSARC** propio (reescritura con `deflate` de **zlib 1.3.1**), verificado sobre el `GAME.PSARC` real.
+- **Mods** por receta (`mod.json`), overlay en el runtime y botón **REGENERAR**; receta `skip-intro` incluida.
+- **F12** ya guarda la captura de pantalla.
+- **`PAD_NO_HOST`** (entrada solo por guion) y arreglo del **escritor de perfiles PGO**.
+- **Versión propia 0.2.0** en el launcher, la pantalla de carga, las propiedades del `.exe` y el informe de fallo;
+  la **base** (`cc42407`) y las licencias se muestran en **AVANZADO**.
+- **Dos lanzadores**: `GOWA-cMc.exe` (juego directo) y `GOWA-cMc-Launcher.exe` (launcher).
+- Título de ventana sin créditos, aviso si no hay **Direct3D 12**, y correcciones de pantalla y de textos
+  (escapes hexadecimales que se comían letras, diálogos en español, restos de español en las páginas inglesas).
+- **Base actualizada a `cc42407`** (commit del autor: SISTEMA recupera la fila de la carpeta del juego).
+
+> El paquete v0.2.0 **incluye arte de la HOME y capturas del juego** por decisión del autor: es material del
+> juego, no está cubierto por la MIT y se retira borrando `assets\` (ver [aviso legal](#aviso-legal) y
+> [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)).
+
+## Novedades del paquete portable (v0.1.0-alpha.10)
 
 - **Texturas rotas arregladas en su causa**: el recorte de mips del streaming de texturas del juego ya no se pasa
   del bloque (el que provocaba texturas rotas y caídas), y la copia de cada textura en la GPU se revalida antes y
@@ -100,7 +129,8 @@ Detalle: [release v0.1.0-alpha.10](https://github.com/cMc292/GOWA_cMc_OmniPort/r
 ## Capturas
 
 Launcher completo (10 páginas) y pantalla de precompilación. Las capturas de las páginas son de la
-`v0.1.0-alpha.8` (la interfaz es la misma); la de precompilación es de la `v0.1.0-alpha.10`.
+`v0.1.0-alpha.8` (la interfaz es la misma); la de precompilación es de la `v0.1.0-alpha.10`; la de AVANZADO
+con la versión propia es de la **v0.2.0**.
 
 | | |
 |---|---|
@@ -115,6 +145,11 @@ Launcher completo (10 páginas) y pantalla de precompilación. Las capturas de l
   <img src="docs/capturas/precompilacion-lectura.png" alt="Pantalla de precompilación: LEYENDO LOS ARCHIVOS DEL JUEGO, Archivo 12 de 48, STAT.PSARC" width="85%">
 </p>
 
+<p align="center">
+  <b>AVANZADO en la v0.2.0</b>: versión propia <code>v0.2.0</code>, base <code>Ascension-R v0.1.0-alpha.10 (cc42407)</code> y licencias<br>
+  <img src="docs/capturas/avanzado-0.2.0.png" alt="AVANZADO de la v0.2.0: Port v0.2.0, Base Ascension-R v0.1.0-alpha.10 (cc42407) y créditos" width="85%">
+</p>
+
 ## Características
 
 ### El juego
@@ -127,7 +162,8 @@ Launcher completo (10 páginas) y pantalla de precompilación. Las capturas de l
 
 ### Launcher
 
-La interfaz del port (estilo *SpartanPort*, con la paleta de *Ascension* y textos en español) tiene **diez páginas**:
+La interfaz del port (estilo *SpartanPort*, con la paleta de *Ascension* y textos en **español e inglés**) tiene
+**diez páginas**:
 
 **HOME · GRÁFICOS · PANTALLA · CONTROLES · PARCHES · CHEATS · SISTEMA · AVANZADO · LOG · TROFEOS**
 
@@ -151,6 +187,16 @@ La interfaz del port (estilo *SpartanPort*, con la paleta de *Ascension* y texto
 Todos los ajustes viven en `_src\GOWA-cMc\build\gowa-cmc.ini` (los mismos de siempre) y la interfaz clásica
 sigue disponible con `[launcher] ui = classic`.
 
+### Línea 0.2.0
+
+- **Bilingüe**: `[launcher] language = auto | es | en` (auto sigue el idioma de Windows) y chip de idioma en HOME.
+  Independiente de `[system] language`, que es el idioma del juego.
+- **RESTAURAR**: deshacer la última partida guardada, con instantánea previa reversible.
+- **Motor PSARC** propio para reescribir archivos del juego (`deflate` de zlib 1.3.1) y **mods** por receta
+  (`mod.json`), overlay en el runtime y botón **REGENERAR**.
+- **F12** guarda capturas; **`PAD_NO_HOST`** limita la entrada al guion; escritor de perfiles PGO corregido.
+- **Versión propia 0.2.0** (independiente del número de Ascension-R) y **AVANZADO** con Port, Base y licencias.
+
 ### Paquete portable
 
 - **Lanzadores nativos** `.exe` (sin consola al jugar): `Jugar`, `Launcher`, `Update`, `Promote`, `Rollback`. Todos
@@ -161,13 +207,16 @@ sigue disponible con `[launcher] ui = classic`.
 
 ## Descarga
 
-La [página de releases](https://github.com/cMc292/GOWA_cMc_OmniPort/releases) tiene el paquete portable:
+La [página de releases](https://github.com/cMc292/GOWA_cMc_OmniPort/releases) tiene dos paquetes:
 
-| Archivo | Tamaño | Contenido |
-|---|---|---|
-| `GOWA_cMc_OmniPort-0.1.0-alpha.10-release.zip` | 177,5 MB (592 MB descomprimido) | lanzadores, `_src/GOWA-cMc` (fuente `bcus` + build), FFmpeg, `tools/` y documentación |
+| Release | Archivo | Tamaño | Contenido |
+|---|---|---|---|
+| **[v0.2.0](https://github.com/cMc292/GOWA_cMc_OmniPort/releases/tag/v0.2.0)** (actual) | `GOWA_cMc_OmniPort-0.2.0.zip` | 51,6 MB | paquete de **ingeniería**: parche único contra `cc42407`, lotes A…X, `source_integrated`, informes, evidencias, `knowledge` y arte de la HOME. **Sin binario**: se compila con `gowa.py build` |
+| [v0.1.0-alpha.10](https://github.com/cMc292/GOWA_cMc_OmniPort/releases/tag/v0.1.0-alpha.10-bcus) (prebuilt) | `GOWA_cMc_OmniPort-0.1.0-alpha.10-release.zip` | 177,5 MB | **portable prebuilt**: lanzadores, `_src/GOWA-cMc` (fuente `bcus` + build), FFmpeg, MinGit, Python y documentación; base `62dfaa1` |
 
-No contiene archivos del juego. Los SHA-256 están en [SHA256SUMS.txt](SHA256SUMS.txt) y en las notas de cada release.
+Ninguno contiene archivos del juego. Los SHA-256 están en [SHA256SUMS.txt](SHA256SUMS.txt) y en las notas de
+cada release. La v0.2.0 es la línea nueva del producto; el portable prebuilt sigue en `0.1.0-alpha.10` hasta que
+se empaquete un binario de la 0.2.0.
 
 ## Requisitos
 
@@ -183,6 +232,13 @@ Para **actualizar o recompilar** (solo el modo `Update`):
 
 - Visual Studio 2022 **Build Tools** con «C++ Clang Compiler for Windows» (trae CMake y Ninja).
 - Nada más: Python y Git del paquete se usan solos.
+
+Para **construir la v0.2.0** desde el paquete de ingeniería (no hay binario):
+
+- Una copia limpia de la base **Ascension-R en `cc42407`** (o `62dfaa1` + el commit de SISTEMA) y Visual Studio
+  2022 Build Tools; se aplica el **parche único** y se compila con `python scripts\gowa.py build`.
+  Pasos exactos en la release `v0.2.0` y en `patches\README.md` del paquete.
+- Tu copia de `BCUS98232` 1.12 y su `GOWA.elf` descifrado, como para jugar.
 
 ## Instalación
 
@@ -239,6 +295,12 @@ informes quedan en `tools\bcus\reports\`. Los lanzadores `.cmd`/`.ps1` equivalen
 Requisitos del modo actualización: Visual Studio 2022 Build Tools con «C++ Clang Compiler for Windows». Para jugar
 no hace falta nada de eso. Hay una tarea programada diaria (04:00) que solo actúa si hay release nueva.
 
+> **Nota v0.2.0:** en el equipo del autor esa tarea quedó **desactivada el 2026-11-14** para que la rama `bcus` no
+> se mueva bajo los parches del release. Si el paquete la crea en tu PC, puede adelantar la rama por su cuenta;
+> desactívala con `Disable-ScheduledTask -TaskName "BCUS98232 - update port"` y reactívala con
+> `Enable-ScheduledTask`. La v0.2.0 se construye con el parche único sobre la base congelada `cc42407` (ver la
+> release y `patches\README.md`), no con el actualizador.
+
 ## Launcher y ajustes
 
 - Ajustes: `_src\GOWA-cMc\build\gowa-cmc.ini` (mismas claves que Ascension-R).
@@ -281,9 +343,9 @@ gamedata/                 partidas (vacío al publicar)
 
 ## Cómo reportar un problema
 
-Abre un *issue* con: versión del paquete (`v0.1.0-alpha.10`), GPU y driver, CPU, página del launcher donde falla y el
-`LOG` (página **LOG** del launcher, o el `.log` más reciente de `_src\GOWA-cMc\logs`). **No adjuntes archivos del
-juego ni el `.exe`.**
+Abre un *issue* con: versión del paquete (`v0.2.0` o `v0.1.0-alpha.10`), GPU y driver, CPU, página del launcher
+donde falla y el `LOG` (página **LOG** del launcher, o el `.log` más reciente de `_src\GOWA-cMc\logs`). **No
+adjuntes archivos del juego ni el `.exe`.**
 
 ## Créditos
 
@@ -295,24 +357,32 @@ juego ni el `.exe`.**
 | **Port a `BCUS98232` y este paquete** | **cMc-OmniPort (cMc292)** |
 
 Terceros y licencias completas: [CREDITOS.md](CREDITOS.md) y [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)
-(FFmpeg LGPL, MinGit GPL-2.0, Python PSF, capstone BSD, DXC, Cinzel OFL, Silkscreen OFL, zlib, Zstandard, SMAA, FSR).
+(MIT de Ascension-R y ps3recomp; zlib 1.3.1; OFL de Cinzel y Silkscreen; y, en el portable prebuilt, FFmpeg LGPL,
+MinGit GPL-2.0, Python PSF, capstone BSD y DXC).
 
 La ventana del juego lleva los créditos en el título:
-`GOW Ascension [BCUS98232] - port: cMc-OmniPort | Ascension-R: Ryan Bagas + ps3recomp: sp00nznet`.
+`GOW Ascension [BCUS98232] - cMc-OmniPort`.
 
 ## Licencia
 
 El **código propio de este repo** está bajo [MIT](LICENSE) (Copyright (c) 2026 cMc292 / cMc-OmniPort). Esa licencia
-**no** cubre el juego ni lo que se genera de él (el ejecutable y las fuentes traducidas); los componentes de terceros
-siguen sus licencias y los proyectos de origen (Ascension-R y ps3recomp, MIT) se acreditan en
-[LICENSE-NOTES.md](LICENSE-NOTES.md) y [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+**no** cubre el juego, ni el arte del juego que incluye el paquete de la v0.2.0, ni lo que se genera de él (el
+ejecutable y las fuentes traducidas); los componentes de terceros siguen sus licencias y los proyectos de origen
+(Ascension-R y ps3recomp, MIT) se acreditan en [LICENSE-NOTES.md](LICENSE-NOTES.md) y
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Aviso legal
 
-- Este repositorio y el paquete **no contienen archivos del juego** ni medios de descifrado: el `GOWA.SELF`, los
-  `*.psarc`, los vídeos y los trofeos son de tu copia y no se distribuyen.
-- El **ejecutable del paquete contiene código traducido del juego**. Es una obra derivada de *God of War: Ascension*:
-  se ofrece para usarse con una copia legítima y **la licencia MIT no la cubre**; sigue perteneciendo a sus titulares.
+- Este repositorio y los paquetes **no contienen archivos del juego** ni medios de descifrado: el `GOWA.SELF`, los
+  `*.psarc`, los vídeos y los trofeos son de tu copia y no se distribuyen. La v0.2.0 **no lleva binario**: se compila
+  en tu PC.
+- El **ejecutable que se compila** (y el del portable prebuilt) contiene código traducido del juego: es una obra
+  derivada de *God of War: Ascension*, se ofrece para usarse con una copia legítima y **la licencia MIT no la cubre**;
+  sigue perteneciendo a sus titulares.
+- El paquete de la **v0.2.0 incluye arte del juego** (`assets\launcher-bg.jpg`, `assets\launcher-logo.png`) y
+  **capturas del juego** (`report\evidencia`), por decisión expresa del autor. **No** están cubiertos por la MIT y
+  siguen perteneciendo a sus titulares; se retiran borrando `assets\` (la HOME vuelve al fondo procedural y al
+  wordmark de texto) y/o las capturas, sin tocar código.
 - *God of War* es una marca de **Sony Interactive Entertainment LLC / Santa Monica Studio**. Este proyecto es de
   aficionados, sin ánimo de lucro, y **no está afiliado ni respaldado** por Sony.
 - No se incluyen ni se piden claves, licencias ni firmware de la consola.
@@ -324,14 +394,17 @@ A native Windows x64 port of **God of War: Ascension** (PS3), built by **static 
 release `BCUS98232` v1.12, on top of [Ascension-R](https://github.com/rigaz29/Ascension-R) by Ryan Bagas and
 [ps3recomp](https://github.com/sp00nznet/ps3recomp) by Ned Heller (sp00nznet) and contributors. The game's PPU/SPU
 code is translated ahead of time to x86-64 and the RSX is rendered with Direct3D 12, so no emulator runs while you
-play. The launcher (SpartanPort-style, Spanish) has ten pages: HOME, GRAPHICS, DISPLAY, CONTROLS, PATCHES, CHEATS,
-SYSTEM, ADVANCED, LOG and TROPHIES, plus presets, FSR 1/3.1 upscaling and frame generation, SMAA, ultrawide, an
-update mode and a portable package.
+play. The bilingual launcher (Spanish/English) has ten pages: HOME, GRAPHICS, DISPLAY, CONTROLS, PATCHES, CHEATS,
+SYSTEM, ADVANCED, LOG and TROPHIES, plus presets, FSR 1/3.1 upscaling and frame generation, SMAA, ultrawide, save
+rollback (RESTAURAR), PSARC rewriting, mod recipes and a portable prebuilt package.
 
-**This repository holds no game files.** You need your own copy of *God of War: Ascension* `BCUS98232` v1.12 (disc
-plus updates 1.04–1.12) and its decrypted `GOWA.elf`. The packaged executable does contain code translated from the
-game: that is a derivative work, not covered by the MIT license, and remains its owners'. *God of War* is a
-trademark of Sony Interactive Entertainment; this project is not affiliated with or endorsed by it.
+**Latest release `v0.2.0` is an engineering package** (patches + accumulated source, no binary: build it with
+`gowa.py build`); the prebuilt portable package is `v0.1.0-alpha.10`. **This repository holds no game files.** You
+need your own copy of *God of War: Ascension* `BCUS98232` v1.12 (disc plus updates 1.04–1.12) and its decrypted
+`GOWA.elf`. Any built executable does contain code translated from the game: that is a derivative work, not covered
+by the MIT license, and remains its owners'. The `v0.2.0` package also includes the game's HOME art and game
+screenshots (author's decision, not covered by the MIT license, removable). *God of War* is a trademark of Sony
+Interactive Entertainment; this project is not affiliated with or endorsed by it.
 
 ## Agradecimientos
 

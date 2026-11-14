@@ -1,8 +1,13 @@
 # SHA-256 de los archivos publicados
 #
 # Comprobar en Windows PowerShell:
-#   Get-FileHash .\GOWA_cMc_OmniPort-0.1.0-alpha.10-release.zip -Algorithm SHA256
+#   Get-FileHash .\<archivo> -Algorithm SHA256
 # Comprobar en Linux/macOS:
 #   sha256sum -c SHA256SUMS.txt
-
-16209997d3c4690598f0f7a6873e1c6cfecc6da87a943440df9d46018b0b8f80  GOWA_cMc_OmniPort-0.1.0-alpha.10-release.zip
+#
+# Release actual: v0.2.0 (paquete de ingeniería)
+13b0f93cdc72381c1165066015b761073053736b5faf80da5f2f253fe3e1a08f  GOWA_cMc_OmniPort-0.2.0.zip
+c2b589f0332fb1af88837d017ac6c068df7178128e6d79503480ce41110bb053  THIRD_PARTY_NOTICES.md
+#
+# Release anterior: v0.1.0-alpha.10-bcus (paquete portable prebuilt; tiene su propio SHA256SUMS)
+# 16209997d3c4690598f0f7a6873e1c6cfecc6da87a943440df9d46018b0b8f80  GOWA_cMc_OmniPort-0.1.0-alpha.10-release.zip

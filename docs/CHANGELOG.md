@@ -8,6 +8,46 @@ El paquete portable de cada versión está en la [página de releases](https://g
 
 ---
 
+## v0.2.0 — 2026-11-14
+
+**Primera versión de la línea propia del port.** Base: **Ascension-R v0.1.0-alpha.10** @ `cc42407`;
+runtime `ps3recomp` rama `gowa` @ `09fece8`. Formato: **paquete de ingeniería** (parche único + código
+acumulado); el binario se compila en el PC del usuario. Changelog detallado:
+`source_integrated\docs\VERSIONES.md` del paquete.
+
+### Launcher bilingüe (español / inglés)
+
+- Las diez páginas, los diálogos y los avisos, con **44 opciones** en los dos idiomas.
+- `[launcher] language = auto | es | en` y **chip** de idioma en HOME (conmuta y persiste).
+- Independiente de `[system] language`, que es el idioma del juego.
+
+### Nuevas funciones
+
+- **RESTAURAR**: deshacer la última partida guardada, con instantánea reversible.
+- **Motor PSARC** propio (reescritura con `deflate` de **zlib 1.3.1**), verificado sobre el `GAME.PSARC` real.
+- **Mods**: recetas `mod.json`, overlay en el runtime y botón **REGENERAR**; receta `skip-intro` incluida.
+- **F12** guarda la captura (el nombre llevaba caracteres ilegales).
+- **`PAD_NO_HOST`** (entrada solo por guion) y arreglo del **escritor de perfiles PGO**.
+
+### Identidad y correcciones
+
+- **Versión propia 0.2.0** en el launcher, la pantalla de carga, el `.exe` y el informe de fallo; la base se
+  muestra en **AVANZADO** junto a las licencias.
+- **Dos lanzadores**: `GOWA-cMc.exe` (juego directo) y `GOWA-cMc-Launcher.exe` (launcher).
+- Título de ventana sin créditos; aviso si no hay **Direct3D 12**.
+- Corregidos: versión del pie de HOME, READY CHECK, «ABRIR LOGS», final de página tapado, fila de la carpeta
+  del juego en SISTEMA, 5 escapes hexadecimales que se comían letras («Gráfica»), diálogos de preparar en
+  español y restos de español en las páginas en inglés.
+- Base actualizada a **`cc42407`** (SISTEMA recupera la fila de la carpeta del juego).
+
+### Notas
+
+- El paquete **no incluye el binario**; se compila con `python scripts\gowa.py build` desde la base
+  `cc42407` y el parche único.
+- Incluye **arte de la HOME** y **capturas del juego** por decisión del autor: material del juego no cubierto
+  por la MIT (ver `THIRD_PARTY_NOTICES.md`).
+- Los parches tocan también el submódulo `ps3recomp` (rama `gowa`).
+
 ## v0.1.0-alpha.10 — 2026-11-13
 
 **Base: Ascension-R v0.1.0-alpha.10** (`62a7122`), que incluye también los cambios de `v0.1.0-alpha.9`.

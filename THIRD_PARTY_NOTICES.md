@@ -1,126 +1,125 @@
-# Third-party notices
+# Avisos de terceros — GOWA_cMc_OmniPort
 
-## ps3recomp
+Este archivo cubre el **paquete de ingeniería `v0.2.0`** (parches, `source_integrated`, informes y
+evidencia) y el repositorio. El **paquete portable prebuilt** (`v0.1.0-alpha.10`, con binarios y
+librerías) lleva además FFmpeg, MinGit, Python, MSVC y DXC; sus textos están en su propia release y en
+`SOURCE_OFFER.txt` de ese paquete.
 
-`CMakeLists.txt`, `port/main.cpp`, `port/stubs.cpp` and `config.toml` started as copies
-of `templates/project/` from [ps3recomp](https://github.com/sp00nznet/ps3recomp),
-and `tools/hle_coverage.py` imports ps3recomp's `tools/`. The runtime itself is
-the `ps3recomp/` submodule (fork: [rigaz29/ps3recomp](https://github.com/rigaz29/ps3recomp)).
+---
+
+## 1. Ascension-R — MIT
+
+Base del port (motor de recompilación estática). Copyright (c) 2026 **Ryan Bagas**.
+
+```
+MIT License
+
+Copyright (c) 2026 Ryan Bagas
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
+Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+```
+
+## 2. ps3recomp — MIT
+
+Toolkit y runtime (lifters PPU/SPU, HLE del sistema, RSX → Direct3D 12). Copyright (c) 2026 **Ned Heller /
+sp00nznet** y colaboradores. El release aplica parches sobre su rama `gowa` (`09fece8`).
 
 ```
 MIT License
 
 Copyright (c) 2026 Ned Heller / sp00nznet
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
+Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
 
-## AMD FSR API
+## 3. zlib 1.3.1 — licencia zlib
 
-The runtime carries the FSR API's headers, unchanged, from
-[FSR SDK 2.4.0](https://github.com/GPUOpen-LibrariesAndSDKs/FidelityFX-SDK) in `ps3recomp/third_party/fsr_api/`, and
-`gowa.py build` copies the SDK's signed DLLs beside the exe. They are not in this repository. MIT License,
-Copyright (C) Advanced Micro Devices, Inc.; the full text is at the top of each header.
+Se distribuyen sin cambios en `source_integrated\third_party\zlib\` los ficheros que necesita el motor PSARC:
+`compress.c`, `deflate.c`, `deflate.h`, `trees.c`, `trees.h`. Copyright (C) 1995-2024 **Jean-loup Gailly y
+Mark Adler**. No se modifican; solo se compilan con el resto del port.
 
-## AMD FidelityFX Super Resolution 1
+```
+zlib License
 
-The runtime carries `ffx_a.h` and `ffx_fsr1.h`, unchanged, from
-[GPUOpen-Effects/FidelityFX-FSR](https://github.com/GPUOpen-Effects/FidelityFX-FSR)
-(commit `a21ffb8f6c13233ba336352bdff293894c706575`), in
-`ps3recomp/third_party/fidelityfx_fsr1/`. They are embedded in the executable for the
-"AMD FSR 1" scaling option. MIT License, Copyright (c) 2021 Advanced Micro Devices, Inc.; the
-full text is at the top of both files.
+Copyright (C) 1995-2024 Jean-loup Gailly and Mark Adler
 
-## SMAA
+This software is provided 'as-is', without any express or implied warranty.  In no event will the
+authors be held liable for any damages arising from the use of this software.
 
-The runtime carries `SMAA.hlsl`, `AreaTex.h`, `SearchTex.h` and `LICENSE.txt`, unchanged, from
-[iryoku/smaa](https://github.com/iryoku/smaa) (commit `71c806a838bdd7d517df19192a20f0c61b3ca29d`),
-in `ps3recomp/third_party/smaa/`, for the "SMAA 1x" anti-aliasing option. MIT License,
-Copyright (C) 2013 Jorge Jimenez, Jose I. Echevarria, Belen Masia, Fernando Navarro and Diego
-Gutierrez; the full text is in that folder's `LICENSE.txt`.
+Permission is granted to anyone to use this software for any purpose, including commercial
+applications, and to alter it and redistribute it freely, subject to the following restrictions:
 
-## zlib
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the
+   original software. If you use this software in a product, an acknowledgment in the product
+   documentation would be appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being
+   the original software.
+3. This notice may not be removed or altered from any source distribution.
+```
 
-`third_party/zlib/` carries the files of [zlib 1.3.1](https://github.com/madler/zlib/releases/tag/v1.3.1) that
-inflate needs, unchanged, from `zlib-1.3.1.tar.gz` (SHA-256
-`9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b91eefb60f03b72df23`): `adler32.c`, `crc32.c`, `crc32.h`, `gzguts.h`,
-`inffast.c`, `inffast.h`, `inffixed.h`, `inflate.c`, `inflate.h`, `inftrees.c`, `inftrees.h`, `zconf.h`, `zlib.h`,
-`zutil.c`, `zutil.h`, `LICENSE` and `README`. `port/precompile.cpp` reads the game's PSARC archives with it. zlib
-license, Copyright (C) 1995-2024 Jean-loup Gailly and Mark Adler; the full text is in that folder's `LICENSE`.
+## 4. Fuentes Cinzel y Silkscreen — SIL Open Font License 1.1
 
-## Silkscreen
+El launcher compila dentro del ejecutable **Cinzel** (display serif) y **Silkscreen** (navegación). En este
+paquete **no se distribuyen los ficheros de fuente** (van como recursos del `.exe` en el árbol de la base), así
+que aquí no hay obligación de acompañar los textos; si distribuyes el ejecutable compilado, incluye:
 
-The launcher draws its headings, buttons and captions in the pixel font Silkscreen, unchanged from
-[google/fonts](https://github.com/google/fonts) (`ofl/silkscreen`; source
-[googlefonts/silkscreen](https://github.com/googlefonts/silkscreen)) and carried in the exe as resources
-(`port/app.rc`): `third_party/silkscreen/` holds `Silkscreen-Regular.ttf` and `Silkscreen-Bold.ttf`. SIL Open Font
-License 1.1, Copyright 2001 The Silkscreen Project Authors; the full text is in that folder's `OFL.txt`. The rest of its
-text is in Windows' own Bahnschrift, which is not carried.
+- **Cinzel** — Copyright (c) Natanael Gama, SIL OFL 1.1 (`third_party/cinzel/OFL.txt` en Ascension-R).
+- **Silkscreen** — Copyright 2001 The Silkscreen Project Authors, SIL OFL 1.1
+  (`third_party/silkscreen/OFL.txt` en Ascension-R).
+- Texto de la licencia: <https://openfontlicense.org/open-font-license-official-text/>
 
-## Zstandard
+## 5. Componentes que este paquete NO distribuye
 
-The runtime carries the library sources of [Zstandard 1.5.7](https://github.com/facebook/zstd/releases/tag/v1.5.7),
-unchanged, in `ps3recomp/third_party/zstd/` (its README lists the files taken). The D3D12 backend keeps its shader cache
-in one zstd frame. Zstandard is dual-licensed, BSD or GPLv2; it is used under the BSD license, Copyright (c) Meta
-Platforms, Inc. and affiliates; the full text is in that folder's `LICENSE`.
+- **FFmpeg** (LGPL): lo aporta el árbol de la base para las cinemáticas; este paquete no incluye DLL ni
+  ejecutables de FFmpeg. Si construyes y distribuyes un binario con FFmpeg, aplican LGPL y la oferta de
+  fuente de ese build.
+- **MinGit, Python, capstone, MSVC y DXC**: solo estaban en el paquete portable prebuilt
+  (`v0.1.0-alpha.10`), no aquí.
+- **RPCS3** (GPL-2.0): herramienta externa para descifrar tu copia; no forma parte del port.
 
-## FFmpeg
+## 6. Material del juego incluido por decisión del autor
 
-The game's movies are decoded with [FFmpeg](https://ffmpeg.org): the runtime loads `avcodec` and `avutil` when it starts.
-Their DLLs are not in this repository; `gowa.py build` looks for an LGPL build in `../ffmpeg` or `local.json`'s `ffmpeg_dir`.
-The build used here is under the GNU Lesser General Public License, version 3, and comes with its `LICENSE.txt`.
-A release carries a smaller build, which `gowa.py ffmpeg` makes from FFmpeg's source: only the H.264 and MPEG-2 decoders,
-under the GNU Lesser General Public License 2.1 or later.
+No es una licencia, es un aviso legal. El paquete `v0.2.0` incluye:
 
-## SDL
+- `assets\launcher-bg.jpg` y `assets\launcher-logo.png`: **arte de *God of War: Ascension* y su logo**, de
+  Santa Monica Studio / Sony Interactive Entertainment LLC. **No** están cubiertos por la MIT; se incluyen
+  asumiendo el riesgo y se retiran borrando `assets\` (la HOME vuelve al fondo procedural y al wordmark de
+  texto, sin tocar código).
+- `report\evidencia\*.png`: capturas del launcher y del juego, con el mismo aviso.
 
-The controllers XInput does not read go through [SDL](https://www.libsdl.org) 3: the runtime loads `SDL3.dll` from the
-exe's folder when it starts (`libs/input/cellPad.c` in the fork). Neither the DLL nor SDL's headers are in this
-repository; `gowa.py build` takes them from `../sdl3` or `local.json`'s `sdl3_dir`, the official
-`SDL3-devel-3.4.20-VC.zip` of libsdl-org/SDL, and a release carries that `SDL3.dll`. SDL is under the zlib license,
-Copyright (C) 1997-2026 Sam Lantinga; see its `LICENSE.txt`.
+El **código traducido del juego** que genera `gowa.py build` tampoco se distribuye: se genera en tu PC y no
+está cubierto por la MIT.
 
-## DirectX Shader Compiler
+## 7. Base de conocimiento (`knowledge\`)
 
-`gowa.py build` copies `dxcompiler.dll` and `dxil.dll` beside the exe, from the Windows SDK or `local.json`'s `dxc_dir`, to
-compile the game's shaders. They are not in this repository, and a release takes them from the SDK's `Redist\D3D\x64`.
-`dxcompiler.dll` is
-[DirectX Shader Compiler](https://github.com/microsoft/DirectXShaderCompiler), University of Illinois/NCSA Open Source
-License; see that project's `LICENSE.TXT` and `ThirdPartyNotices.txt`. `dxil.dll` comes under the Windows SDK's terms.
+`knowledge\index.sqlite` contiene **solo metadatos** (rutas, tamaños y SHA-256) de las releases de
+referencia usadas para comparar: no incluye su código ni sus datos. Los informes de `knowledge\reports\`
+resumen diferencias y decisiones; no reproducen código de terceros. Nada de eso concede licencia alguna
+sobre esos proyectos.
 
-## Microsoft Visual C++ runtime
+---
 
-`gowa.py build` copies `msvcp140.dll`, `vcruntime140.dll` and `vcruntime140_1.dll` beside the exe from the Visual Studio
-redistributable folder. They are not in this repository, and they come under Visual Studio's license terms.
-
-## ATRAC decoder
-
-`ps3recomp/third_party/at3_standalone/` holds FFmpeg's ATRAC decoder, under the GNU Lesser General Public License 2.1 or
-later. It is not part of this port's exe: the game does not import `cellAtrac`, so the NID table skips that module and the
-linker leaves the decoder out.
-
-## Code taken from other ports
-
-Whenever code is copied from another repository, add it here with its source,
-commit and license before committing it. See [CONTRIBUTING.md](CONTRIBUTING.md)
-for which sources may be copied and which may only be read.
-
-## Cinzel (display serif)
-
-	hird_party/cinzel/Cinzel-Regular.ttf, used by the launcher of this port. Cinzel is (c) Natanael Gama, under the SIL Open Font License 1.1; the full text is in 	hird_party/cinzel/OFL.txt.
+*God of War* es una marca de **Sony Interactive Entertainment LLC**. Este proyecto es de aficionados, sin
+ánimo de lucro, y **no está afiliado ni respaldado** por Sony.

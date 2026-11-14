@@ -20,7 +20,8 @@ Adaptación a la versión de **disco US (`BCUS98232`) v1.12** por **cMc-OmniPort
 
 | Versión | Enlace |
 |---|---|
-| **v0.1.0-alpha.10** (actual) | [Notas de la versión](https://github.com/cMc292/GOWA_cMc_OmniPort/releases/tag/v0.1.0-alpha.10-bcus) · [Descargar ZIP](https://github.com/cMc292/GOWA_cMc_OmniPort/releases/download/v0.1.0-alpha.10-bcus/GOWA_cMc_OmniPort-0.1.0-alpha.10-release.zip) |
+| **v0.2.0** (actual, paquete de ingeniería: parches + código; sin binario) | [Notas de la versión](https://github.com/cMc292/GOWA_cMc_OmniPort/releases/tag/v0.2.0) · [Descargar ZIP](https://github.com/cMc292/GOWA_cMc_OmniPort/releases/download/v0.2.0/GOWA_cMc_OmniPort-0.2.0.zip) |
+| **v0.1.0-alpha.10** (portable prebuilt) | [Notas de la versión](https://github.com/cMc292/GOWA_cMc_OmniPort/releases/tag/v0.1.0-alpha.10-bcus) · [Descargar ZIP](https://github.com/cMc292/GOWA_cMc_OmniPort/releases/download/v0.1.0-alpha.10-bcus/GOWA_cMc_OmniPort-0.1.0-alpha.10-release.zip) |
 | Todas | [Página de releases](https://github.com/cMc292/GOWA_cMc_OmniPort/releases) |
 
 ## Capturas
