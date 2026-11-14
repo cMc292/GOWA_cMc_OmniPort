@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/capturas/banner.png" alt="GOWA_cMc_OmniPort — God of War: Ascension [BCUS98232] para PC" width="100%">
+  <img src="docs/capturas/launcher-home.png" alt="Launcher de GOWA_cMc_OmniPort: página HOME con PLAY, presets y estado de la copia del juego" width="100%">
 </p>
 
 # GOWA_cMc_OmniPort
