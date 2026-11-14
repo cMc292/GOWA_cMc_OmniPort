@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://cMc292.github.io/GOWA_cMc_OmniPort/sitemap.xml
