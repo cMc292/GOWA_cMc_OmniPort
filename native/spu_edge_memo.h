@@ -1,0 +1,47 @@
+/*
+ * EDGE's job results, kept (spu_edge_memo.c).
+ */
+#ifndef SPU_EDGE_MEMO_H
+#define SPU_EDGE_MEMO_H
+
+#include "spu_context.h"
+#include <stdint.h>
+
+/* the job's entry */
+void edge_memo_job(void);
+/* a transform at its entry: 1 = left out, its arguments kept */
+int edge_memo_left_out(spu_context* ctx);
+/* unpack, with the attribute list filled: 1 = the arrays left out, the arguments kept */
+int edge_memo_unpack(spu_context* ctx, int lit, uint32_t src, uint32_t cnt, uint32_t p0, uint32_t n0, uint32_t t0);
+/* the index stage: 1 = the list is in place at src, *bytes long */
+int edge_memo_idx(spu_context* ctx, uint32_t src, uint32_t* bytes);
+/* the stage made the list: bytes at src */
+void edge_memo_idx_note(const spu_context* ctx, uint32_t src, uint32_t bytes);
+/* a stage ran lifted: nothing to keep */
+void edge_memo_cancel(void);
+/* the packing: a result's n records of rec bytes, or NULL */
+const uint8_t* edge_memo_vtx(uint32_t n, uint32_t rec);
+int edge_memo_resident(void);
+/* the output stage cannot leave this result out of the ring */
+void edge_memo_ring(spu_context* ctx);
+/* a skinned result: nobody reads the input piece's arrays */
+int edge_memo_skip_decode(void);
+/* a skinned result's part of the job's record, or NULL */
+const void* edge_memo_skin_part(uint32_t* bytes);
+void edge_memo_publish(uint32_t vio, uint32_t nverts);
+/* the packing made n records, stride apart, the first rec bytes of each to keep */
+void edge_memo_vtx_note(const uint8_t* src, uint32_t n, uint32_t stride, uint32_t rec);
+/* the arrays are wanted after all: in any job; in a lit job */
+void edge_memo_revoke(spu_context* ctx);
+void edge_memo_revoke_lit(spu_context* ctx);
+/* 0xBBC8's entry in an unskinned job (GOWA_EDGE_RIGID): 1 = left out, its arguments kept */
+int edge_memo_rigid_bbc8(spu_context* ctx);
+/* a velocity job the memo follows (GOWA_EDGE_VEL); the output stage: its block at this stride can stay
+ * out of the ring */
+int edge_memo_vel(void);
+int edge_memo_vel_kept(uint32_t stride);
+int edge_memo_vel_binorm_left(void);
+/* 0xF538's constant vectors for the matrix at mat (spu_edge_xform.c) */
+void edge_xf_consts(const uint8_t* ls, uint32_t mat, float c[4][4]);
+
+#endif

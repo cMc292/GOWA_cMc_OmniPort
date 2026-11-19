@@ -1,0 +1,71 @@
+{
+ "jobmod_1bdd67b54c3b_e7F60": {
+  "jobmod_1bdd67b54c3b_e7F60_spu_func_00004138": "gowa_g6_solve_4138",
+  "jobmod_1bdd67b54c3b_e7F60_spu_func_000053E0": "?gowa_g6_slerp_53e0",
+  "jobmod_1bdd67b54c3b_e7F60_spu_func_00005C40": "gowa_g6_solve_5c40",
+  "jobmod_1bdd67b54c3b_e7F60_spu_func_00007520": "gowa_g6_blend_7520",
+  "jobmod_1bdd67b54c3b_e7F60_spu_func_00009FB8": "gowa_g6_memset_9fb8",
+  "jobmod_1bdd67b54c3b_e7F60_spu_func_0000A588": "?gowa_g6_joint_a588"
+ },
+ "jobmod_9b03908f93a9_e77C8": {
+  "jobmod_9b03908f93a9_e77C8_spu_func_0000B7C8": "gowa_edge_job_b7c8"
+ },
+ "jobmod_a67e549fa0ab_e41E8": {
+  "jobmod_a67e549fa0ab_e41E8_spu_func_00004930": "?gowa_g6_noise_4930",
+  "jobmod_a67e549fa0ab_e41E8_spu_func_000063B4": "gowa_g6_cell_63b4",
+  "jobmod_a67e549fa0ab_e41E8_spu_func_00006A90": "gowa_g6_cell_6a90"
+ },
+ "jobmod_e8f44fbc6dbf_e6D98": {
+  "jobmod_e8f44fbc6dbf_e6D98_spu_func_00005DA8": "gowa_edge_lzero_5da8",
+  "jobmod_e8f44fbc6dbf_e6D98_spu_func_00006AC8": "?gowa_edge_lightpt_6ac8",
+  "jobmod_e8f44fbc6dbf_e6D98_spu_func_000073E0": "?gowa_edge_light_73e0",
+  "jobmod_e8f44fbc6dbf_e6D98_spu_func_000075D8": "gowa_edge_lscat_75d8",
+  "jobmod_e8f44fbc6dbf_e6D98_spu_func_00007670": "gowa_edge_lsum_7670",
+  "jobmod_e8f44fbc6dbf_e6D98_spu_func_000079B0": "gowa_edge_light_79b0",
+  "jobmod_e8f44fbc6dbf_e6D98_spu_func_00007BB4": "gowa_edge_light_7bb4",
+  "jobmod_e8f44fbc6dbf_e6D98_spu_func_00007ED8": "gowa_edge_light_7ed8",
+  "jobmod_e8f44fbc6dbf_e6D98_spu_func_000088B0": "?gowa_edge_ctx_88b0",
+  "jobmod_e8f44fbc6dbf_e6D98_spu_func_00008988": "gowa_edge_ctx_8988",
+  "jobmod_e8f44fbc6dbf_e6D98_spu_func_00008B90": "gowa_edge_ctx_8b90",
+  "jobmod_e8f44fbc6dbf_e6D98_spu_func_00009080": "?gowa_edge_out_9080",
+  "jobmod_e8f44fbc6dbf_e6D98_spu_func_00009A40": "gowa_edge_memo_9a40",
+  "jobmod_e8f44fbc6dbf_e6D98_spu_func_0000A928": "?gowa_edge_binorm_a928",
+  "jobmod_e8f44fbc6dbf_e6D98_spu_func_0000A950": "gowa_edge_normals_a950",
+  "jobmod_e8f44fbc6dbf_e6D98_spu_func_0000AD98": "?gowa_edge_job_ad98",
+  "jobmod_e8f44fbc6dbf_e6D98_spu_func_0000BBC8": "?gowa_edge_vnorm_bbc8",
+  "jobmod_e8f44fbc6dbf_e6D98_spu_func_0000BD54": "gowa_edge_vnorm_bd54",
+  "jobmod_e8f44fbc6dbf_e6D98_spu_func_0000D250": "?gowa_edge_cull_d250",
+  "jobmod_e8f44fbc6dbf_e6D98_spu_func_0000D618": "?gowa_edge_cull_d618",
+  "jobmod_e8f44fbc6dbf_e6D98_spu_func_0000E4D0": "?gowa_edge_idx_e4d0",
+  "jobmod_e8f44fbc6dbf_e6D98_spu_func_0000E550": "?gowa_edge_skinmat_e550",
+  "jobmod_e8f44fbc6dbf_e6D98_spu_func_0000E804": "gowa_edge_skinmat_e804",
+  "jobmod_e8f44fbc6dbf_e6D98_spu_func_0000EC08": "gowa_edge_skin_ec08",
+  "jobmod_e8f44fbc6dbf_e6D98_spu_func_0000F104": "gowa_edge_skinmat_f104",
+  "jobmod_e8f44fbc6dbf_e6D98_spu_func_0000F538": "?gowa_edge_xform_f538"
+ },
+ "pic_00755B80": {
+  "pic_00755B80_spu_func_00030020": "?gowa_edge_cmp_755b80"
+ },
+ "pic_00758590": {
+  "pic_00758590_spu_func_000304A0": "gowa_edge_decode_304a0"
+ },
+ "pic_0075BD10": {
+  "pic_0075BD10_spu_func_00030020": "?gowa_edge_vtx_75bd10"
+ },
+ "pic_0075EB40": {
+  "pic_0075EB40_spu_func_00030310": "gowa_edge_decode_30310"
+ },
+ "pic_0075F580": {
+  "pic_0075F580_spu_func_00030030": "?gowa_edge_vel_75f580"
+ },
+ "pic_00764D10": {
+  "pic_00764D10_spu_func_00030018": "?gowa_edge_pos_764d10"
+ },
+ "pic_00765B70": {
+  "pic_00765B70_spu_func_00030000": "?gowa_edge_pos_765b70"
+ },
+ "wwspm": {
+  "wwspm_spu_func_00000A60": "gowa_pm_stub_a60",
+  "wwspm_spu_func_00000AAC": "gowa_pm_stub_aac"
+ }
+}

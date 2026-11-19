@@ -1,0 +1,67 @@
+{
+ "note": "Switchable patches of GOWA.SELF 1.12 (ppu, data and spu edits). Each is off unless switched on ([patches] <id> = on in gowa-cmc.ini, --set patches.<id>=on, or GOWA_PATCH_<ID>=1), or, with \"default\": true, on unless switched off (= off, =0). `gowa.py lift` lifts every ppu edit in both forms behind the patch's guard (ppu_lifter --insn-patches), every spu edit the same way in its job module (spu_lifter --insn-patches), and writes recompiled/gowa_title_patches.h; patches.cpp writes the data edits and sets the guard once the ELF is in guest memory, before the title runs. Every orig is checked against the ELF at the lift, and the data again in guest memory: a patch for another build of the title is refused. The sites were found with RPCS3's patch list for this build as a map, and each one read back from this ELF (docs/notes/2026-11-01-title-patches.md). `gowa.py patches` lists them and checks them against the ELF.",
+ "patches": [
+  {
+   "id": "disable_mlaa",
+   "name": "Disable MLAA",
+   "guard": "g_gowa_patch_disable_mlaa",
+   "default": true,
+   "note": "The title's SPU anti-aliasing: five taskset tasks a frame over a copy of the frame. This port never shows their output (its frame stays on the GPU), so they only cost time. The word at 0x83D004 is the title's own MLAA switch, read in 18 places from its init to every frame (func_0041C344 arms the MLAA counter with it); at 0 the title takes its own paths without MLAA.",
+   "ppu": [
+    {"addr": "0x00397754", "orig": "0x4BFFFCB5", "new": "0x60000000",
+     "note": "func_003973D0: bl 0x397408, the 64-bit entry it builds with r4 = 4"},
+    {"addr": "0x00397784", "orig": "0x4BFFFC85", "new": "0x60000000",
+     "note": "func_003973D0: bl 0x397408, the entry with r4 = 6 (the one with r4 = 5, between them, stays)"}
+   ],
+   "data": [
+    {"addr": "0x0083D007", "orig": "01", "new": "00",
+     "note": "the low byte of the MLAA word 0x83D004: 1 -> 0"}
+   ]
+  },
+  {
+   "id": "disable_depth_of_field",
+   "name": "Disable Depth of Field",
+   "guard": "g_gowa_patch_disable_depth_of_field",
+   "note": "Reads the effect's enable as 0 in its update. The same code as Motion Blur's: the field at +0x20 of the effect's object, read before cmpwi r5,0.",
+   "ppu": [
+    {"addr": "0x0043BCBC", "orig": "0x80BF0020", "new": "0x38A00000",
+     "note": "func_0043BA48: lwz r5,0x20(r31) -> li r5,0"}
+   ]
+  },
+  {
+   "id": "disable_motion_blur",
+   "name": "Disable Motion Blur",
+   "guard": "g_gowa_patch_disable_motion_blur",
+   "default": true,
+   "note": "Reads the effect's enable as 0 in its update, as Depth of Field's.",
+   "ppu": [
+    {"addr": "0x0043F210", "orig": "0x80BF0020", "new": "0x38A00000",
+     "note": "func_0043F0D0: lwz r5,0x20(r31) -> li r5,0"}
+   ]
+  },
+  {
+   "id": "disable_mesh_trimming",
+   "name": "Disable Mesh Trimming",
+   "guard": "g_gowa_patch_disable_mesh_trimming",
+   "note": "In EDGE's SPU geometry code, the same instruction of both EDGE job modules. RPCS3's note: it lets the title draw correctly above the PS3's resolutions, and keeps the signed-area, back-face and later culling stages. For drawing above 720p, not for speed: it can only add geometry. The modules' bytes in guest memory stay as they are; the lifted code takes the replacement (an SPU interpreted there would not).",
+   "spu": [
+    {"module": "jobmod_e8f44fbc6dbf_e6D98", "ls": "0x0000DAF4", "orig": "0x18264284", "new": "0x40800004",
+     "note": "and $4,$5,$25 -> il $4,0"},
+    {"module": "jobmod_9b03908f93a9_e77C8", "ls": "0x0000E524", "orig": "0x18264284", "new": "0x40800004",
+     "optional": true,
+     "note": "the same in the other EDGE module, a second build of it the first levels do not run and the Grotto does. Only a pointer reaches the function, 0xE35C (the same code as the first module's 0xD92C): its lift ended at 0xB90C until the entries of issue #7's missed code moved it out to 0xF1C4 (2026-11-12), and the Grotto's jobs ran it interpreted, unpatched. Optional: a lift that does not reach it reports it"}
+   ]
+  },
+  {
+   "id": "disable_shadows",
+   "name": "Disable Shadows",
+   "guard": "g_gowa_patch_disable_shadows",
+   "default": true,
+   "note": "Not one of RPCS3's. The title's dynamic shadows are its fxNewShadows effect (RTTI 12fxNewShadows, vtable 0x6A5940; per-frame update func_00376748, slot 2). Its update reads the effect's enable at +0x20, as Depth of Field's and Motion Blur's do (the same base: bl 0x3B69B8 on this+16 just before); when it is 0 the title clears the renderer's shadow parameter block (memset 0x982F08, 120 bytes) instead of copying the effect's parameters into it. The edit makes that read 0 (docs/notes/2026-11-03-disable-shadows.md). Skipping the whole update instead (its vtable slot pointed at a bare blr) left no shadow map either, but the fight then drew giant copies of Megaera's wings where the sky is.",
+   "ppu": [
+    {"addr": "0x00376894", "orig": "0x809F0020", "new": "0x38800000",
+     "note": "func_00376748: lwz r4,0x20(r31) -> li r4,0"}
+   ]
+  }
+ ]
+}

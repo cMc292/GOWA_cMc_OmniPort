@@ -1,0 +1,55 @@
+# Everything made from the game stays on your machine. See CONTRIBUTING.md.
+# Never force-add any of these.
+vfs/
+gamedata/
+analysis/
+recompiled/
+spu/
+build*/
+dist/
+logs/
+scratch/
+firmware/
+local.json
+
+# Game file types, wherever they end up
+*.elf
+*.ELF
+*.self
+*.SELF
+*.sprx
+*.prx
+*.pkg
+*.rap
+*.edat
+*.sdat
+*.psarc
+*.PSARC
+*.SPRX
+*.PRX
+*.RAP
+*.EDAT
+*.SDAT
+*.PKG
+*.iso
+EBOOT.BIN
+PARAM.SFO
+
+# Local tooling
+.venv/
+__pycache__/
+*.pyc
+
+# Local dependencies copied with this phase
+_src/
+
+
+# Local build dependencies
+tools/python/
+_src/
+BUILD.md
+
+
+# Compiled portable launchers
+portable/*.exe
+

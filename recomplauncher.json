@@ -1,0 +1,424 @@
+{
+  "$schema": "https://recomplauncher.com/schema/recomplauncher.json",
+  "format": 1,
+  "name": "Ascension-R",
+  "repo": "rigaz29/Ascension-R",
+  "requires": ["start", "exit_codes", "settings.ini", "settings.args", "settings.choices", "settings.groups"],
+  "start": {
+    "program": ["Ascension-R.exe"],
+    "args": ["--set", "launcher.show=off"]
+  },
+  "config": [
+    {
+      "id": "main",
+      "format": "ini",
+      "file": [
+        { "path": "{install}/ascension-r.ini", "if": "{install}/ascension-r.ini" },
+        { "path": "{install}/ascension-r.ini", "if": "{install}/portable.txt" },
+        { "path": "{local}/Ascension-R/ascension-r.ini" }
+      ]
+    }
+  ],
+  "saves": [
+    "{install}/gamedata/dev_hdd0/home/00000001/savedata",
+    "{local}/Ascension-R/gamedata/dev_hdd0/home/00000001/savedata"
+  ],
+  "folders": {
+    "saves": [
+      { "path": "{install}/gamedata/dev_hdd0/home/00000001/savedata", "if": "{install}/ascension-r.ini" },
+      { "path": "{install}/gamedata/dev_hdd0/home/00000001/savedata", "if": "{install}/portable.txt" },
+      { "path": "{local}/Ascension-R/gamedata/dev_hdd0/home/00000001/savedata" }
+    ],
+    "logs": [
+      { "path": "{install}/logs", "if": "{install}/ascension-r.ini" },
+      { "path": "{install}/logs", "if": "{install}/portable.txt" },
+      { "path": "{local}/Ascension-R/logs" }
+    ]
+  },
+  "exit_codes": {
+    "3": "Your copy of the game is missing a file it needs. Install the game's updates 1.04 to 1.12 in RPCS3, in that order, then hold Shift while Ascension-R starts and pick the game's folder in its System tab."
+  },
+  "groups": [
+    { "id": "Display" },
+    { "id": "Picture" },
+    { "id": "Game patches" },
+    { "id": "Controls" },
+    { "id": "Cheats" },
+    { "id": "System" }
+  ],
+  "settings": [
+    {
+      "id": "window", "label": "Window", "group": "Display",
+      "help": "Borderless covers the whole screen.",
+      "choices": [
+        { "label": "Windowed", "set": { "display/mode": "windowed" } },
+        { "label": "Borderless", "set": { "display/mode": "borderless" } }
+      ],
+      "defaults": { "display/mode": "windowed" }
+    },
+    {
+      "id": "window_size", "label": "Window size", "group": "Display",
+      "help": "The game draws 720p; the picture is scaled to the window. Default is 720p times Windows' scale.",
+      "choices": [
+        { "label": "Default", "set": { "display/window_size": "" } },
+        { "label": "1280 x 720", "set": { "display/window_size": "1280x720" } },
+        { "label": "1600 x 900", "set": { "display/window_size": "1600x900" } },
+        { "label": "1920 x 1080", "set": { "display/window_size": "1920x1080" } },
+        { "label": "2560 x 1440", "set": { "display/window_size": "2560x1440" } },
+        { "label": "3840 x 2160", "set": { "display/window_size": "3840x2160" } }
+      ],
+      "defaults": { "display/window_size": "", "display/mode": "windowed" },
+      "when": { "display/mode": "windowed" }
+    },
+    {
+      "id": "vsync", "label": "VSync", "group": "Display",
+      "help": "Waits for the display's refresh: no tearing.",
+      "choices": [
+        { "label": "On", "set": { "display/vsync": "on" } },
+        { "label": "Off", "set": { "display/vsync": "off" } }
+      ],
+      "defaults": { "display/vsync": "on" }
+    },
+    {
+      "id": "frame_cap", "label": "Frame rate cap", "group": "Display",
+      "help": "An even pace instead of the highest rate the PC reaches. With frame generation, off follows the monitor.",
+      "choices": [
+        { "label": "Off", "set": { "display/frame_cap": "off" } },
+        { "label": "20 fps", "set": { "display/frame_cap": "20" } },
+        { "label": "30 fps", "set": { "display/frame_cap": "30" } }
+      ],
+      "defaults": { "display/frame_cap": "off" }
+    },
+    {
+      "id": "show_fps", "label": "Show FPS", "group": "Display",
+      "help": "On screen adds the frame time, the load of the CPU, GPU, PPU, SPU and RSX, and a graph of the last frames' times.",
+      "choices": [
+        { "label": "Off", "set": { "display/show_fps": "off" } },
+        { "label": "Title bar", "set": { "display/show_fps": "title" } },
+        { "label": "On screen", "set": { "display/show_fps": "overlay" } }
+      ],
+      "defaults": { "display/show_fps": "title" }
+    },
+    {
+      "id": "ultrawide", "label": "Ultrawide", "group": "Display",
+      "help": "Draws the game to the full width of a wider screen. The HUD, menus and movies stay 16:9.",
+      "choices": [
+        { "label": "Off", "set": { "display/ultrawide": "off" } },
+        { "label": "On", "set": { "display/ultrawide": "on" } }
+      ],
+      "defaults": { "display/ultrawide": "off" }
+    },
+    {
+      "id": "render_scale", "label": "Internal resolution", "group": "Picture",
+      "help": "What the scene is drawn at. 720p is the PS3's own. FSR 3.1 and frame generation go no higher than the window.",
+      "choices": [
+        { "label": "720p", "set": { "graphics/render_scale": "1" } },
+        { "label": "1080p", "set": { "graphics/render_scale": "1.5" } },
+        { "label": "1440p", "set": { "graphics/render_scale": "2" } },
+        { "label": "4K", "set": { "graphics/render_scale": "3" } },
+        { "label": "Window size", "set": { "graphics/render_scale": "native" } }
+      ],
+      "defaults": { "graphics/render_scale": "1" }
+    },
+    {
+      "id": "scaling", "label": "Scaling", "group": "Picture",
+      "help": "How the picture is fitted to the window. FSR 3.1 builds detail from past frames and needs MLAA off.",
+      "choices": [
+        { "label": "Bilinear", "set": { "graphics/scaling": "bilinear" } },
+        { "label": "Sharp bilinear", "set": { "graphics/scaling": "sharp" } },
+        { "label": "FSR 1", "set": { "graphics/scaling": "fsr1" } },
+        { "label": "FSR 3.1", "set": { "graphics/scaling": "fsr3" } }
+      ],
+      "defaults": { "graphics/scaling": "bilinear" }
+    },
+    {
+      "id": "sharpening", "label": "FSR sharpening", "group": "Picture",
+      "help": "FSR's sharpening pass. Only with FSR 1 or FSR 3.1 scaling.",
+      "choices": [
+        { "label": "Off", "set": { "graphics/sharpening": "off" } },
+        { "label": "Low", "set": { "graphics/sharpening": "low" } },
+        { "label": "Medium", "set": { "graphics/sharpening": "medium" } },
+        { "label": "High", "set": { "graphics/sharpening": "high" } },
+        { "label": "Max", "set": { "graphics/sharpening": "max" } }
+      ],
+      "defaults": { "graphics/sharpening": "high" }
+    },
+    {
+      "id": "frame_generation", "label": "Frame generation", "group": "Picture",
+      "help": "FSR 3.1: twice the frames on screen, with VSync on. The game runs at half the monitor's refresh, and it adds about a frame of delay.",
+      "choices": [
+        { "label": "Off", "set": { "graphics/frame_generation": "off" } },
+        { "label": "On", "set": { "graphics/frame_generation": "on" } }
+      ],
+      "defaults": { "graphics/frame_generation": "off", "patches/disable_mlaa": "on" },
+      "when": { "patches/disable_mlaa": "on" }
+    },
+    {
+      "id": "antialiasing", "label": "Anti-aliasing", "group": "Picture",
+      "help": "SMAA smooths jagged edges for next to nothing. FSR 3.1 scaling does this itself in play.",
+      "choices": [
+        { "label": "Off", "set": { "graphics/antialiasing": "off" } },
+        { "label": "SMAA", "set": { "graphics/antialiasing": "smaa" } }
+      ],
+      "defaults": { "graphics/antialiasing": "off" }
+    },
+    {
+      "id": "anisotropy", "label": "Texture filtering", "group": "Picture",
+      "help": "Sharper textures seen at an angle. The game itself asks for none.",
+      "choices": [
+        { "label": "Game's own", "set": { "graphics/anisotropy": "game" } },
+        { "label": "2x", "set": { "graphics/anisotropy": "2" } },
+        { "label": "4x", "set": { "graphics/anisotropy": "4" } },
+        { "label": "8x", "set": { "graphics/anisotropy": "8" } },
+        { "label": "16x", "set": { "graphics/anisotropy": "16" } }
+      ],
+      "defaults": { "graphics/anisotropy": "game" }
+    },
+    {
+      "id": "gpu", "label": "Graphics card", "group": "Picture", "advanced": true,
+      "help": "On a laptop with two, which one draws the game.",
+      "choices": [
+        { "label": "Discrete", "set": { "graphics/gpu": "discrete" } },
+        { "label": "Integrated", "set": { "graphics/gpu": "integrated" } }
+      ],
+      "defaults": { "graphics/gpu": "discrete" }
+    },
+    {
+      "id": "shader_wait", "label": "Wait for new shaders", "group": "Picture", "advanced": true,
+      "help": "How long walls and floors wait for their new shaders. Short: 33 ms in all for a frame, no pause; past it a gap shows there until the shader is built. Full: up to two seconds each, no gap but a pause. Off: no wait, a gap for a moment.",
+      "choices": [
+        { "label": "Off", "set": { "graphics/shader_wait": "off" } },
+        { "label": "Short", "set": { "graphics/shader_wait": "short" } },
+        { "label": "Full", "set": { "graphics/shader_wait": "full" } }
+      ],
+      "defaults": { "graphics/shader_wait": "off" }
+    },
+    {
+      "id": "preset", "label": "Preset", "group": "Game patches",
+      "help": "Smooth, the default, is the fastest: no dynamic shadows, motion blur or MLAA. Balanced keeps the shadows. Faithful draws everything as on the PS3.",
+      "choices": [
+        { "label": "Smooth", "set": { "patches/disable_mlaa": "on", "patches/disable_motion_blur": "on", "patches/disable_shadows": "on", "patches/disable_depth_of_field": "off", "patches/disable_mesh_trimming": "off" } },
+        { "label": "Balanced", "set": { "patches/disable_mlaa": "on", "patches/disable_motion_blur": "on", "patches/disable_shadows": "off", "patches/disable_depth_of_field": "off", "patches/disable_mesh_trimming": "off" } },
+        { "label": "Faithful", "set": { "patches/disable_mlaa": "off", "patches/disable_motion_blur": "off", "patches/disable_shadows": "off", "patches/disable_depth_of_field": "off", "patches/disable_mesh_trimming": "off" } }
+      ],
+      "defaults": { "patches/disable_mlaa": "on", "patches/disable_motion_blur": "on", "patches/disable_shadows": "on", "patches/disable_depth_of_field": "off", "patches/disable_mesh_trimming": "off" }
+    },
+    {
+      "id": "mlaa", "label": "MLAA", "group": "Game patches",
+      "help": "The PS3's own anti-aliasing, whose picture this port never shows. Off is about 5% faster; FSR 3.1 and frame generation need it off.",
+      "choices": [
+        { "label": "Off", "set": { "patches/disable_mlaa": "on" } },
+        { "label": "On", "set": { "patches/disable_mlaa": "off" } }
+      ],
+      "defaults": { "patches/disable_mlaa": "on" }
+    },
+    {
+      "id": "shadows", "label": "Dynamic shadows", "group": "Game patches",
+      "help": "Off is the biggest saving, about 25% faster in the Megaera fight.",
+      "choices": [
+        { "label": "Off", "set": { "patches/disable_shadows": "on" } },
+        { "label": "On", "set": { "patches/disable_shadows": "off" } }
+      ],
+      "defaults": { "patches/disable_shadows": "on" }
+    },
+    {
+      "id": "motion_blur", "label": "Motion blur", "group": "Game patches",
+      "help": "Off saves the blur's work.",
+      "choices": [
+        { "label": "Off", "set": { "patches/disable_motion_blur": "on" } },
+        { "label": "On", "set": { "patches/disable_motion_blur": "off" } }
+      ],
+      "defaults": { "patches/disable_motion_blur": "on" }
+    },
+    {
+      "id": "depth_of_field", "label": "Depth of field", "group": "Game patches",
+      "help": "The blur of what lies outside the camera's focus.",
+      "choices": [
+        { "label": "On", "set": { "patches/disable_depth_of_field": "off" } },
+        { "label": "Off", "set": { "patches/disable_depth_of_field": "on" } }
+      ],
+      "defaults": { "patches/disable_depth_of_field": "off" }
+    },
+    {
+      "id": "mesh_trimming", "label": "Mesh trimming", "group": "Game patches",
+      "help": "The game drops triangles too thin for its 720p grid. Off keeps them, for Internal resolution above 720p.",
+      "choices": [
+        { "label": "On", "set": { "patches/disable_mesh_trimming": "off" } },
+        { "label": "Off", "set": { "patches/disable_mesh_trimming": "on" } }
+      ],
+      "defaults": { "patches/disable_mesh_trimming": "off" }
+    },
+    {
+      "id": "device", "label": "Device", "group": "Controls",
+      "help": "Auto reads a controller and the keyboard and mouse at the same time: either one plays.",
+      "choices": [
+        { "label": "Auto", "set": { "input/device": "auto" } },
+        { "label": "Controller", "set": { "input/device": "pad" } },
+        { "label": "Keyboard", "set": { "input/device": "keyboard" } }
+      ],
+      "defaults": { "input/device": "auto" }
+    },
+    {
+      "id": "enter_button", "label": "Confirm button", "group": "Controls",
+      "help": "The button that confirms in the menus.",
+      "choices": [
+        { "label": "Cross", "set": { "input/enter_button": "cross" } },
+        { "label": "Circle", "set": { "input/enter_button": "circle" } }
+      ],
+      "defaults": { "input/enter_button": "cross" }
+    },
+    {
+      "id": "vibration", "label": "Vibration", "group": "Controls",
+      "help": "Controller rumble.",
+      "choices": [
+        { "label": "On", "set": { "input/vibration": "on" } },
+        { "label": "Off", "set": { "input/vibration": "off" } }
+      ],
+      "defaults": { "input/vibration": "on" }
+    },
+    {
+      "id": "api", "label": "Controller API", "group": "Controls", "advanced": true,
+      "help": "Auto reads a controller through XInput when it has it, else through SDL3 (DualShock 4, DualSense, Switch and others).",
+      "choices": [
+        { "label": "Auto", "set": { "input/api": "auto" } },
+        { "label": "XInput", "set": { "input/api": "xinput" } },
+        { "label": "SDL3", "set": { "input/api": "sdl3" } }
+      ],
+      "defaults": { "input/api": "auto" }
+    },
+    {
+      "id": "deadzone", "label": "Stick dead zone", "group": "Controls", "advanced": true,
+      "help": "How far a stick moves before it counts. 24% is XInput's.",
+      "choices": [
+        { "label": "10%", "set": { "input/deadzone": "0.10" } },
+        { "label": "15%", "set": { "input/deadzone": "0.15" } },
+        { "label": "20%", "set": { "input/deadzone": "0.20" } },
+        { "label": "24%", "set": { "input/deadzone": "0.24" } },
+        { "label": "30%", "set": { "input/deadzone": "0.30" } },
+        { "label": "35%", "set": { "input/deadzone": "0.35" } },
+        { "label": "40%", "set": { "input/deadzone": "0.40" } }
+      ],
+      "defaults": { "input/deadzone": "0.24" }
+    },
+    {
+      "id": "damage_taken", "label": "Damage to Kratos", "group": "Cheats",
+      "help": "How much of a hit he takes. None: hits take no health from him.",
+      "choices": [
+        { "label": "Normal", "set": { "cheats/damage_taken": "1" } },
+        { "label": "Half", "set": { "cheats/damage_taken": "0.5" } },
+        { "label": "Quarter", "set": { "cheats/damage_taken": "0.25" } },
+        { "label": "None", "set": { "cheats/damage_taken": "0" } }
+      ],
+      "defaults": { "cheats/damage_taken": "1" }
+    },
+    {
+      "id": "damage_dealt", "label": "Kratos's damage", "group": "Cheats",
+      "help": "How much his hits take from an enemy. One hit: all of its health.",
+      "choices": [
+        { "label": "Normal", "set": { "cheats/damage_dealt": "1" } },
+        { "label": "2x", "set": { "cheats/damage_dealt": "2" } },
+        { "label": "5x", "set": { "cheats/damage_dealt": "5" } },
+        { "label": "One hit", "set": { "cheats/damage_dealt": "kill" } }
+      ],
+      "defaults": { "cheats/damage_dealt": "1" }
+    },
+    {
+      "id": "max_orbs", "label": "Max red orbs", "group": "Cheats",
+      "help": "The red orbs are held at 1,000,000, the most the game allows. A save made with this on keeps them.",
+      "choices": [
+        { "label": "Off", "set": { "cheats/max_orbs": "off" } },
+        { "label": "On", "set": { "cheats/max_orbs": "on" } }
+      ],
+      "defaults": { "cheats/max_orbs": "off" }
+    },
+    {
+      "id": "infinite_magic", "label": "Infinite magic and items", "group": "Cheats",
+      "help": "The magic and item meters stay full.",
+      "choices": [
+        { "label": "Off", "set": { "cheats/infinite_magic": "off" } },
+        { "label": "On", "set": { "cheats/infinite_magic": "on" } }
+      ],
+      "defaults": { "cheats/infinite_magic": "off" }
+    },
+    {
+      "id": "infinite_rage", "label": "Infinite rage", "group": "Cheats",
+      "help": "The rage meter stays full.",
+      "choices": [
+        { "label": "Off", "set": { "cheats/infinite_rage": "off" } },
+        { "label": "On", "set": { "cheats/infinite_rage": "on" } }
+      ],
+      "defaults": { "cheats/infinite_rage": "off" }
+    },
+    {
+      "id": "infinite_jumps", "label": "Infinite double jumps", "group": "Cheats",
+      "help": "Kratos can jump again in the air, as often as he likes.",
+      "choices": [
+        { "label": "Off", "set": { "cheats/infinite_jumps": "off" } },
+        { "label": "On", "set": { "cheats/infinite_jumps": "on" } }
+      ],
+      "defaults": { "cheats/infinite_jumps": "off" }
+    },
+    {
+      "id": "language", "label": "Language", "group": "System",
+      "help": "The game's language: text and speech.",
+      "choices": [
+        { "label": "Windows language", "set": { "system/language": "auto" } },
+        { "label": "English (US)", "set": { "system/language": "en" } },
+        { "label": "English (UK)", "set": { "system/language": "en-gb" } },
+        { "label": "French", "set": { "system/language": "fr" } },
+        { "label": "Spanish", "set": { "system/language": "es" } },
+        { "label": "German", "set": { "system/language": "de" } },
+        { "label": "Italian", "set": { "system/language": "it" } },
+        { "label": "Dutch", "set": { "system/language": "nl" } },
+        { "label": "Portuguese", "set": { "system/language": "pt" } },
+        { "label": "Portuguese (Brazil)", "set": { "system/language": "pt-br" } },
+        { "label": "Russian", "set": { "system/language": "ru" } },
+        { "label": "Japanese", "set": { "system/language": "ja" } },
+        { "label": "Korean", "set": { "system/language": "ko" } },
+        { "label": "Chinese (traditional)", "set": { "system/language": "zh-t" } },
+        { "label": "Chinese (simplified)", "set": { "system/language": "zh-s" } },
+        { "label": "Finnish", "set": { "system/language": "fi" } },
+        { "label": "Swedish", "set": { "system/language": "sv" } },
+        { "label": "Danish", "set": { "system/language": "da" } },
+        { "label": "Norwegian", "set": { "system/language": "no" } },
+        { "label": "Polish", "set": { "system/language": "pl" } },
+        { "label": "Turkish", "set": { "system/language": "tr" } }
+      ],
+      "defaults": { "system/language": "auto" }
+    },
+    {
+      "id": "speakers", "label": "Speakers", "group": "System",
+      "help": "Auto follows the output device. Surround also needs the game's Sound Mode on 5.1 or 7.1.",
+      "choices": [
+        { "label": "Auto", "set": { "system/speakers": "auto" } },
+        { "label": "Stereo", "set": { "system/speakers": "stereo" } },
+        { "label": "5.1", "set": { "system/speakers": "5.1" } },
+        { "label": "7.1", "set": { "system/speakers": "7.1" } }
+      ],
+      "defaults": { "system/speakers": "auto" }
+    },
+    {
+      "id": "save_backups", "label": "Save backups", "group": "System",
+      "help": "Copies kept of a save before the game writes over it.",
+      "choices": [
+        { "label": "Off", "set": { "system/save_backups": "0" } },
+        { "label": "3", "set": { "system/save_backups": "3" } },
+        { "label": "5", "set": { "system/save_backups": "5" } },
+        { "label": "10", "set": { "system/save_backups": "10" } }
+      ],
+      "defaults": { "system/save_backups": "5" }
+    },
+    {
+      "id": "own_launcher", "label": "Ascension-R's launcher", "group": "System", "in": "args",
+      "help": "Its own window before the game: the game's folder, Clear shaders, Report a problem. Holding Shift at the start also shows it.",
+      "choices": [
+        { "label": "Skip it", "args": [] },
+        { "label": "Show it", "args": ["--set", "launcher.show=on"] }
+      ]
+    }
+  ],
+  "actions": [
+    { "id": "saves", "label": "Saves", "help": "Your saves. The copies kept before a save is written over are next to them, in savedata_backup.", "open": "saves" },
+    { "id": "logs", "label": "Logs", "help": "The last five sessions' logs.", "open": "logs" }
+  ]
+}

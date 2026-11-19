@@ -1,0 +1,45 @@
+/* Resources of Ascension-R.exe: the manifest (gowa.manifest), the icon (app.ico, scripts/brand/brand.py; its windows
+ * take it as resource 1), the launcher's fonts and the version in the file's properties. */
+#include <windows.h>
+#include "version.h"
+
+CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST "gowa.manifest"
+1 ICON "app.ico"
+
+/* The launcher's pixel font, under the SIL Open Font License 1.1 (THIRD_PARTY_NOTICES.md). launcher.cpp reads it
+ * from memory by these numbers. */
+101 RCDATA "..\\third_party\\silkscreen\\Silkscreen-Regular.ttf"
+102 RCDATA "..\\third_party\\silkscreen\\Silkscreen-Bold.ttf"
+/* Cinzel (SIL Open Font License 1.1): the display serif of the new shell. */
+103 RCDATA "..\\third_party\\cinzel\\Cinzel-Regular.ttf"
+
+/* Button icons: Xbox (textures.cpp, which says which texture of the game's each stands for): the port's own, drawn
+ * by scripts/button_icons.ps1. */
+201 RCDATA "icons\\xbox_a.png"
+202 RCDATA "icons\\xbox_b.png"
+203 RCDATA "icons\\xbox_x.png"
+204 RCDATA "icons\\xbox_y.png"
+205 RCDATA "icons\\xbox_view.png"
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION AR_VERSION_RC
+PRODUCTVERSION AR_VERSION_RC
+FILEOS VOS_NT_WINDOWS32
+FILETYPE VFT_APP
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "FileDescription", "GOWA-cMc (God of War: Ascension BCUS98232) - port cMc-OmniPort"
+            VALUE "FileVersion", AR_VERSION
+            VALUE "OriginalFilename", "GOWA-cMc.exe"
+            VALUE "ProductName", "GOWA-cMc"
+            VALUE "ProductVersion", AR_VERSION
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0409, 1200
+    END
+END

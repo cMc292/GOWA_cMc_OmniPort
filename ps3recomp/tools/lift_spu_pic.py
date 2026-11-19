@@ -1,0 +1,278 @@
+#!/usr/bin/env python3
+"""lift_spu_pic.py -- lift the position-independent SPU code pieces a title's
+jobs stream out of its PPU executable to wherever they have room.
+
+Some SPU jobs carry code of their own: the job's DMA list fetches pieces of
+the executable into the job's buffer, packed one after another, so the same
+bytes run from many local-store addresses and no fixed-address lift can serve
+them. God of War: Ascension's EDGE geometry jobs fetch 26 such pieces into LS
+0x11000-0x12400, each to between 3 and 38 different addresses; interpreted,
+they kept three SPU threads busy.
+
+Each distinct piece (by content: two EAs may hold the same bytes) is lifted
+once with spu_lifter.py --pic at LIFT_BASE, and registered with
+spu_overlay_register_pic_region() under an image id of its own, once per EA it
+streams from. A GET of it marks it resident wherever it lands, the first
+dispatch compares the bytes there with the lifted ones, and dispatch runs the
+lifted code with ctx->pic_base set to that placement's distance from
+LIFT_BASE. Only the instructions are compared: the lifted code reads the
+constant pool from local store as the SPU does, and a piece may store into it.
+A piece that arrives inside a block from somewhere else (a buffer the PPU
+assembled) is found by its bytes when dispatch finds nothing where it is.
+
+The list of pieces is the title's, found by running it (SPU_DMA_RANGE_UNIQ for
+where they come from and land, SPU_INTERP_BYSIG for the entries):
+
+  [{"ea": "0x755080", "size": 2816, "entry": "0x18"}, ...]
+
+"entries" (optional) lists further entry offsets. The constant pool a piece
+keeps after its code (what its lqr loads read) is left out of the lift.
+
+usage:
+  python tools/lift_spu_pic.py --elf <PPU ELF> --list <pieces.json> --out <dir>
+                               [--register <file.c>] [--symbol-prefix NAME] [--jobs N]
+"""
+import argparse
+import concurrent.futures
+import hashlib
+import json
+import os
+import struct
+import subprocess
+import sys
+
+sys.path.insert(0, os.path.dirname(__file__))
+from wrap_spu_elf import wrap                     # noqa: E402
+from lift_jobmods import elf_load_segments        # noqa: E402
+
+LIFTER = os.path.join(os.path.dirname(__file__), "spu_lifter.py")
+# Options every spu_lifter.py run gets (--float-spec).
+LIFTER_ARGS = []
+LIFT_BASE = 0x30000
+PIC_IMAGE_BASE = 400
+
+
+def read_ea(segs, ea, size):
+    for va, data in segs:
+        if va <= ea and ea + size <= va + len(data):
+            return data[ea - va: ea - va + size]
+    sys.exit(f"0x{ea:X}+{size}: not inside a loaded segment")
+
+
+def pool_start(raw):
+    """Where the constant pool begins: the lowest quadword an lqr/stqr reads
+    inside the piece (they all read their own piece's pool), else the end."""
+    lo = len(raw)
+    for off in range(0, len(raw) - 3, 4):
+        w = struct.unpack_from(">I", raw, off)[0]
+        if (w >> 23) in (0x067, 0x047):            # lqr, stqr (RI16)
+            imm = (w >> 7) & 0xFFFF
+            if imm & 0x8000:
+                imm -= 0x10000
+            t = (off + imm * 4) & ~15
+            if 0 <= t < lo:
+                lo = t
+    return lo
+
+
+def lift_piece(raw, name, entries, outdir, tmp_elf, prefix, log=None):
+    """Lift one piece into <outdir>/<name>/. With `log`, a list, what it would print goes there as
+    (stream, line) pairs instead, for main to print in the list's order."""
+    def say(line, stream=None):
+        if log is None:
+            print(line, file=stream or sys.stdout)
+        else:
+            log.append((stream, line))
+
+    end = pool_start(raw)
+    if any(e >= end for e in entries):
+        sys.exit(f"{name}: an entry is in the constant pool (0x{end:X})")
+    with open(tmp_elf, "wb") as f:
+        f.write(wrap(raw, base=LIFT_BASE, entry=LIFT_BASE + entries[0]))
+    cmd = [sys.executable, LIFTER, "--auto-functions", tmp_elf, "--base", hex(LIFT_BASE),
+           "--pic", "--symbol-prefix", prefix, "-o", os.path.join(outdir, name),
+           "--source-name", "spu_recomp.c", "--header-name", "spu_recomp.h",
+           "--code-end", hex(LIFT_BASE + end)] + LIFTER_ARGS
+    if len(entries) > 1:
+        cmd += ["--extra-funcs", ",".join(hex(LIFT_BASE + e) for e in entries[1:])]
+    r = subprocess.run(cmd, capture_output=True, text=True)
+    if r.returncode != 0:
+        say(f"  FAIL {name}\n{r.stderr}", sys.stderr)
+        return None
+    funcs = unsup = 0
+    for line in r.stdout.splitlines():
+        t = line.strip()
+        if t.endswith("function(s) lifted"):
+            funcs = int(t.split()[0])
+        if "unsupported instruction(s)" in t:
+            unsup = int(t.split()[0])
+    say(f"  {name:24} {len(raw):5d} bytes, code 0x{end:X}, funcs={funcs:2d} unsup={unsup}"
+        + ("  <-- UNSUPPORTED" if unsup else ""))
+    return {"funcs": funcs, "unsup": unsup, "code_end": end}
+
+
+def emit_register(pieces, register_c, sym_prefix):
+    L = []
+    L.append("/* pic_register.c -- GENERATED by tools/lift_spu_pic.py.")
+    L.append(" * Position-independent SPU code pieces streamed out of the executable.")
+    L.append(" * Each registers its lifted functions under an image id of its own and")
+    L.append(" * every EA it streams from as a position-independent verified region.")
+    L.append(" * Contains the title's code bytes, like the lifted C it registers. */")
+    L.append("#include <stdint.h>")
+    L.append("#include <stdio.h>")
+    L.append("#include <stdlib.h>")
+    L.append('#include "spu_overlay_residency.h"')
+    L.append("")
+    L.append("extern void spu_begin_image(int image_id);")
+    for p in pieces:
+        L.append(f"extern void {p['prefix']}spu_recomp_register(void);")
+    L.append("")
+    # Only the instructions are verified: the lifted code reads the constant
+    # pool after them from local store (lqr), and a piece may store into it.
+    for p in pieces:
+        b = p["raw"][:p["code_end"]]
+        L.append(f"static const uint8_t code_{p['image']}[{len(b)}] = {{")
+        for k in range(0, len(b), 16):
+            L.append("    " + ",".join(f"0x{x:02X}" for x in b[k:k + 16]) + ",")
+        L.append("};")
+    L.append("")
+    L.append("/* SPU_PIC_SKIP=<ea>[,<ea>...] leaves those pieces interpreted;")
+    L.append(" * SPU_PIC_ONLY=<ea>[,<ea>...] registers those alone (hex source EAs). */")
+    L.append("static int pic_listed(const char* var, uint32_t ea)")
+    L.append("{")
+    L.append("    const char* e = getenv(var);")
+    L.append("    while (e && *e) {")
+    L.append("        char* end;")
+    L.append("        if ((uint32_t)strtoul(e, &end, 16) == ea) return 1;")
+    L.append("        e = *end ? end + 1 : end;")
+    L.append("    }")
+    L.append("    return 0;")
+    L.append("}")
+    L.append("")
+    L.append("static int pic_skipped(uint32_t ea)")
+    L.append("{")
+    L.append('    if (getenv("SPU_PIC_ONLY") && !pic_listed("SPU_PIC_ONLY", ea)) return 1;')
+    L.append('    return pic_listed("SPU_PIC_SKIP", ea);')
+    L.append("}")
+    L.append("")
+    L.append(f"void {sym_prefix}_pic_register_all(void)")
+    L.append("{")
+    for p in pieces:
+        img = p["image"]
+        L.append(f"    {{ static const spu_overlay_code_segment seg = "
+                 f"{{0x{LIFT_BASE:X}u, sizeof code_{img}, code_{img}}};")
+        L.append(f"      int any = 0;")
+        for ea in p["eas"]:
+            L.append(f"      if (!pic_skipped(0x{ea:08X}u)) {{")
+            L.append(f"          if (!any) {{ any = 1; spu_begin_image({img}); "
+                     f"{p['prefix']}spu_recomp_register(); }}")
+            L.append(f"          if (!spu_overlay_register_pic_region(0x{ea:08X}u, 0x{LIFT_BASE:X}u, "
+                     f"{len(p['raw'])}u, {img}, &seg, 1))")
+            L.append(f'              fprintf(stderr, "[spu-pic] image {img}: region 0x{ea:08X} '
+                     f'not registered, interpreted\\n");')
+            L.append("      }")
+        L.append("    }")
+    L.append("    spu_begin_image(0);")
+    L.append("}")
+    L.append("")
+    L.append(f"__attribute__((constructor)) static void {sym_prefix}_pic_register_ctor(void)")
+    L.append("{")
+    L.append(f"    {sym_prefix}_pic_register_all();")
+    L.append("}")
+    L.append("")
+    os.makedirs(os.path.dirname(register_c) or ".", exist_ok=True)
+    with open(register_c, "w") as f:
+        f.write("\n".join(L))
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--elf", required=True, help="the PPU executable the pieces stream from")
+    ap.add_argument("--list", required=True, help="JSON list of pieces (ea, size, entry)")
+    ap.add_argument("--out", required=True, help="output directory, one subdirectory per piece")
+    ap.add_argument("--register", default=None, help="registration TU (default <out>/pic_register.c)")
+    ap.add_argument("--symbol-prefix", default="port")
+    ap.add_argument("--jobs", type=int, default=1, metavar="N",
+                    help="lift N pieces at a time, each a spu_lifter.py process of its own (default 1)")
+    ap.add_argument("--float-spec", type=int, default=0, metavar="N",
+                    help="Pass --float-spec N to spu_lifter.py: a speculative float body for "
+                         "each function with no store, channel op, call or internal branch "
+                         "and at least N single-precision float ops.")
+    ap.add_argument("--loop-locals", action="store_true",
+                    help="Pass --loop-locals to spu_lifter.py: a single-block loop's registers "
+                         "in C locals.")
+    ap.add_argument("--loop-locals-skip", default="", metavar="ADDRS",
+                    help="Pass --loop-locals-skip to spu_lifter.py (loop heads, hex, comma-separated).")
+    ap.add_argument("--loop-locals-max", type=int, default=0, metavar="N",
+                    help="Pass --loop-locals-max to spu_lifter.py.")
+    args = ap.parse_args()
+    if args.float_spec:
+        LIFTER_ARGS.extend(["--float-spec", str(args.float_spec)])
+    if args.loop_locals:
+        LIFTER_ARGS.append("--loop-locals")
+        if args.loop_locals_skip:
+            LIFTER_ARGS.extend(["--loop-locals-skip", args.loop_locals_skip])
+        if args.loop_locals_max:
+            LIFTER_ARGS.extend(["--loop-locals-max", str(args.loop_locals_max)])
+
+    segs = elf_load_segments(open(args.elf, "rb").read())
+    listed = json.load(open(args.list))
+    os.makedirs(args.out, exist_ok=True)
+    by_content = {}
+    order = []
+    for item in listed:
+        ea = int(str(item["ea"]), 0)
+        size = int(str(item["size"]), 0)
+        entries = [int(str(item["entry"]), 0)] + [int(str(e), 0) for e in item.get("entries", [])]
+        raw = read_ea(segs, ea, size)
+        key = hashlib.sha1(raw).hexdigest()
+        if key in by_content:
+            p = by_content[key]
+            p["eas"].append(ea)
+            for e in entries:
+                if e not in p["entries"]:
+                    sys.exit(f"0x{ea:X}: same bytes as 0x{p['eas'][0]:X} but another entry 0x{e:X}")
+            continue
+        p = {"eas": [ea], "raw": raw, "entries": entries, "name": f"pic_{ea:08X}",
+             "prefix": f"pic_{ea:08X}_", "image": PIC_IMAGE_BASE + len(order)}
+        by_content[key] = p
+        order.append(p)
+
+    print(f"{len(listed)} pieces, {len(order)} distinct; lifting at 0x{LIFT_BASE:X}")
+
+    def lift_one(p):
+        log, tmp_elf = [], os.path.join(args.out, f"_piece_{p['name']}.elf")
+        try:
+            return lift_piece(p["raw"], p["name"], p["entries"], args.out, tmp_elf, p["prefix"], log), log
+        finally:
+            if os.path.exists(tmp_elf):
+                os.remove(tmp_elf)
+
+    # --jobs: each piece is a spu_lifter.py process of its own; what is printed keeps the list's order.
+    failed = 0
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, args.jobs)) as ex:
+        running = [ex.submit(lift_one, p) for p in order]
+        for p, lifting in zip(order, running):
+            r, log = lifting.result()
+            for stream, line in log:
+                print(line, file=stream or sys.stdout)
+            if r is None or r["unsup"]:
+                failed += 1
+            else:
+                p["code_end"] = r["code_end"]
+    if failed:
+        sys.exit(f"{failed} piece(s) failed or have unsupported instructions")
+    manifest = [{"name": p["name"], "image": p["image"], "eas": [hex(e) for e in p["eas"]],
+                 "size": len(p["raw"]), "code_end": hex(p["code_end"]),
+                 "entries": [hex(e) for e in p["entries"]]} for p in order]
+    with open(os.path.join(args.out, "pic_manifest.json"), "w") as f:
+        json.dump(manifest, f, indent=1)
+    register_c = args.register or os.path.join(args.out, "pic_register.c")
+    emit_register(order, register_c, args.symbol_prefix)
+    print(f"Wrote {register_c} ({len(order)} images, ids {PIC_IMAGE_BASE}.."
+          f"{PIC_IMAGE_BASE + len(order) - 1})")
+
+
+if __name__ == "__main__":
+    main()

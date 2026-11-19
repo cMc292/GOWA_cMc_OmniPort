@@ -1,0 +1,17 @@
+{
+  "$schema": "https://recomp.fyi/schema/v1.json",
+  "game": "God of War: Ascension",
+  "wikidata": "Q2298167",
+  "system": "PS3",
+  "type": "recomp",
+  "original": { "region": "USA", "revision": "1.12", "serial": "NPUA80918" },
+  "project": "Ascension-R",
+  "status": "released",
+  "targets": ["Windows"],
+  "toolchain": "Ps3recomp",
+  "approach": "PPU and SPU code statically recompiled to x86-64 on a fork of ps3recomp, with a D3D12 renderer; the Kit builds the game's code on the player's PC from their own copy.",
+  "maintainers": [{ "name": "rigaz29", "link": "https://github.com/rigaz29" }],
+  "links": [{ "label": "Website", "url": "https://rigaz29.github.io/Ascension-R/" }],
+  "help": ["European and disc releases (issue #4)", "Testing on Linux through Proton and on the Steam Deck"],
+  "notes": "Alpha. Boots, plays the cinematics and goes through the menus into the levels; not yet played from start to finish. Needs the digital US release NPUA80918 at version 1.12. The Kit release holds none of the game's code and builds it on your PC from your own copy. FSR 1 and FSR 3.1 with frame generation, SMAA, ultrawide, controller or keyboard and mouse, game patches and cheats. Windows 10 and 11; one player runs it on Linux through Proton."
+}
