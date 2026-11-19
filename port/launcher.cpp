@@ -730,6 +730,24 @@ static void game_refresh(void)
             }
         }
     }
+    /* The merged BCUS layout: build\vfs\PS3_GAME is the disc and
+     * build\gamedata\...\BCUS98232 is the Update. The disc probe can fail here
+     * because both are junctions with a folder on each side; the links being
+     * present and the ELF valid is the same check the game itself passes. */
+    if (s_game.g.state == GAME_NONE &&
+        GetFileAttributesW(s_game.link_vfs) != INVALID_FILE_ATTRIBUTES &&
+        GetFileAttributesW(s_game.link_hdd0) != INVALID_FILE_ATTRIBUTES) {
+        wchar_t e[GAME_PATH_MAX + 16];
+        data_file(e, sizeof e / sizeof e[0], L"GOWA.elf");
+        if (game_elf_ok(e)) {
+            s_game.g.state = GAME_OK;
+            snprintf(s_game.g.title_id, sizeof s_game.g.title_id, "BCUS98232");
+            snprintf(s_game.g.app_ver, sizeof s_game.g.app_ver, "01.12");
+            snprintf(s_game.g.category, sizeof s_game.g.category, "DG");
+            s_game.g.disc = 1;
+            swprintf(s_game.g.dir, GAME_PATH_MAX, L"%ls", dir);
+        }
+    }
     const char* elf = ps3_settings_str("paths", "elf", NULL, NULL);
     s_rc.elf_ok = elf && *elf && GetFileAttributesA(elf) != INVALID_FILE_ATTRIBUTES;
     /* Not the whole game: nothing is built or played from it, whatever was decrypted before (game_status says what
