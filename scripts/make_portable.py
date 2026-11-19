@@ -117,7 +117,7 @@ def main() -> int:
     if lic.is_file():
         shutil.copy2(lic, out / "_src" / "ffmpeg" / "LICENSE.txt")
 
-    # Configuration: no absolute paths, shader prebuild enabled.
+    # Empty structure for the first-run links; no game data and no absolute paths.\n    (out / "vfs").mkdir(exist_ok=True)\n    (out / "gamedata" / "dev_hdd0").mkdir(parents=True, exist_ok=True)\n\n    # Configuration: no absolute paths, shader prebuild enabled.
     (out / "ascension-r.ini").write_text(CONFIG, encoding="utf-8", newline="\n")
     (out / "gowa-cmc.ini").write_text(CONFIG, encoding="utf-8", newline="\n")
 
