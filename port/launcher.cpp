@@ -2913,7 +2913,6 @@ static void kit_start(void)
     }
     const char* elf = ps3_settings_str("paths", "elf", NULL, NULL);
     if (!s_rc.elf_ok || !elf) {
-        s_tab = T_SYSTEM;
         toast_bad(game_needed_toast());
         return;
     }
@@ -3423,7 +3422,9 @@ static void act(int id)
     if (id >= H_PLAY) {
         switch (id) {
         case H_PLAY:
-            if (s_game.g.state != GAME_OK || !s_rc.elf_ok) {
+            if (!s_rc.elf_ok || !s_game.vfs[0] || !s_game.hdd0[0] ||
+                GetFileAttributesW(s_game.link_vfs) == INVALID_FILE_ATTRIBUTES ||
+                GetFileAttributesW(s_game.link_hdd0) == INVALID_FILE_ATTRIBUTES) {
                 s_tab = T_SYSTEM;
                 if (new_ui_on()) s_new_page = 7  /* SISTEMA in the new UI (page 6 is MODS) */;
                 toast_bad(game_needed_toast());
