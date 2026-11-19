@@ -1,0 +1,73 @@
+name: Release portable
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Versión con v, por ejemplo v0.1.5"
+        required: true
+        default: "v0.1.5"
+      draft:
+        description: "Crear el release como borrador"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    # Runner del autor: tiene el juego, el ELF y el árbol completo.
+    # No se puede compilar esto en un runner alojado por GitHub porque
+    # el repositorio no contiene archivos del juego.
+    runs-on: [self-hosted, windows, gowa]
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Comprobar versión
+        shell: pwsh
+        run: |
+          $v = "${{ inputs.version }}"
+          if ($v -notmatch '^v\d+\.\d+\.\d+([.-][0-9A-Za-z.-]+)?$') {
+            throw "Versión inválida: $v"
+          }
+          if (-not $env:GOWA_FULL_ROOT) {
+            throw "Configura GOWA_FULL_ROOT en el runner self-hosted"
+          }
+          if (-not (Test-Path -LiteralPath (Join-Path $env:GOWA_FULL_ROOT "tools\python\python.exe"))) {
+            throw "GOWA_FULL_ROOT no apunta al full compilado"
+          }
+          if (-not (Get-Command gh -ErrorAction SilentlyContinue)) {
+            throw "GitHub CLI (gh) no está instalado en el runner"
+          }
+
+      - name: Generar paquete
+        shell: pwsh
+        run: |
+          $root = $env:GOWA_FULL_ROOT
+          & (Join-Path $root "tools\python\python.exe") `
+            (Join-Path $root "scripts\make_portable.py") --version "${{ inputs.version }}"
+          if ($LASTEXITCODE -ne 0) { throw "El empaquetador falló" }
+          $zip = Join-Path $root ("..\dist\GOWA_cMc_OmniPort " + "${{ inputs.version }}" + ".zip")
+          $zip = [IO.Path]::GetFullPath($zip)
+          if (-not (Test-Path -LiteralPath $zip)) { throw "No existe el ZIP: $zip" }
+          "ZIP=$zip"
+
+      - name: Publicar release
+        shell: pwsh
+        run: |
+          $v = "${{ inputs.version }}"
+          $root = $env:GOWA_FULL_ROOT
+          $zip = [IO.Path]::GetFullPath((Join-Path $root ("..\dist\GOWA_cMc_OmniPort " + $v + ".zip")))
+          if ("${{ inputs.draft }}" -eq "true") {
+            & gh release create $v $zip `
+              --repo "${{ github.repository }}" `
+              --title "GOWA_cMc_OmniPort $v" `
+              --generate-notes --draft
+          } else {
+            & gh release create $v $zip `
+              --repo "${{ github.repository }}" `
+              --title "GOWA_cMc_OmniPort $v" `
+              --generate-notes
+          }
+          if ($LASTEXITCODE -ne 0) { throw "gh release create falló" }

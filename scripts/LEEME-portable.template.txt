@@ -1,0 +1,35 @@
+GOWA_cMc_OmniPort {{VERSION}}
+God of War: Ascension [BCUS98232] - port para Windows x64
+
+LEEME PRIMERO
+=============
+
+1. Descomprime este paquete en una carpeta con permisos de escritura.
+2. Ejecuta GOWA-cMc.exe.
+3. En SISTEMA elige la carpeta del juego.
+   Elige la carpeta que contiene PS3_GAME, NO la carpeta Update\BCUS98232.
+4. La primera vez se compilan los shaders. Espera a que HOME muestre:
+   "Pixel shaders: listos".
+5. Pulsa PLAY.
+
+IMPORTANTE
+----------
+Este paquete NO contiene el juego: ni PS3_GAME, ni PSARC, ni EBOOT,
+ni videos, ni trofeos. Necesitas tu propia copia de BCUS98232 1.12
+y tu GOWA.elf descifrado.
+
+Si el juego se cierra despues de compilar shaders, revisa que elegiste
+la carpeta del disco (la que contiene PS3_GAME), no la del Update.
+
+F10 muestra u oculta el panel GC de rendimiento.
+F11 cambia ventana/borderless.
+F12 hace una captura.
+F9 relee las texturas.
+
+Creditos y licencias: CREDITOS.md, LICENSE, THIRD-PARTY.txt y
+THIRD_PARTY_NOTICES.md.
+
+Repositorio:
+https://github.com/cMc292/GOWA_cMc_OmniPort
+
+Build: {{EXE_SHA256}} - {{DATE}}

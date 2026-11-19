@@ -14,7 +14,9 @@ selects their own game folder on first run.
 from __future__ import annotations
 
 import argparse
+import datetime
 import hashlib
+import os
 import shutil
 import subprocess
 import sys
@@ -38,7 +40,7 @@ RUNTIME = [
 ]
 VC_RUNTIME = ["msvcp140.dll", "vcruntime140.dll", "vcruntime140_1.dll", "concrt140.dll"]
 DOCS = ["LICENSE", "THIRD-PARTY.txt", "THIRD_PARTY_NOTICES.md", "SOURCE_OFFER.txt",
-        "CREDITOS.md", "LEEME-PRIMERO.txt", "README.md", "update_check.txt"]
+        "CREDITOS.md", "update_check.txt"]
 
 CONFIG = """[paths]
 vfs =
@@ -138,8 +140,19 @@ def main() -> int:
                                 text=True, capture_output=True, check=False).stdout.strip()
     except Exception:
         commit = ""
+    # Current README/LEEME, generated from templates with this package's data.
+    date = datetime.date.today().isoformat()
+    vars = {"{{VERSION}}": version, "{{EXE_SHA256}}": exe_hash, "{{DATE}}": date}
+    for tmpl_name, out_name in (("README-portable.template.md", "README.md"),
+                                ("LEEME-portable.template.txt", "LEEME-PRIMERO.txt")):
+        tmpl = FULL / "scripts" / tmpl_name
+        text = need(tmpl).read_text(encoding="utf-8")
+        for k, v in vars.items():
+            text = text.replace(k, v)
+        (out / out_name).write_text(text, encoding="utf-8", newline="\n")
+
     (out / "BUILD-INFO.txt").write_text(
-        f"Package: {name}\nVersion: {version}\nFull: {FULL}\n"
+        f"Package: {name}\nVersion: {version}\nFull: work/0.2.0-full\n"
         f"Exe SHA-256: {exe_hash}\nExe bytes: {(out / 'GOWA-cMc.exe').stat().st_size}\n"
         f"Full commit: {commit}\nGame data: not included; selected by the player on first run.\n",
         encoding="utf-8", newline="\n")
@@ -170,5 +183,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    import os  # noqa: E402  (used above; kept local to avoid global import warning)
     raise SystemExit(main())
