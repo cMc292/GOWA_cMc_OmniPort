@@ -731,21 +731,29 @@ static void game_refresh(void)
         }
     }
     /* The merged BCUS layout: build\vfs\PS3_GAME is the disc and
-     * build\gamedata\...\BCUS98232 is the Update. The disc probe can fail here
-     * because both are junctions with a folder on each side; the links being
-     * present and the ELF valid is the same check the game itself passes. */
+     * build\gamedata\...\BCUS98232 is the Update. Probes through junctions can
+     * miss the pair, so read both PARAM.SFO files and require the Update 1.12. */
     if (s_game.g.state == GAME_NONE &&
         GetFileAttributesW(s_game.link_vfs) != INVALID_FILE_ATTRIBUTES &&
         GetFileAttributesW(s_game.link_hdd0) != INVALID_FILE_ATTRIBUTES) {
+        wchar_t vfs_dir[GAME_PATH_MAX], upd_dir[GAME_PATH_MAX];
+        if (!game_link_target(s_game.link_vfs, vfs_dir, GAME_PATH_MAX))
+            swprintf(vfs_dir, GAME_PATH_MAX, L"%ls", s_game.link_vfs);
+        if (!game_link_target(s_game.link_hdd0, upd_dir, GAME_PATH_MAX))
+            swprintf(upd_dir, GAME_PATH_MAX, L"%ls", s_game.link_hdd0);
+        GameInfo d, u;
         wchar_t e[GAME_PATH_MAX + 16];
         data_file(e, sizeof e / sizeof e[0], L"GOWA.elf");
-        if (game_elf_ok(e)) {
+        if (game_read_info(vfs_dir, &d) && game_read_info(upd_dir, &u) &&
+            !strcmp(d.title_id, "BCUS98232") && !strcmp(u.app_ver, "01.12") &&
+            game_elf_ok(e)) {
+            s_game.g = d;
             s_game.g.state = GAME_OK;
-            snprintf(s_game.g.title_id, sizeof s_game.g.title_id, "BCUS98232");
-            snprintf(s_game.g.app_ver, sizeof s_game.g.app_ver, "01.12");
+            snprintf(s_game.g.app_ver, sizeof s_game.g.app_ver, "%s", u.app_ver);
             snprintf(s_game.g.category, sizeof s_game.g.category, "DG");
             s_game.g.disc = 1;
-            swprintf(s_game.g.dir, GAME_PATH_MAX, L"%ls", dir);
+            swprintf(s_game.g.update, GAME_PATH_MAX, L"%ls", upd_dir);
+            swprintf(s_game.g.dir, GAME_PATH_MAX, L"%ls", vfs_dir);
         }
     }
     const char* elf = ps3_settings_str("paths", "elf", NULL, NULL);
