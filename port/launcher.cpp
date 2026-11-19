@@ -3423,7 +3423,7 @@ static void act(int id)
     if (id >= H_PLAY) {
         switch (id) {
         case H_PLAY:
-            if (!s_rc.elf_ok) {
+            if (s_game.g.state != GAME_OK || !s_rc.elf_ok) {
                 s_tab = T_SYSTEM;
                 if (new_ui_on()) s_new_page = T_SYSTEM;
                 toast_bad(game_needed_toast());
