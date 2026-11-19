@@ -2570,8 +2570,17 @@ static int game_use(const wchar_t* dir)
     wchar_t err[GAME_PATH_MAX + 64] = L"";
     const size_t n = sizeof err / sizeof err[0];
     s_game.note[0] = 0;
-    if (!game_link_possible(s_game.link_vfs, dir, err, n) || !game_link_possible(s_game.link_hdd0, dir, err, n) ||
-        !game_link(s_game.link_vfs, dir, err, n) || !game_link(s_game.link_hdd0, dir, err, n)) {
+    /* A disc and its update are two folders: /dev_bdvd/PS3_GAME (the disc)
+     * and /dev_hdd0/game/<id> (the update). The update alone has no ARCHIVES;
+     * linking both to the same folder closes the game after the loading screen. */
+    GameInfo g;
+    game_probe(dir, &g);
+    const wchar_t* vfs_dir = g.state != GAME_NONE && g.dir[0] ? g.dir : dir;
+    const wchar_t* hdd_dir = g.update[0] ? g.update : vfs_dir;
+    if (!game_link_possible(s_game.link_vfs, vfs_dir, err, n) ||
+        !game_link_possible(s_game.link_hdd0, hdd_dir, err, n) ||
+        !game_link(s_game.link_vfs, vfs_dir, err, n) ||
+        !game_link(s_game.link_hdd0, hdd_dir, err, n)) {
         swprintf(s_game.note, sizeof s_game.note / sizeof s_game.note[0], L"%ls", err);
         return 0;
     }
