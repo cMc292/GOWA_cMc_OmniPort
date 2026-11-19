@@ -2635,7 +2635,7 @@ static int game_use(const wchar_t* dir)
      * and /dev_hdd0/game/<id> (the update). The update alone has no ARCHIVES;
      * linking both to the same folder closes the game after the loading screen. */
     GameInfo g;
-    game_probe(dir, &g);
+    if (game_locate(dir, &g) == GAME_NONE) game_probe(dir, &g);
     if (g.category[0] == 'G' && g.category[1] == 'D' && !g.update[0]) {
         GameInfo disc;
         if (find_disc_near(dir, &disc)) g = disc;
