@@ -2590,6 +2590,41 @@ static void game_paths_fill(void)
     if (changed) ps3_settings_save(NULL);
 }
 
+/* An update folder (...\Update\BCUS98232) is not the disc: it has no ARCHIVES.
+ * If the user (or Auto detect) picks it, look for a PS3_GAME in its parent
+ * tree and return that GameInfo. */
+static int find_disc_near(const wchar_t* start, GameInfo* out)
+{
+    std::wstring path(start);
+    for (int up = 0; up < 4; up++) {
+        wchar_t cand[GAME_PATH_MAX];
+        swprintf(cand, GAME_PATH_MAX, L"%ls\\PS3_GAME", path.c_str());
+        GameInfo g;
+        if (game_probe(cand, &g) != GAME_NONE && g.disc) { *out = g; return 1; }
+        wchar_t pat[GAME_PATH_MAX];
+        swprintf(pat, GAME_PATH_MAX, L"%ls\\*", path.c_str());
+        WIN32_FIND_DATAW fd;
+        HANDLE h = FindFirstFileW(pat, &fd);
+        if (h != INVALID_HANDLE_VALUE) {
+            do {
+                if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) continue;
+                if (!wcscmp(fd.cFileName, L".") || !wcscmp(fd.cFileName, L"..")) continue;
+                swprintf(cand, GAME_PATH_MAX, L"%ls\\%ls\\PS3_GAME", path.c_str(), fd.cFileName);
+                if (game_probe(cand, &g) != GAME_NONE && g.disc) {
+                    FindClose(h);
+                    *out = g;
+                    return 1;
+                }
+            } while (FindNextFileW(h, &fd));
+            FindClose(h);
+        }
+        const size_t slash = path.find_last_of(L'\\');
+        if (slash == std::wstring::npos) break;
+        path.resize(slash);
+    }
+    return 0;
+}
+
 /* Both links to a folder, checked before either changes. */
 static int game_use(const wchar_t* dir)
 {
@@ -2601,6 +2636,15 @@ static int game_use(const wchar_t* dir)
      * linking both to the same folder closes the game after the loading screen. */
     GameInfo g;
     game_probe(dir, &g);
+    if (g.category[0] == 'G' && g.category[1] == 'D' && !g.update[0]) {
+        GameInfo disc;
+        if (find_disc_near(dir, &disc)) g = disc;
+        else {
+            swprintf(s_game.note, sizeof s_game.note / sizeof s_game.note[0],
+                     L"Elige la carpeta del disco que contiene PS3_GAME, no Update");
+            return 0;
+        }
+    }
     const wchar_t* vfs_dir = g.state != GAME_NONE && g.dir[0] ? g.dir : dir;
     const wchar_t* hdd_dir = g.update[0] ? g.update : vfs_dir;
     if (!game_link_possible(s_game.link_vfs, vfs_dir, err, n) ||
