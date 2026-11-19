@@ -1,4 +1,4 @@
-/*
+﻿/*
  * GOWA-cMc -- the launcher
  *
  * The settings window shown before the game starts. It reads and writes
@@ -3425,7 +3425,7 @@ static void act(int id)
         case H_PLAY:
             if (s_game.g.state != GAME_OK || !s_rc.elf_ok) {
                 s_tab = T_SYSTEM;
-                if (new_ui_on()) s_new_page = T_SYSTEM;
+                if (new_ui_on()) s_new_page = 7  /* SISTEMA in the new UI (page 6 is MODS) */;
                 toast_bad(game_needed_toast());
                 break;
             }
