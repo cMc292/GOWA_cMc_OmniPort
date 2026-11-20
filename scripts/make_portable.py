@@ -172,6 +172,11 @@ def main() -> int:
             shutil.copy2(src, out / n)
 
     date = datetime.date.today().isoformat()
+    # Mandatory legal notice: every release carries it verbatim.
+    notice_src = need(FULL / "scripts" / "AVISO-LEGAL.txt")
+    shutil.copy2(notice_src, out / "AVISO-LEGAL.txt")
+    notice = notice_src.read_text(encoding="utf-8").strip()
+    flat = lambda t: " ".join(t.replace("\r\n", "\n").split())
     values = {"{{VERSION}}": version, "{{EXE_SHA256}}": exe_hash, "{{DATE}}": date}
     for tmpl_name, out_name in (("README-portable.template.md", "README.md"),
                                 ("LEEME-portable.template.txt", "LEEME-PRIMERO.txt")):
@@ -195,6 +200,12 @@ def main() -> int:
     for bad in ("logs",):
         if (out / bad).exists():
             raise SystemExit(f"unexpected generated file in package: {bad}")
+    # A release without the exact notice in its three documents does not get published.
+    for name in ("README.md", "LEEME-PRIMERO.txt", "AVISO-LEGAL.txt"):
+        text = (out / name).read_text(encoding="utf-8")
+        if flat(notice) not in flat(text):
+            raise SystemExit(f"mandatory legal notice missing or altered in {name}")
+
     for cfg in ("ascension-r.ini",):
         text = (out / cfg).read_text(encoding="utf-8")
         if "C:\\" in text or "D:\\" in text or "E:\\" in text:
