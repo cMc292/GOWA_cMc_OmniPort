@@ -1,260 +1,237 @@
-<p align="center"><img src="docs/images/banner.png" alt="Ascension-R: a temple on a cliff and ruins over the sea at sunset, in pixel art" width="100%"></p>
+<div align="center">
 
-# Ascension-R: a God of War: Ascension PC port
+# GOWA_cMc_OmniPort
 
-[![CI](https://github.com/rigaz29/Ascension-R/actions/workflows/ci.yml/badge.svg)](https://github.com/rigaz29/Ascension-R/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-![Platform: Windows x64](https://img.shields.io/badge/platform-Windows%20x64-lightgrey.svg)
-![Status: alpha](https://img.shields.io/badge/status-alpha-orange.svg)
+**God of War: Ascension · BCUS98232 · Windows x64**
 
-<a href="https://recomplauncher.com/game/ascension-r"><picture><source media="(prefers-color-scheme: dark)" srcset="https://recomplauncher.com/assets/press/launcher/badge-light.svg"><img alt="Get it on RecompLauncher" src="https://recomplauncher.com/assets/press/launcher/badge-dark.svg" height="48"></picture></a>
+![Versión](https://img.shields.io/badge/version-v0.1.6-orange)
+![Plataforma](https://img.shields.io/badge/platform-Windows%20x64-lightgrey)
+![Estado](https://img.shields.io/badge/status-alpha-orange)
+![Licencia](https://img.shields.io/badge/license-MIT-blue)
 
-An unofficial, native PC port of **God of War: Ascension** (PS3) for Windows, made by static recompilation with
-[ps3recomp](https://github.com/sp00nznet/ps3recomp). The game's PPU and SPU code is translated to x86-64 ahead of time and the RSX
-is drawn with Direct3D 12, so no emulator runs while you play.
+</div>
 
-Website: [rigaz29.github.io/Ascension-R](https://rigaz29.github.io/Ascension-R/)
+Port nativo de **God of War: Ascension** (PS3, BCUS98232) para Windows x64,
+hecho con recompilación estática mediante [ps3recomp](https://github.com/sp00nznet/ps3recomp).
+El código PPU y SPU se traduce a x86-64 y el RSX se dibuja con Direct3D 12:
+no hay emulador durante la partida. RPCS3 se usa solo para descifrar tu copia.
+
+Repositorio: <https://github.com/cMc292/GOWA_cMc_OmniPort>
 
 > [!IMPORTANT]
-> This repository holds no game files. You build the port from your own copy of the game. See [Legal](#legal).
+> Este repositorio no contiene archivos del juego. El port se construye y se
+> ejecuta con tu propia copia legítima. Consulta [Legal](#legal).
 
-## Contents
+## Contenido
 
-- [Status](#status)
-- [Features](#features)
-- [Download](#download)
-- [What you need](#what-you-need)
-- [Building from source](#building-from-source)
-- [Playing](#playing)
-- [Reporting a problem](#reporting-a-problem)
-- [How it works](#how-it-works)
-- [Project layout](#project-layout)
-- [Contributing](#contributing)
-- [FAQ](#faq)
+- [Estado](#estado)
+- [Características](#características)
+- [Descarga](#descarga)
+- [Requisitos](#requisitos)
+- [Primera ejecución](#primera-ejecución)
+- [Compilar desde el código](#compilar-desde-el-código)
+- [Mods](#mods)
+- [Controles](#controles)
+- [Informes de problemas](#informes-de-problemas)
+- [Cómo funciona](#cómo-funciona)
+- [Estructura del proyecto](#estructura-del-proyecto)
+- [Preguntas frecuentes](#preguntas-frecuentes)
 - [Legal](#legal)
-- [Credits](#credits)
-- [License](#license)
+- [Créditos](#créditos)
+- [Licencia](#licencia)
 
-## Status
+## Estado
 
-It boots, plays the cinematics and goes through the menus into the levels. It has not been played from start to finish, so expect
-problems further in.
+- **Juego:** God of War: Ascension **BCUS98232 1.12**, con su Update.
+- **Plataforma:** Windows 10 u 11, 64 bits.
+- **GPU:** compatible con Direct3D 12.
+- **Online:** no soportado; el port es para un jugador.
+- **Primera carga:** compila los shaders del juego; puede tardar varios minutos.
+- **Paquete:** portable, sin instalador; la configuración, los logs y el caché
+  quedan junto al ejecutable gracias a `portable.txt`.
 
-- **Game:** God of War: Ascension at version 1.12: the digital US release NPUA80918, or the European disc BCES01741 with its
-  updates installed in RPCS3 (the US disc BCUS98232 too, from the next release). Each needs the game and its updates
-  1.04 to 1.12.
-- **Platform:** Windows 10 or 11, 64-bit. Tested on Windows 11.
-- **Speed:** above 30 frames a second in the two scenes measured, a fight of the first level and the gate, on a Ryzen 5 4600H with
-  a GTX 1650 Ti and the Smooth preset.
-- **Online:** not supported. The port is single player.
-- **Downloads:** the Kit, on the [releases page](https://github.com/rigaz29/Ascension-R/releases). It holds none of the game's code
-  and builds it on your PC from your copy.
+## Características
 
-## Features
+- **Launcher cMc:** páginas de gráficos, pantalla, controles, parches, cheats,
+  mods, sistema, avanzado, log y trofeos.
+- **Idiomas:** launcher en inglés, español, portugués de Brasil, francés,
+  alemán e italiano; cambio en caliente al pulsar **GUARDAR**.
+- **Juego:** idioma limitado a los idiomas reales del disco.
+- **Imagen:** FSR, SMAA, filtrado anisotrópico, vibrance y contraste.
+- **Pantalla:** ventana, borderless, ultrawide, VSync, límite de FPS y panel GC.
+- **Shaders:** compilación con DXC y caché persistente.
+- **Parches:** MLAA, profundidad de campo, motion blur, sombras y mesh trimming.
+- **Cheats:** daño, orbes, magia, objetos, furia y dobles saltos.
+- **Controles:** Xbox/XInput y PlayStation mediante SDL3; teclado y ratón.
+- **Mods:** carpeta `mods` funcional; mods por carpeta o `.zip`.
+- **Guardados:** copias de seguridad antes de sobrescribir.
+- **Informes:** `GOWA-cMc.exe --report` genera un ZIP con los logs y las rutas
+  ocultas.
 
-- **Launcher:** a ready check, three presets (Smooth, Balanced, Faithful) and every setting below. It finds the game's folder by
-  itself, and says when a newer release is out, with a link to it.
-- **Picture:** internal resolution from 1x to 4x or native, AMD FSR 1 and FSR 3.1 scaling, FSR 3.1 frame generation, SMAA 1x and
-  anisotropic filtering.
-- **Display:** windowed or borderless, ultrawide, VSync, a frame rate cap, and the frame rate on screen.
-- **Shaders:** a compressed cache, pipelines built before the title, every vertex shader built before the first start
-  of each version, on an 8-bit screen with music of its own, and the pixel shaders of the game's files built ahead from
-  the launcher (Build all shaders now).
-- **Game patches:** switch off MLAA, depth of field, motion blur, mesh trimming or dynamic shadows.
-- **Cheats:** damage to and from Kratos, max red orbs, infinite magic and items, infinite rage and double jumps.
-- **Controls:** a controller or keyboard and mouse. Xbox and other XInput pads, and through SDL3 the DualShock 4, the
-  DualSense, Switch controllers and many others; stick dead zone, confirm button, vibration and controller API settings,
-  and Xbox button icons (from the next release) in place of the PlayStation ones, by choice or for an Xbox controller.
-- **Trophies:** read from the game's own trophy list, in the game's language. A notice over the picture for each one
-  won, a Trophies page in the launcher, and the platinum once every single-player trophy is won.
-- **Saves:** backups kept before the game writes over a save.
-- **Mods** (from the next release): a `mods` folder beside the program. A mod's folder or `.zip` dropped in shows on the
-  launcher's Mods tab, where each one is switched on or off and ordered. Its files are read in place of the game's,
-  files inside the game's archives and lines of its text go in as one more update, and its pictures take the place of
-  the game's textures; the game's own folder is never changed ([docs/MODDING.md](docs/MODDING.md)).
-- **Problem reports:** one button makes a zip of the logs, with your paths hidden.
+## Descarga
 
-[docs/FEATURES.md](docs/FEATURES.md) describes each one and its setting.
+La página de releases publica el paquete portable. No contiene `PS3_GAME`,
+`*.psarc`, `EBOOT`, vídeos, trofeos, claves ni licencias de la consola.
 
-## Download
+Cada release incluye:
 
-The [releases page](https://github.com/rigaz29/Ascension-R/releases) has the Kit: a zip of the program without the game's code.
-Its launcher finds your copy of the game, decrypts it with RPCS3 and builds the game's code on your PC, once, in about ten minutes.
-There is nothing else to install: the Kit brings its own Python and LLVM. Each release's notes have the steps.
-
-[RecompLauncher](https://recomplauncher.com/game/ascension-r) installs and updates the same Kit, and shows the settings on
-the game's page. Its Play goes straight into the game once the launcher above has set it up; hold Shift to see that
-launcher again.
-Optimise for this PC (System tab, off at first) has the build train on your PC first, with the game playing its opening by
-itself, and optimize with what it counted: 2-3% more frames, for about 15 minutes more.
-
-Your copy needs all nine of the game's updates, 1.04 to 1.12, installed in RPCS3 in that order. Each brings its own files:
-1.12's is the EBOOT alone, and the archives come with the ones before it. With 1.12 alone the game stops on its first
-loading screen.
-
-The European disc (BCES01741) runs from two folders: a decrypted dump of the disc, unpacked into a folder (an ISO has to be
-opened and copied out first), and its updates installed in RPCS3, which puts them in `dev_hdd0\game\BCES01741`. The
-launcher finds the two together, and decrypts the update's GOWA.SELF with no `.rap`: the key is in the update's own
-EBOOT.BIN, which it hands to RPCS3. Both releases run the same GOWA.elf at 1.12, byte for byte, so the same game code.
-The US disc (BCUS98232) is taken the same way, its updates in `dev_hdd0\game\BCUS98232`: its update is the European
-disc's (the same PPU cache folders in RPCS3, [#4](https://github.com/rigaz29/Ascension-R/issues/4)). Its files are not
-checked yet, as a list of them is not in the port.
-
-## What you need
-
-To build it from source:
-
-- Windows 10 or 11, 64-bit.
-- A CPU with AVX2 and FMA, and a GPU with Direct3D 12.
-- The game, installed in RPCS3 with its license, and its updates 1.04 to 1.12, installed in that order.
-- Python 3.10 or later, Git, CMake, Ninja, Visual Studio with "C++ Clang Compiler for Windows", a Windows SDK, and about 20 GB free.
-- For the game's movies: an LGPL shared build of FFmpeg with its headers, unpacked under `..\ffmpeg`, for example
-  `win64-lgpl-shared` from [BtbN/FFmpeg-Builds](https://github.com/BtbN/FFmpeg-Builds/releases).
-- Optional, for AMD FSR 3.1: [FSR SDK 2.4.0](https://github.com/GPUOpen-LibrariesAndSDKs/FidelityFX-SDK), unpacked under
-  `..\fsr-sdk`.
-
-## Building from source
-
-```
-git clone --recursive https://github.com/rigaz29/Ascension-R
-cd Ascension-R
-python -m venv ..\.venv
-..\.venv\Scripts\pip install -r ps3recomp\requirements.txt
-
-# 1. Decrypt USRDIR\GOWA.SELF to GOWA.elf with RPCS3 (Utilities > Decrypt PS3 Binaries).
-# 2. Point the project at the installed game. It is only read.
-..\.venv\Scripts\python scripts\gowa.py setup --game-dir <RPCS3>\dev_hdd0\game\NPUA80918
-..\.venv\Scripts\python scripts\gowa.py doctor
-..\.venv\Scripts\python scripts\gowa.py analyze
-..\.venv\Scripts\python scripts\gowa.py lift
-..\.venv\Scripts\python scripts\gowa.py build
-..\.venv\Scripts\python scripts\gowa.py run
+```text
+portable.txt
+mods\skip-intro
+kit\python + kit\scripts\modpack.py
+AVISO-LEGAL.txt
 ```
 
-`doctor` lists anything that is missing. The lift and the first build take about 13 minutes on a Ryzen 5 4600H. `run` starts the
-game straight away, with its log in `logs\`.
+No incluye `GOWA.elf`: se genera en la primera ejecución.
 
-## Playing
+## Requisitos
 
-Open `build\Ascension-R.exe`. The launcher checks the game's folder and your setup, and **Play** starts the game.
+- Windows 10 u 11, 64 bits.
+- CPU con AVX2 y FMA.
+- GPU compatible con Direct3D 12.
+- Tu copia legítima de **BCUS98232 1.12** con el Update `1.04–1.12`.
+- RPCS3 para descifrar la primera vez, o tu propio `GOWA.elf`.
 
-The first start of each version builds the game's vertex shaders before the game begins, on a screen of its own: a
-minute or two the first time, seconds after an update. Then the same screen builds the pixel shaders of the game's
-files, some 7 minutes on six cores the first time: **Enter** or a controller's **Start** leaves the rest for the next
-start, or for **Build all shaders now** in the launcher's sidebar (Build on the Play tab). The few it cannot build come
-the first time they are needed. **Clear shaders**, in the launcher's sidebar, makes the next start build them again.
+## Primera ejecución
 
-A build from source keeps its settings, logs and shader caches in `build\`, and its saves in `gamedata\`.
+1. Extrae el ZIP en una **ruta corta** (`C:\GOWA`, el Escritorio).
+   Evita rutas profundas: Windows y el juego tienen un límite práctico de
+   260 caracteres.
+2. Ejecuta `GOWA-cMc.exe`.
+3. En **SISTEMA**, elige la carpeta que contiene **`PS3_GAME`**.
+   No elijas `Update\BCUS98232`: no tiene `ARCHIVES`.
+4. El launcher busca el Update y descifra `GOWA.SELF` con RPCS3.
+5. Deja terminar **COMPILANDO SHADERS**.
+6. Cuando HOME muestre `GOWA.elf listo`, pulsa **PLAY**.
 
-## Reporting a problem
+Si ya tienes un `GOWA.elf`, usa **USAR GOWA.ELF...** en SISTEMA.
 
-**Report a problem**, in the launcher's sidebar, makes a zip in `logs\` beside the settings file, for you to attach to an
-[issue](https://github.com/rigaz29/Ascension-R/issues/new?template=problem.yml). The launcher offers it by itself after a session
-that crashed, lost the graphics device, froze or stopped with no reason in its log. `Ascension-R --report [--with-saves]` makes one
-without the window.
+## Compilar desde el código
 
-The zip holds the logs and pad recordings of the last three sessions the game ran in, your settings, the build, your hardware and
-driver versions, and Windows' records of crashes and hangs of this exe in the last two weeks. Folder paths and your Windows account
-and PC names are hidden. The game sends nothing by itself and no game file goes in. Saves go in only if you tick the box, without
-the game's images and sounds; with them go the backups (Save backups, in the System tab) that hold your saves as each of those
-sessions found them, so that a session can be played again here from where it started.
+Requisitos de compilación: Git, CMake, Ninja, Visual Studio con el compilador
+C++ de Clang para Windows, Windows SDK, Python y FFmpeg compartido en `_src\ffmpeg`.
 
-If no new frame comes for 15 seconds, the log gets what each thread was doing, and again at 60 (`GOWA_FREEZE_WATCH=<seconds>`,
-`0` = off).
-
-## How it works
-
-1. `gowa.py lift` translates the PPU code of `GOWA.elf` to C++, and `build` does the same to C for the SPU programs and job modules.
-   Both are compiled for x86-64 with clang-cl.
-2. The [ps3recomp](https://github.com/sp00nznet/ps3recomp) runtime stands in for the PS3: its system calls and libraries, SPURS, the
-   file system, audio, pads and save data.
-3. The game's RSX commands are drawn with Direct3D 12. Its shaders are translated to HLSL and compiled with DXC.
-4. Movies are decoded with FFmpeg.
-5. SPU code that was not translated ahead of time runs in an interpreter. The session records it, and the next `lift` adds it.
-
-More detail: [what the game is made of](docs/ANALYSIS.md), [what has been measured](docs/PERF.md), and the
-[development notes](docs/notes), one per session.
-
-## Project layout
-
-```
-port/          the port: entry point, launcher, game-specific code
-native/        hand-written routines for the SPU code that costs the most
-scripts/       gowa.py, the pipeline (doctor, setup, analyze, lift, build, run, symbolize), and the bench
-tools/         which of the game's imports the runtime answers, shader cache checks, RenderDoc helpers
-tests/         tests for the launcher's game search, shader compile guards and native routines
-docs/          analysis, measurements, features and development notes
-packaging/     text files that go beside the program in a package
-site/          the website, rigaz29.github.io/Ascension-R, published by .github/workflows/pages.yml
-third_party/   zlib
-ps3recomp/     the toolkit and runtime, as a submodule (fork rigaz29/ps3recomp, branch gowa)
+```powershell
+$env:GOWA_ELF = "$PWD\GOWA.elf"
+tools\python\python.exe scripts\gowa.py build --jobs 8
 ```
 
-## Contributing
+El ejecutable sale en `build\GOWA-cMc.exe`. Consulta
+[BUILD.md](BUILD.md) para las dependencias locales y el empaquetado.
 
-Anyone can help: by playing and reporting, or with changes to the port or to the runtime under it.
-[CONTRIBUTING.md](CONTRIBUTING.md) says where help is most useful, where a change goes, and what must never be committed.
+## Mods
 
-## FAQ
+El port lee la carpeta `mods` situada junto a la configuración. Un mod puede ser
+una carpeta o un `.zip`; el launcher lo lista en **MODS**, donde se activa,
+desactiva y ordena.
 
-### Is there an official PC version of God of War: Ascension?
+Formato admitido:
 
-No. It came out on PlayStation 3 only. Ascension-R is an unofficial fan project, not affiliated with or endorsed by Sony.
+```text
+mod.ini
+archive\...
+USRDIR\...
+```
 
-### How is this different from playing on RPCS3?
+El paquete incluye `skip-intro` convertido a este formato, con dos entries
+`BOOT_*.TXT` vacíos. Los mods son solo archivos: no se ejecuta código de un mod.
 
-RPCS3 emulates the PS3 and runs the game's code as it goes. Ascension-R translates that code to native x86-64 code ahead of time,
-on your PC, and draws with Direct3D 12, so no emulator runs while you play. RPCS3 is used only to decrypt your copy.
+## Controles
 
-### Do I need to own the game?
+| Tecla | Acción |
+|---|---|
+| `F10` | Mostrar u ocultar el panel GC |
+| `F11` | Ventana / borderless |
+| `F12` | Captura de pantalla |
+| `F9` | Releer texturas |
+| `ESC` | Cerrar el juego, si está activado en SISTEMA |
 
-Yes. The download holds no code or assets of the game: its launcher builds the game's code from your own copy, with its license.
+## Informes de problemas
 
-### Which copies of the game work?
+`GOWA-cMc.exe --report` genera un ZIP con los logs, la configuración y los datos
+del sistema. Las rutas, el usuario y el nombre del PC se ocultan. No se incluye
+ningún archivo del juego.
 
-At version 1.12, with every update from 1.04 installed:
+## Cómo funciona
 
-| Release | Id | |
-|---|---|---|
-| Digital, US | NPUA80918 | supported |
-| Disc, Europe and Australia | BCES01741 | supported: a decrypted dump of the disc, its updates in RPCS3 |
-| Disc, US | BCUS98232 | in the next release (a build from source has it): as the European disc |
-| Digital, Europe, and the others | | not yet |
+1. `gowa.py lift` traduce el código PPU de `GOWA.elf` a C++; el build hace lo
+   mismo con los programas SPU y los job modules.
+2. El runtime de [ps3recomp](https://github.com/sp00nznet/ps3recomp) sustituye
+   a la PS3: syscalls, bibliotecas, SPURS, sistema de archivos, audio, mandos y
+   guardados.
+3. Los comandos RSX se dibujan con Direct3D 12; los shaders se traducen a HLSL
+   y se compilan con DXC.
+4. Las cinemáticas se decodifican con FFmpeg.
+5. El código SPU no traducido se ejecuta en un intérprete; la sesión lo registra
+   y el siguiente `lift` lo incorpora.
 
-For a copy that is not supported yet, its serial and version (RPCS3's game list shows both) in
-[#4](https://github.com/rigaz29/Ascension-R/issues/4) help add it.
+## Estructura del proyecto
 
-### Does it run on Linux or the Steam Deck?
+```text
+port/          entrada, launcher y código específico del juego
+recompiled/    código PPU traducido
+spu/           programas SPU traducidos
+ps3recomp/     toolkit y runtime de ps3recomp
+scripts/       gowa.py, empaquetado y utilidades
+tools/         Python local y herramientas de build
+tests/         pruebas del launcher, del juego y del empaquetado
+docs/          análisis, bitácora, i18n y notas
+_src/          FFmpeg y SDL3 locales
+locale/        textos del launcher
+```
 
-One player plays it on Linux through Proton, in a Wine prefix made by Lutris
-([#12](https://github.com/rigaz29/Ascension-R/issues/12)). The Steam Deck has not been tried.
+## Preguntas frecuentes
 
-### Can I use mods?
+### ¿Es una versión oficial de PC?
 
-From the next release, yes: put a mod's folder or its `.zip` into the `mods` folder beside `Ascension-R.exe` (the Mods
-tab's **Open folder** makes it), and the Mods tab lists it, switched on. Mods made for RPCS3 as files over the game's
-(`dev_hdd0\game\<id>\USRDIR\...`) are taken as they are. A mod is files alone: nothing of it runs as a program.
-[docs/MODDING.md](docs/MODDING.md) is for those who make them.
+No. *God of War: Ascension* solo salió en PlayStation 3. Este es un proyecto
+de aficionados, sin ánimo de lucro y no afiliado a Sony.
 
-### Is it safe to run?
+### ¿Necesito el juego original?
 
-The code is open source and built in the open. Each release lists the SHA-256 of its download and what the package was checked
-for, and the game's code is built on your own PC. The program is not signed, so Windows SmartScreen may warn the first time.
+Sí. El paquete no contiene código ni archivos del juego. Necesitas una copia
+legítima de BCUS98232 1.12 y su Update.
+
+### ¿Por qué el paquete no incluye `GOWA.elf`?
+
+Porque es código derivado del juego. El launcher lo genera desde tu `GOWA.SELF`
+con RPCS3 y tu copia legal.
+
+### ¿RPCS3 es necesario para jugar?
+
+No. Solo se usa para descifrar la primera vez. Después, el juego se ejecuta
+nativo con Direct3D 12.
+
+### ¿Puedo usar mods?
+
+Sí. La carpeta `mods` está incluida y es funcional. Añade carpetas o `.zip` y
+actívalos en MODS.
+
+### ¿Por qué tarda la primera vez?
+
+Porque compila los shaders del juego. Es un proceso único por versión; después
+se usa el caché generado.
 
 ## Legal
 
-No game files are in this repository, and none will be. You need your own copy of the game and its license, and you decrypt it
-yourself.
+Aviso legal
 
-What you build from your copy contains code translated from the game. Keep it on your machine: do not commit it or share it.
+Este release no contiene archivos del juego: ni PS3_GAME, ni *.psarc, ni EBOOT, ni vídeos, ni trofeos, ni claves o licencias de la consola.
 
-God of War is a trademark of Sony Interactive Entertainment. This project is not affiliated with or endorsed by it.
+El ejecutable contiene código traducido del juego, obra derivada de God of War: Ascension: se ofrece para usarse con una copia legítima y la licencia MIT del proyecto no la cubre.
 
-## Credits
+God of War es una marca de Sony Interactive Entertainment LLC / Santa Monica Studio. Proyecto de aficionados, sin ánimo de lucro, no afiliado a Sony.
 
-Built on [ps3recomp](https://github.com/sp00nznet/ps3recomp) by sp00nznet. The other code and libraries the port uses, among them
-FFmpeg, AMD FSR, SMAA, zlib and Zstandard, are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+## Créditos
 
-## License
+- **Ascension-R** y **ps3recomp**: motor, toolkit y runtime.
+- **FFmpeg** (LGPL), **SDL3**, **DXC**, **Cinzel** (OFL) y runtime de Microsoft.
+- **Port BCUS98232**: cMc-OmniPort.
 
-The code in this repository is under the MIT License, see [LICENSE](LICENSE). It does not cover the game or anything made from it.
+Lee `CREDITOS.md`, `LICENSE`, `THIRD-PARTY.txt` y `THIRD_PARTY_NOTICES.md`
+antes de redistribuir.
+
+## Licencia
+
+El código del proyecto está bajo la licencia **MIT**; consulta `LICENSE`.
+La licencia MIT **no cubre** el juego ni el código derivado de él.
