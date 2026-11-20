@@ -173,3 +173,7 @@ Columnas:
 ```text
 id, fecha, modulo, proceso, archivos, verificacion, estado, commit_hash
 ```
+
+### F-008 — Ruta de ejecución demasiado larga
+
+Síntoma: la release se queda cargando la primera cinemática. Causa: se ejecutó desde `work\dist`, con una ruta profunda. Corrección: extraer a una ruta corta (Escritorio o `C:\GOWA`). Una prueba en el Escritorio con `v0.1.12` funciona correctamente.

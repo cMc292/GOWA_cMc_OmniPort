@@ -18,6 +18,12 @@ Motor **Ascension-R 0.2.0** · paquete **v0.1.12** · juego base **1.12**
 - La consola se oculta si `GOWA.elf` ya existe y al terminar de generarlo.
   En la primera ejecución puede verse mientras se prepara el juego.
 
+## Ruta de instalación
+
+Extrae el ZIP en una ruta corta, como `C:\GOWA` o el Escritorio.
+No lo ejecutes desde `work\dist`: la ruta profunda puede bloquear la carga
+de WAD, vídeos o parches por el límite de 260 caracteres de Windows.
+
 ## Primera ejecución
 
 1. Descomprime el ZIP.

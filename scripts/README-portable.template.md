@@ -24,6 +24,12 @@ Repositorio y versiones nuevas:
 
 ## Instalación
 
+> **No ejecutes la release desde `work\dist`.** Extrae el ZIP en una ruta
+> corta, por ejemplo `C:\GOWA` o el Escritorio. Windows y el juego usan
+> rutas con límite de 260 caracteres; una ruta profunda puede impedir que
+> se abran WAD, vídeos o parches y dejar la carga bloqueada.
+
+
 1. Descomprime el ZIP en una carpeta con permisos de escritura.
 2. Ejecuta `GOWA-cMc.exe`.
 3. En **SISTEMA**, elige la carpeta del juego.
