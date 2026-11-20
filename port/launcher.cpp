@@ -42,6 +42,7 @@
 #include "version.h"
 #include "update_check.h"
 #include "mods.h"
+#include "i18n.h"
 #include "loading_screen.h"   /* the header's scene and the pixel font */
 
 #include <math.h>
@@ -238,6 +239,8 @@ static Opt s_opt[] = {
       "Kratos can jump again in the air, as often as he likes." },
     { T_SYSTEM, "system", "language", "auto", "Language", 0, LIST(k_lang, k_lang_n), NULL,
       "The game's language: text and speech." },
+    { T_SYSTEM, "launcher", "language", "auto", "Launcher language", 0, LIST(k_lang, k_lang_n), NULL,
+      "The launcher's language. It is separate from the game's language." },
     { T_SYSTEM, "system", "esc_quits", "off", "Esc closes the game", 1, SW,
       "Esc is not a PS3 button; off leaves it free." },
     { T_SYSTEM, "system", "save_backups", "5", "Save backups", 0, LIST(k_bak, k_bak_n), k_bak_s,
@@ -3943,6 +3946,7 @@ extern "C" int gowa_launcher(void)
     popt_init();
     for (int i = 0; i < s_npopt; i++)
         opt_set(s_popt[i], ps3_settings_str(s_popt[i].section, s_popt[i].key, NULL, s_popt[i].def));
+    i18n_init(ps3_settings_str("launcher", "language", "GOWA_LAUNCHER_LANGUAGE", NULL));
     ready_check();
 
     /* COM for WIC, given back before the game starts (its audio takes it multithreaded). */

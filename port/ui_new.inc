@@ -63,14 +63,23 @@ static int new_page(void)
 
 static const wchar_t* new_page_title(int p)
 {
-    static const wchar_t* t[11] = { L"HOME", L"GR\x00C1" L"FICOS", L"PANTALLA", L"CONTROLES",
-                                    L"PARCHES", L"CHEATS", L"MODS", L"SISTEMA", L"AVANZADO", L"LOG", L"TROFEOS" };
-    return t[p >= 0 && p < 11 ? p : 0];
+    static const wchar_t* keys[11] = { L"nav.home", L"nav.graphics", L"nav.display", L"nav.controls",
+                                       L"nav.patches", L"nav.cheats", L"nav.mods", L"nav.system",
+                                       L"nav.advanced", L"nav.log", L"nav.trophies" };
+    static const wchar_t* fallback[11] = { L"HOME", L"GR\x00C1" L"FICOS", L"PANTALLA", L"CONTROLES",
+                                          L"PARCHES", L"CHEATS", L"MODS", L"SISTEMA", L"AVANZADO", L"LOG", L"TROFEOS" };
+    const int i = p >= 0 && p < 11 ? p : 0;
+    return i18n_tr(keys[i], fallback[i]);
 }
 
 static const wchar_t* new_page_sub(int p)
 {
-    static const wchar_t* t[11] = {
+    static const wchar_t* keys[11] = {
+        L"page.home.sub", L"page.graphics.sub", L"page.display.sub", L"page.controls.sub",
+        L"page.patches.sub", L"page.cheats.sub", L"page.mods.sub", L"page.system.sub",
+        L"page.advanced.sub", L"page.log.sub", L"page.trophies.sub"
+    };
+    static const wchar_t* fallback[11] = {
         L"",
         L"Ajustes de imagen. Se guardan en ascension-r.ini; el juego lee los mismos.",
         L"Ventana, sincronizaci\x00F3n y l\x00EDmite de fotogramas.",
@@ -83,7 +92,8 @@ static const wchar_t* new_page_sub(int p)
         L"\x00DA" L"ltimas l\x00EDneas del registro de la build m\x00E1s reciente.",
         L"Conjunto de trofeos del juego: iconos del TRP y su carpeta.",
     };
-    return t[p >= 0 && p < 11 ? p : 0];
+    const int i = p >= 0 && p < 11 ? p : 0;
+    return i18n_tr(keys[i], fallback[i]);
 }
 
 /* The Spanish of the option table; anything not here falls back to the launcher's English. */
