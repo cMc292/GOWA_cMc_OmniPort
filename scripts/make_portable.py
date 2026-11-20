@@ -27,7 +27,6 @@ BUILD = FULL / "build"
 DIST = PROJECT / "work" / "dist"
 
 RUNTIME = [
-    "GOWA.elf",
     "SDL3.dll",
     "avcodec-62.dll",
     "avutil-60.dll",

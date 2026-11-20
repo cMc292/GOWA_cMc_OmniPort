@@ -114,5 +114,5 @@ licencia MIT del proyecto no la cubre.
 Santa Monica Studio. Proyecto de aficionados, sin ánimo de lucro, no afiliado
 a Sony.
 
-> **Nota:** este release todavía incluye `GOWA.elf` de trabajo. una versión futura
+> **Nota:** este release todavía incluye `GOWA.elf` de trabajo. `v0.1.7`
 > lo retira y lo genera en la primera ejecución con RPCS3 y la licencia del juego.
