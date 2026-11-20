@@ -59,6 +59,10 @@ SHA-256: 009E86ECF9CE1C5DE3BC1F761D9202F412A1CC5529308F4DB8903F766F04CB4A
 Subsistema PE: 2 (Windows GUI)
 ```
 
+## Validación
+
+- Sesión larga confirmada por el usuario: partida larga sin problemas.
+
 ## Limitaciones conocidas
 
 - La primera ejecución compila shaders y puede tardar varios minutos.

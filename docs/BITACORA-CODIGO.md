@@ -73,6 +73,7 @@ El empaquetador **no debe** copiar `build/GOWA-cMc.exe` mientras ese hash sea
 | P-022 | 2026-11-19 | Mods | Carga de mods por carpeta y `.zip` | `port/mods.cpp` | Prueba de mods | verificado | base |
 | P-023 | 2026-11-19 | Pantalla | Ultrawide con HUD/menús a 16:9 | `ps3recomp/libs/video/rsx_d3d12_backend.c` | Implementado; sin monitor ultrawide | pendiente | base |
 | P-024 | 2026-11-19 | Publicación | README/LEEME generados con versión y hash | `scripts/README-portable.template.md`, `scripts/LEEME-portable.template.txt` | Revisión del paquete | verificado | `035dd22` |
+| P-025 | 2026-11-19 | QA | Sesión larga de juego | 0.1.6 | Confirmado por el usuario: partida larga sin problemas | verificado | 6cff48 |
 
 ---
 
@@ -151,7 +152,7 @@ borrarlos después. No duplicar la carpeta del paquete y no tocar el full.
 - Validar el ejecutable nuevo `5FA6…` y actualizar el pin solo si supera la
   prueba completa.
 - Probar ultrawide en un monitor real.
-- Probar una sesión larga de estabilidad.
+- ~~Probar una sesión larga de estabilidad.~~ Confirmada el 2026-11-19 sin problemas.
 - Verificar el flujo completo del paquete `v0.1.5` con selección de juego,
   shaders, menú, guardado y reapertura.
 - Publicar el release en GitHub con `gh` o el runner self-hosted.
