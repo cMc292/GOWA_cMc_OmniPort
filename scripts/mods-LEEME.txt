@@ -1,0 +1,25 @@
+Mods para GOWA_cMc_OmniPort v0.1.6
+==================================
+
+Esta carpeta es la que lee la página MODS del launcher.
+
+Cada mod debe ir aqui como:
+
+  mods\NombreDelMod\
+      mod.ini
+      USRDIR\
+      ...
+
+o como un archivo:
+
+  mods\NombreDelMod.zip
+
+Despues de copiarlo, abre MODS en el launcher y pulsa RECARGAR.
+
+Reglas:
+- Un mod por carpeta o por .zip.
+- No pongas archivos sueltos en la raiz de mods.
+- El orden y el estado ON/OFF se guardan en ascension-r.ini.
+- Si un mod no aparece, revisa que no este vacio y que contenga mod.ini.
+- Para desactivar todos: TODO OFF.
+- Para volver a activar todos: TODO ON.

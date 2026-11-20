@@ -96,6 +96,8 @@ def main() -> int:
         zpath.unlink()
     (out / "vfs").mkdir(parents=True, exist_ok=True)
     (out / "gamedata" / "dev_hdd0").mkdir(parents=True, exist_ok=True)
+    (out / "mods").mkdir(exist_ok=True)
+    shutil.copy2(need(FULL / "scripts" / "mods-LEEME.txt"), out / "mods" / "LEEME-MODS.txt")
 
     exe_src, expected = release_exe(args.exe)
     exe_src = need(exe_src)

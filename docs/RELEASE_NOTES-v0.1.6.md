@@ -28,7 +28,7 @@ Incluye las mismas mejoras de `v0.1.5`:
 - mods y guardados;
 - ultrawide;
 - runtime VC, SDL3, FFmpeg y DXC incluidos;
-- configuración limpia, sin rutas absolutas ni archivos del juego.
+- configuración limpia, sin rutas absolutas ni archivos del juego;`n- carpeta `mods` incluida con instrucciones para instalar mods.
 
 ## Requisitos
 
@@ -52,7 +52,7 @@ Incluye las mismas mejoras de `v0.1.5`:
 ```text
 Archivo: GOWA_cMc_OmniPort v0.1.6.zip
 Tamaño:  126,4 MB
-SHA-256: 367C582388636B746A9C1670CD95DE1174E950FA2175499B31A38E40F4A8B825
+SHA-256: 246070F268032FF04757F00F9B6615F3C40E16C6799F7CB8CEBAAD91369887C6
 
 Ejecutable:
 SHA-256: 009E86ECF9CE1C5DE3BC1F761D9202F412A1CC5529308F4DB8903F766F04CB4A
