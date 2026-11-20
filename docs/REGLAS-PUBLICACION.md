@@ -94,3 +94,20 @@ La primera ejecución debe documentar:
 - la generación de `GOWA.elf`;
 - la compilación inicial de shaders;
 - que la compilación inicial no es un cuelgue.
+
+## 8. Palabra clave de publicación
+
+Cuando el usuario escriba exactamente:
+
+```text
+Audita y prepara Para publicar
+```
+
+El agente debe:
+
+1. auditar el ZIP, el ejecutable, el aviso legal, `portable.txt`, `mods`, la ausencia de `GOWA.elf` y del caché;
+2. verificar los hashes y el checksum;
+3. comprobar que la documentación no tenga rutas internas;
+4. terminar la respuesta con un bloque de **copia y pega** para la sección `Publicar releases`.
+
+El bloque debe incluir versión, nombre del ZIP, SHA-256, SHA-256 del exe, tamaño, requisitos de publicación y un enlace o referencia a las notas. No debe incluir instrucciones internas ni rutas como `work\dist`.
