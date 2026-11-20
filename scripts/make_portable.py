@@ -135,7 +135,7 @@ def main() -> int:
         shutil.copy2(lic, out / "_src" / "ffmpeg" / "LICENSE.txt")
 
     (out / "ascension-r.ini").write_text(CONFIG, encoding="utf-8", newline="\n")
-    (out / "gowa-cmc.ini").write_text(CONFIG, encoding="utf-8", newline="\n")
+
 
     pkg = PROJECT / "GOWA_cMc_OmniPort-0.1.0-alpha.10"
     for n in DOCS:
