@@ -121,11 +121,14 @@ def main() -> int:
     ffroot = FULL / "_src" / "ffmpeg"
     ffbin = out / "_src" / "ffmpeg" / "bin"
     ffbin.mkdir(parents=True, exist_ok=True)
-    for n in ("avcodec-62.dll", "avutil-60.dll", "swresample-6.dll"):
+    for n in ("avcodec-62.dll", "avutil-60.dll", "swresample-6.dll",
+              "avformat-62.dll", "avfilter-11.dll", "swscale-9.dll", "avdevice-62.dll"):
         src = ffroot / "bin" / n
         if not src.is_file():
             src = BUILD / n
-        shutil.copy2(need(src), ffbin / n)
+        src = need(src)
+        shutil.copy2(src, ffbin / n)
+        shutil.copy2(src, out / n)
     lic = ffroot / "LICENSE.txt"
     if lic.is_file():
         shutil.copy2(lic, out / "_src" / "ffmpeg" / "LICENSE.txt")
