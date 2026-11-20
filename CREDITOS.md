@@ -3,7 +3,7 @@
 **God of War: Ascension [BCUS98232] — port nativo a Windows x64 por recompilación estática.**
 Adaptación a la versión de **disco US `BCUS98232` v1.12** por **cMc-OmniPort (cMc292)**.
 
-Versión: **v0.2.0** · Base: **Ascension-R v0.1.0-alpha.10** (`cc42407`) · Rama del port: `bcus` (congelada) · Portable prebuilt: `v0.1.0-alpha.10` sobre `62dfaa1`
+Versión: **v0.1.0-alpha.10** · Base: **Ascension-R v0.1.0-alpha.10** (`62a7122`) · Rama del port: `bcus` (`62dfaa1`)
 
 ---
 
@@ -57,26 +57,9 @@ Trabajo realizado:
 Estos créditos aparecen también en el **título de la ventana** del juego y del launcher:
 
 ```
-GOW Ascension [BCUS98232] - port: cMc-OmniPort | Ascension-R: Ryan Bagas + ps3recomp: sp00nznet
+GOW Ascension [BCUS98232] - port: cMc-OmniPort
 ```
 
-
-## 2-bis. Línea 0.2.0 (parches y launcher)
-
-Trabajo propio de la **v0.2.0** (paquete de ingeniería, sin binario; se compila con `gowa.py build`):
-
-- **Launcher bilingüe** español/inglés (44 opciones, diez páginas, diálogos y avisos) con `[launcher] language = auto | es | en` y chip de idioma en HOME.
-- **RESTAURAR**: deshacer la última partida guardada, con instantánea reversible.
-- **Motor PSARC** propio (reescritura con `deflate` de zlib 1.3.1), verificado sobre el `GAME.PSARC` real.
-- **Mods** por receta (`mod.json`), overlay en el runtime y botón **REGENERAR**; receta `skip-intro` incluida.
-- **F12** guarda capturas; **`PAD_NO_HOST`** (entrada solo por guion) y arreglo del escritor de perfiles PGO.
-- **Versión propia 0.2.0** en el launcher, la pantalla de carga, el `.exe` y el informe de fallo; **AVANZADO** con Port, Base y licencias.
-- **Dos lanzadores** (juego directo y launcher), título sin créditos y aviso si no hay **Direct3D 12**.
-- Correcciones de pantalla y de textos (escapes hexadecimales, diálogos en español, restos de español en las páginas inglesas).
-- Base actualizada a **`cc42407`** (commit del autor: SISTEMA recupera la fila de la carpeta del juego).
-
-El arte de la HOME y las capturas del juego que incluye el paquete son **material del juego** (Santa Monica Studio /
-Sony): **no** los cubre la licencia MIT y se retiran borrando `assets\` y las capturas, sin tocar código.
 ## 3. Herramientas y bibliotecas de terceros
 
 | Componente | Uso | Licencia |
