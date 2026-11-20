@@ -43,7 +43,7 @@ Reglas:
 - navegación, títulos y subtítulos;
 - prueba visual en francés.
 
-### Fase 2 — catálogo completo
+### Fase 2 — catálogo completo (en curso)`n`n- HOME completo en los 6 idiomas;`n- SISTEMA es el siguiente bloque.
 
 - extraer todas las cadenas de `port/launcher.cpp` y `port/ui_new.inc`;
 - separar etiquetas, descripciones, avisos y errores;

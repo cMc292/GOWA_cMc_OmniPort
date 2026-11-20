@@ -1505,52 +1505,57 @@ static void new_home_ready(void)
     const float x = 32.0f, y = 286.0f, w = 480.0f, h = 360.0f;
     fill(R(x, y, w, h), 0x0A0C0F, 0.86f);
     frame(R(x, y, w, h), NC_GOLD, 0.55f, 2.0f);
-    text(L"ESTADO DE LA PARTIDA", s_tf_small, R(x + 18, y + 14, w - 36, 20), NC_GOLD_HI);
+    text(i18n_tr(L"home.status", L"ESTADO DE LA PARTIDA"), s_tf_small, R(x + 18, y + 14, w - 36, 20), NC_GOLD_HI);
 
     wchar_t b[GAME_PATH_MAX + 128];
     const int lvl = new_game_line(b, (int)(sizeof b / sizeof b[0]));
     new_line(x + 18, y + 40, w - 36, lvl, b);
 
     float yy = y + 70.0f;
-    swprintf(b, sizeof b / sizeof b[0], s_rc.profiles > 0 ? L"Guardados: %d perfil%ls" : L"Guardados: ninguno todav\x00ED" L"a",
-             s_rc.profiles, s_rc.profiles == 1 ? L"" : L"es");
+    if (s_rc.profiles <= 0)
+        swprintf(b, sizeof b / sizeof b[0], i18n_tr(L"home.saves.none", L"Guardados: ninguno todavía"));
+    else
+        swprintf(b, sizeof b / sizeof b[0],
+                 s_rc.profiles == 1 ? i18n_tr(L"home.saves.one", L"Guardados: %d perfil")
+                                    : i18n_tr(L"home.saves.many", L"Guardados: %d perfiles"),
+                 s_rc.profiles);
     new_line(x + 18, yy, w - 36, s_rc.profiles > 0 ? 1 : 2, b);
     yy += 26.0f;
-    swprintf(b, sizeof b / sizeof b[0], L"Gr\x00E1" L"fica: %ls", gpu_chosen()[0] ? W(gpu_chosen()) : L"sin adaptador Direct3D");
+    swprintf(b, sizeof b / sizeof b[0], i18n_tr(L"home.gpu", L"Gráfica: %ls"), gpu_chosen()[0] ? W(gpu_chosen()) : i18n_tr(L"home.gpu.none", L"sin adaptador Direct3D"));
     new_line(x + 18, yy, w - 36, gpu_chosen()[0] ? 1 : -1, b);
     yy += 26.0f;
-    if (s_rc.pad > 0) swprintf(b, sizeof b / sizeof b[0], L"Mando: %ls", W(s_rc.pad_name));
-    else swprintf(b, sizeof b / sizeof b[0], L"Sin mando: teclado y rat\x00F3n");
+    if (s_rc.pad > 0) swprintf(b, sizeof b / sizeof b[0], i18n_tr(L"home.pad", L"Mando: %ls"), W(s_rc.pad_name));
+    else swprintf(b, sizeof b / sizeof b[0], L"%ls", i18n_tr(L"home.nopad", L"Sin mando: teclado y ratón"));
     new_line(x + 18, yy, w - 36, s_rc.pad > 0 ? 1 : 2, b);
     yy += 26.0f;
     int on = 0;
     for (int i = 0; i < s_npopt; i++) on += opt_on(s_popt[i]);
-    swprintf(b, sizeof b / sizeof b[0], L"Parches: %d de %d activos", on, s_npopt);
+    swprintf(b, sizeof b / sizeof b[0], i18n_tr(L"home.patches", L"Parches: %d de %d activos"), on, s_npopt);
     new_line(x + 18, yy, w - 36, 2, b);
     yy += 26.0f;
     {
         const int ps = new_pixel_shaders_state();
-        if (ps == 1) swprintf(b, sizeof b / sizeof b[0], L"Pixel shaders: listos");
-        else if (ps == 0) swprintf(b, sizeof b / sizeof b[0], L"Pixel shaders: desactivados");
-        else swprintf(b, sizeof b / sizeof b[0], L"Pixel shaders: pendientes");
+        if (ps == 1) swprintf(b, sizeof b / sizeof b[0], L"%ls", i18n_tr(L"home.shaders.ready", L"Pixel shaders: listos"));
+        else if (ps == 0) swprintf(b, sizeof b / sizeof b[0], L"%ls", i18n_tr(L"home.shaders.off", L"Pixel shaders: desactivados"));
+        else swprintf(b, sizeof b / sizeof b[0], L"%ls", i18n_tr(L"home.shaders.pending", L"Pixel shaders: pendientes"));
         new_line(x + 18, yy, w - 36, ps == 1 ? 1 : 2, b);
     }
 
-    text(L"PRESET", s_tf_small, R(x + 18, y + 244, w - 36, 18), NC_GOLD_HI);
+    text(i18n_tr(L"home.preset", L"PRESET"), s_tf_small, R(x + 18, y + 244, w - 36, 18), NC_GOLD_HI);
     const int pn = preset_now();
-    static const wchar_t* name[3] = { L"Suave", L"Equilibrado", L"Fieles" };
+    const wchar_t* name[3] = { i18n_tr(L"home.preset.soft", L"Suave"), i18n_tr(L"home.preset.balanced", L"Equilibrado"), i18n_tr(L"home.preset.faithful", L"Fieles") };
     const float pw = (w - 36.0f - 16.0f) / 3.0f;
     for (int i = 0; i < N_PRESET && i < 3; i++) {
         new_btn(name[i], R(x + 18 + i * (pw + 8), y + 266, pw, 30), H_PRESET + i, i == pn);
     }
     if (s_new_dirty) {
-        new_btn(L"GUARDAR", R(x + 18, y + 310, 130, 30), H_SAVE, 1);
-        text(L"Cambios sin guardar", s_tf_small, R(x + 158, y + 310, w - 176, 30), NC_RED);
+        new_btn(i18n_tr(L"home.save", L"GUARDAR"), R(x + 18, y + 310, 130, 30), H_SAVE, 1);
+        text(i18n_tr(L"home.dirty", L"Cambios sin guardar"), s_tf_small, R(x + 158, y + 310, w - 176, 30), NC_RED);
     } else if (!s_rc.elf_ok) {
-        text(L"Elige la carpeta del juego en SISTEMA", s_tf_small,
+        text(i18n_tr(L"home.choose", L"Elige la carpeta del juego en SISTEMA"), s_tf_small,
              R(x + 18, y + 310, w - 36, 30), NC_TEXT2);
     } else {
-        text(L"Listo para jugar", s_tf_small, R(x + 18, y + 310, w - 36, 30), NC_OK);
+        text(i18n_tr(L"home.ready", L"Listo para jugar"), s_tf_small, R(x + 18, y + 310, w - 36, 30), NC_OK);
     }
 }
 
