@@ -112,6 +112,11 @@ def main() -> int:
         src = need(BUILD / n)
         shutil.copy2(src, out / n)
 
+    # Same prebuilt shader cache as the tested full.
+    for cache in sorted(BUILD.glob("d3d12_shader_cache.bin*")):
+        if cache.is_file() and cache.suffix != ".journal":
+            shutil.copy2(cache, out / cache.name)
+
     sys32 = Path(os.environ.get("WINDIR", r"C:\Windows")) / "System32"
     for n in VC_RUNTIME:
         src = sys32 / n
@@ -165,7 +170,7 @@ def main() -> int:
         f"Full commit: {commit}\nGame data: not included; selected by the player on first run.\n",
         encoding="utf-8", newline="\n")
 
-    for bad in ("d3d12_shader_cache.bin.dxil.prebuilt", "d3d12_shader_cache.bin.fprogs", "logs"):
+    for bad in ("logs",):
         if (out / bad).exists():
             raise SystemExit(f"unexpected generated file in package: {bad}")
     for cfg in ("ascension-r.ini", "gowa-cmc.ini"):
