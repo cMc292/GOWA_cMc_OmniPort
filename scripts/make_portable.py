@@ -71,7 +71,7 @@ def release_exe(args_exe: str | None) -> tuple[Path, str | None]:
         return Path(args_exe).resolve(), None
     manifest = FULL / "scripts" / "release-exe.json"
     if manifest.is_file():
-        m = json.loads(manifest.read_text(encoding="utf-8"))
+        m = json.loads(manifest.read_text(encoding="utf-8-sig"))
         src = (FULL / m["source"]).resolve()
         return src, m.get("sha256")
     return BUILD / "GOWA-cMc.exe", None
