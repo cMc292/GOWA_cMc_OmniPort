@@ -43,7 +43,7 @@ Reglas:
 - navegación, títulos y subtítulos;
 - prueba visual en francés.
 
-### Fase 2 — catálogo completo (en curso)`n`n- HOME completo en los 6 idiomas;`n- SISTEMA funcional y valores en los 6 idiomas;`n- GRÁFICOS completo en los 6 idiomas;`n- PANTALLA completa y botón global GUARDAR;`n- CONTROLES es el siguiente bloque.`n- botones globales y errores dinámicos pendientes.`n- SISTEMA es el siguiente bloque.
+### Fase 2 — catálogo completo (hecho)`n`n- HOME completo en los 6 idiomas;`n- SISTEMA funcional y valores en los 6 idiomas;`n- GRÁFICOS completo en los 6 idiomas;`n- PANTALLA completa y botón global GUARDAR;`n- CONTROLES es el siguiente bloque.`n- botones globales y errores dinámicos pendientes.`n- SISTEMA es el siguiente bloque.
 
 - extraer todas las cadenas de `port/launcher.cpp` y `port/ui_new.inc`;
 - separar etiquetas, descripciones, avisos y errores;
@@ -114,3 +114,11 @@ No se considera terminado hasta que:
 3. las 11 páginas se vean bien en los 6 idiomas;
 4. no haya claves faltantes;
 5. un hablante nativo haya revisado cada idioma.
+
+## Cobertura actual
+
+- 291 claves en cada uno de los 6 idiomas.
+- Validador: scripts/check_locale.py (0 faltantes, 0 extras, 0 duplicadas).
+- Páginas: HOME, GRÁFICOS, PANTALLA, CONTROLES, PARCHES, CHEATS, MODS, SISTEMA, AVANZADO, LOG y TROFEOS.
+- Pendiente humano: revisión nativa de cada traducción.
+- Pendiente de release: empaquetar locale/ y probar una versión nueva; no se toca 0.1.6.

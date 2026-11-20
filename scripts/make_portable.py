@@ -96,6 +96,9 @@ def main() -> int:
         zpath.unlink()
     (out / "vfs").mkdir(parents=True, exist_ok=True)
     (out / "gamedata" / "dev_hdd0").mkdir(parents=True, exist_ok=True)
+    (out / "locale").mkdir(exist_ok=True)
+    for loc in sorted((FULL / "locale").glob("*.lang")):
+        shutil.copy2(loc, out / "locale" / loc.name)
     (out / "mods").mkdir(exist_ok=True)
     shutil.copy2(need(FULL / "scripts" / "mods-LEEME.txt"), out / "mods" / "LEEME-MODS.txt")
 

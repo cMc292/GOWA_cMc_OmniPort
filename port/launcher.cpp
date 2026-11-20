@@ -772,9 +772,11 @@ static void game_refresh(void)
 /* What to tell a player who pressed something that needs the game. */
 static const char* game_needed_toast(void)
 {
-    return s_game.g.state == GAME_INCOMPLETE                              ? "Not the whole game: see the System tab"
-           : s_game.g.state == GAME_OTHER_BUILD && s_game.g.other_version ? "Not version 1.12: see the System tab"
-                                                                          : "Set the game's folder first";
+    return s_game.g.state == GAME_INCOMPLETE
+               ? U8(i18n_tr(L"toast.not_whole", L"No es el juego completo: mira SISTEMA"))
+           : s_game.g.state == GAME_OTHER_BUILD && s_game.g.other_version
+               ? U8(i18n_tr(L"toast.other_build", L"No es la versión 1.12: mira SISTEMA"))
+           : U8(i18n_tr(L"toast.need_game", L"Elige primero la carpeta del juego"));
 }
 
 static const wchar_t* game_path_shown(void)

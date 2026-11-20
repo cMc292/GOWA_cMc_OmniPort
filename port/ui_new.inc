@@ -505,18 +505,18 @@ static void new_summary(wchar_t* out, size_t n)
     const char* mode = ps3_settings_str("display", "mode", NULL, "windowed");
     const char* size = ps3_settings_str("display", "window_size", NULL, "");
     const char* cap = ps3_settings_str("display", "frame_cap", NULL, "off");
-    const wchar_t* m = L"Ventana";
-    if (mode && !strcmp(mode, "borderless")) m = L"Sin bordes";
-    else if (mode && !strcmp(mode, "fullscreen")) m = L"Pantalla completa";
+    const wchar_t* m = i18n_tr(L"home.mode.windowed", L"Ventana");
+    if (mode && !strcmp(mode, "borderless")) m = i18n_tr(L"home.mode.borderless", L"Sin bordes");
+    else if (mode && !strcmp(mode, "fullscreen")) m = i18n_tr(L"home.mode.fullscreen", L"Pantalla completa");
     wchar_t capw[48];
-    if (!cap || !cap[0] || !strcmp(cap, "off")) wcscpy(capw, L"Sin l\x00EDmite");
-    else swprintf(capw, 48, L"L\x00EDmite %hs FPS", cap);
+    if (!cap || !cap[0] || !strcmp(cap, "off")) wcscpy(capw, i18n_tr(L"home.cap.unlimited", L"Sin límite"));
+    else swprintf(capw, 48, i18n_tr(L"home.cap.limit", L"Límite %hs FPS"), cap);
     if (size && size[0]) {
         wchar_t sizeh[24];
         MultiByteToWideChar(CP_UTF8, 0, size, -1, sizeh, 24);
         swprintf(out, n, L"%ls  \x00B7  %ls  \x00B7  %ls", sizeh, m, capw);
     } else {
-        swprintf(out, n, L"%ls  \x00B7  %ls  \x00B7  Tama\x00F1o autom\x00E1tico", m, capw);
+        swprintf(out, n, L"%ls  \x00B7  %ls  \x00B7  %ls", m, capw, i18n_tr(L"home.size.auto", L"Tamaño automático"));
     }
 }
 
@@ -563,8 +563,8 @@ static void new_hero(float a, int chips)
     wchar_t c1[220], c2[160], c3[160];
     if (s_game.g.title_id[0]) swprintf(c1, 220, L"\x2713 %ls \x00B7 %ls", W(s_game.g.title_id), game_version());
     else swprintf(c1, 220, L"\x2713 BCUS98232 \x00B7 1.12");
-    swprintf(c2, 160, s_rc.elf_ok ? L"\x2713 GOWA.elf listo" : L"\x2717 Falta GOWA.elf");
-    swprintf(c3, 160, L"\x2713 Direct3D 12");
+    swprintf(c2, 160, L"%ls", s_rc.elf_ok ? i18n_tr(L"home.elf.ready", L"✓ GOWA.elf listo") : i18n_tr(L"home.elf.missing", L"✗ Falta GOWA.elf"));
+    swprintf(c3, 160, L"%ls", i18n_tr(L"home.d3d12", L"✓ Direct3D 12"));
     const float w1 = snap(text_w(c1, s_tf_small) + 26.0f);
     const float w2 = snap(text_w(c2, s_tf_small) + 26.0f);
     const float w3 = snap(text_w(c3, s_tf_small) + 26.0f);
@@ -576,7 +576,7 @@ static void new_hero(float a, int chips)
     wchar_t sum[200];
     new_summary(sum, 200);
     text(sum, s_tf_ui, R(right - 560, cy + 42, 560, 24), NC_TEXT2, a, DWRITE_TEXT_ALIGNMENT_TRAILING);
-    text(L"ESC cierra  \x00B7  el launcher no toca la partida  \x00B7  port: cMc-OmniPort",
+    text(i18n_tr(L"home.footer", L"ESC cierra  ·  el launcher no toca la partida  ·  port: cMc-OmniPort"),
          s_tf_small, R(right - 560, cy + 70, 560, 22), NC_DESC, a, DWRITE_TEXT_ALIGNMENT_TRAILING);
 }
 
@@ -738,14 +738,14 @@ static void new_log_page(float x, float w)
     if (!s_log_lines) new_log_reload();
     {
         const wchar_t* base = s_log_file[0] ? wcsrchr(s_log_file, L'\\') : NULL;
-        text(base ? base + 1 : L"(todav\x00ED" L"a sin registros)", s_tf_small, R(x, top - 28, w - 340, 20), NC_TEXT2);
+        text(base ? base + 1 : i18n_tr(L"log.no_records", L"(todavía sin registros)"), s_tf_small, R(x, top - 28, w - 340, 20), NC_TEXT2);
         const D2D1_RECT_F b1 = R(x + w - 316, top - 32, 146, 28);
         const D2D1_RECT_F b2 = R(x + w - 162, top - 32, 150, 28);
         fill(b1, NC_FIELD, 1.0f); frame(b1, NC_GOLD, 0.8f, 2.0f);
-        text(L"ABRIR CARPETA", s_tf_small, b1, NC_TEXT, 1.0f, DWRITE_TEXT_ALIGNMENT_CENTER);
+        text(i18n_tr(L"log.open_folder", L"ABRIR CARPETA"), s_tf_small, b1, NC_TEXT, 1.0f, DWRITE_TEXT_ALIGNMENT_CENTER);
         hit(b1, H_NEW_LOGACT + 0);
         fill(b2, NC_FIELD, 1.0f); frame(b2, NC_GOLD, 0.8f, 2.0f);
-        text(L"RECARGAR", s_tf_small, b2, NC_TEXT, 1.0f, DWRITE_TEXT_ALIGNMENT_CENTER);
+        text(i18n_tr(L"log.reload", L"RECARGAR"), s_tf_small, b2, NC_TEXT, 1.0f, DWRITE_TEXT_ALIGNMENT_CENTER);
         hit(b2, H_NEW_LOGACT + 1);
     }
     const float lineH = 16.0f;
@@ -1129,26 +1129,33 @@ static unsigned new_trophy_type_color(char t)
     }
 }
 
+static const wchar_t* new_trophy_err_text(void)
+{
+    if (strstr(s_trop_err, "encontro")) return i18n_tr(L"trophies.err.no_trp", L"no se encontró TROPHY.TRP en el juego");
+    if (strstr(s_trop_err, "abrir")) return i18n_tr(L"trophies.err.open", L"no se pudo abrir TROPHY.TRP");
+    return W(s_trop_err);
+}
+
 static void new_trophies_page(float x, float w)
 {
     const float top = 146.0f, viewH = WIN_H - NC_NAV_H - 8.0f - top;
     new_trophies_load();
-    text(s_trop_id[0] ? s_trop_id : L"TROFEOS", s_tf_display_md, R(x, top - 34, w - 220, 30), NC_GOLD_HI);
+    text(s_trop_id[0] ? s_trop_id : i18n_tr(L"trophies.title", L"TROFEOS"), s_tf_display_md, R(x, top - 34, w - 220, 30), NC_GOLD_HI);
     {
         wchar_t head[160];
         if (s_trop_usr)
-            swprintf(head, 160, L"%d trofeos \x00B7 %d conseguidos", s_trop_defs, s_trop_earned_n);
+            swprintf(head, 160, i18n_tr(L"trophies.count", L"%d trofeos \x00B7 %d conseguidos"), s_trop_defs, s_trop_earned_n);
         else
-            swprintf(head, 160, L"%d trofeos \x00B7 sin registro de progreso", s_trop_defs);
+            swprintf(head, 160, i18n_tr(L"trophies.no_progress", L"%d trofeos \x00B7 sin registro de progreso"), s_trop_defs);
         text(head, s_tf_small, R(x, top - 4, w - 220, 20), NC_TEXT2);
         const D2D1_RECT_F b = R(x + w - 190, top - 34, 180, 30);
         fill(b, NC_FIELD, 1.0f);
         frame(b, hovered(H_NEW_LOGACT + 2) ? NC_GOLD_HI : NC_GOLD, 0.8f, 2.0f);
-        text(L"ABRIR CARPETA", s_tf_small, b, NC_TEXT, 1.0f, DWRITE_TEXT_ALIGNMENT_CENTER);
+        text(i18n_tr(L"log.open_folder", L"ABRIR CARPETA"), s_tf_small, b, NC_TEXT, 1.0f, DWRITE_TEXT_ALIGNMENT_CENTER);
         hit(b, H_NEW_LOGACT + 2);
     }
     if (!s_trop_defs) {
-        text(s_trop_err[0] ? W(s_trop_err) : L"Sin definiciones de trofeos.", s_tf_desc, R(x, top + 20, w, 44), NC_DESC);
+        text(s_trop_err[0] ? new_trophy_err_text() : i18n_tr(L"trophies.none", L"Sin definiciones de trofeos."), s_tf_desc, R(x, top + 20, w, 44), NC_DESC);
         return;
     }
 
@@ -1176,7 +1183,7 @@ static void new_trophies_page(float x, float w)
         if (s_trop_detail[id][0])
             text(s_trop_detail[id], s_tf_desc, R(x + 56, y + 24, w - 210, 40), NC_DESC);
         if (s_trop_earned[id])
-            text(L"\x2713 CONSEGUIDO", s_tf_small, R(x + w - 130, y + 8, 130, 22), NC_GOLD_HI, 1.0f,
+            text(i18n_tr(L"trophies.earned", L"\x2713 CONSEGUIDO"), s_tf_small, R(x + w - 130, y + 8, 130, 22), NC_GOLD_HI, 1.0f,
                  DWRITE_TEXT_ALIGNMENT_TRAILING);
         else
             text(new_trophy_type_name(s_trop_ttype[id]), s_tf_small, R(x + w - 120, y + 8, 120, 22),
@@ -1226,23 +1233,22 @@ static void new_mods_page(float x, float w)
 
     {
         wchar_t head[220];
-        swprintf(head, 220, L"%d mods \x00B7 %ls", (int)s_mods.mods.size(),
-                 s_mods.use ? L"activos" : L"desactivados");
+        swprintf(head, 220, i18n_tr(L"mods.count", L"%d mods \x00B7 %ls"), (int)s_mods.mods.size(),
+                 s_mods.use ? i18n_tr(L"mods.active", L"activos") : i18n_tr(L"mods.disabled", L"desactivados"));
         text(head, s_tf_small, R(x, top - 4, w - 360, 20), NC_TEXT2);
-        text(s_mods.dir.empty() ? L"Sin carpeta de mods" : s_mods.dir.c_str(),
+        text(s_mods.dir.empty() ? i18n_tr(L"mods.no_folder", L"Sin carpeta de mods") : s_mods.dir.c_str(),
              s_tf_desc, R(x, top + 20, w - 360, 22), NC_DESC);
     }
     {
         const float by = top - 10, bw = 92;
-        new_btn(L"RECARGAR", R(x + w - 4 * bw - 18, by, bw, 28), H_NEW_MODS_ACT + 0, 0);
-        new_btn(L"ABRIR", R(x + w - 3 * bw - 12, by, bw, 28), H_NEW_MODS_ACT + 1, 0);
-        new_btn(L"TODO ON", R(x + w - 2 * bw - 6, by, bw, 28), H_NEW_MODS_ACT + 2, 0);
-        new_btn(L"TODO OFF", R(x + w - bw, by, bw, 28), H_NEW_MODS_ACT + 3, 0);
+        new_btn(i18n_tr(L"mods.reload", L"RECARGAR"), R(x + w - 4 * bw - 18, by, bw, 28), H_NEW_MODS_ACT + 0, 0);
+        new_btn(i18n_tr(L"mods.open", L"ABRIR"), R(x + w - 3 * bw - 12, by, bw, 28), H_NEW_MODS_ACT + 1, 0);
+        new_btn(i18n_tr(L"mods.all_on", L"TODO ON"), R(x + w - 2 * bw - 6, by, bw, 28), H_NEW_MODS_ACT + 2, 0);
+        new_btn(i18n_tr(L"mods.all_off", L"TODO OFF"), R(x + w - bw, by, bw, 28), H_NEW_MODS_ACT + 3, 0);
     }
 
     if (s_mods.mods.empty()) {
-        text(L"No hay mods. Crea la carpeta \"mods\" junto a la configuraci\x00F3n "
-             L"y pon dentro una carpeta o un .zip por mod.",
+        text(i18n_tr(L"mods.empty", L"No hay mods. Crea la carpeta \"mods\" junto a la configuración y pon dentro una carpeta o un .zip por mod."),
              s_tf_desc, R(x, top + 62, w, 60), NC_DESC);
         return;
     }
@@ -1328,19 +1334,19 @@ static void new_advanced(float x, float w)
     s_d->PushAxisAlignedClip(R(0, top - 6, NC_PANEL_W, viewH + 12), D2D1_ANTIALIAS_MODE_ALIASED);
     float y = top - s_new_scroll[7];
 
-    new_h3(L"VERSI\x00D3N", x, &y, w);
+    new_h3(i18n_tr(L"adv.version", L"VERSIÓN"), x, &y, w);
     new_kv(L"Port", W("v" AR_VERSION), x, &y, w);
-    new_kv(L"Juego", L"BCUS98232 \x00B7 1.12", x, &y, w);
+    new_kv(i18n_tr(L"adv.game", L"Juego"), L"BCUS98232 \x00B7 1.12", x, &y, w);
     y += 10.0f;
 
-    new_h3(L"CR\x00E9" L"DITOS", x, &y, w);
+    new_h3(i18n_tr(L"adv.credits", L"CRÉDITOS"), x, &y, w);
     {
         static const wchar_t* lines[] = {
-            L"Motor y port original: Ascension-R \x2014 Ryan Bagas (MIT)",
-            L"Toolkit y runtime: ps3recomp \x2014 Ned Heller / sp00nznet y colaboradores (MIT)",
-            L"Port a BCUS98232: cMc-OmniPort",
-            L"FFmpeg (LGPL) \x00B7 DXC \x00B7 MinGit \x00B7 Cinzel (OFL)",
-            L"No se distribuyen archivos del juego.",
+            i18n_tr(L"adv.credit.engine", L"Motor y port original: Ascension-R — Ryan Bagas (MIT)"),
+            i18n_tr(L"adv.credit.toolkit", L"Toolkit y runtime: ps3recomp — Ned Heller / sp00nznet y colaboradores (MIT)"),
+            i18n_tr(L"adv.credit.port", L"Port a BCUS98232: cMc-OmniPort"),
+            i18n_tr(L"adv.credit.libs", L"FFmpeg (LGPL) · DXC · MinGit · Cinzel (OFL)"),
+            i18n_tr(L"adv.credit.no_game", L"No se distribuyen archivos del juego."),
         };
         for (size_t i = 0; i < sizeof lines / sizeof lines[0]; i++) {
             text(lines[i], s_tf_small, R(x, y, w, 20), i == 4 ? NC_DESC : NC_TEXT2);
@@ -1349,19 +1355,19 @@ static void new_advanced(float x, float w)
     }
     y += 10.0f;
 
-    new_h3(L"HERRAMIENTAS DEL PAQUETE", x, &y, w);
-    new_tool_row(L"Buscar y compilar una versi\x00F3n nueva", L"ACTUALIZAR", 0, x, &y, w);
-    new_tool_row(L"Activar la build pendiente", L"PROMOVER", 1, x, &y, w);
-    new_tool_row(L"Volver a la build anterior", L"REVERTIR", 2, x, &y, w);
-    text(L"Se abren en su propia ventana; la de actualizar compila en build.next.",
+    new_h3(i18n_tr(L"adv.tools", L"HERRAMIENTAS DEL PAQUETE"), x, &y, w);
+    new_tool_row(i18n_tr(L"adv.tool.update", L"Buscar y compilar una versión nueva"), i18n_tr(L"adv.update", L"ACTUALIZAR"), 0, x, &y, w);
+    new_tool_row(i18n_tr(L"adv.tool.promote", L"Activar la build pendiente"), i18n_tr(L"adv.promote", L"PROMOVER"), 1, x, &y, w);
+    new_tool_row(i18n_tr(L"adv.tool.revert", L"Volver a la build anterior"), i18n_tr(L"adv.revert", L"REVERTIR"), 2, x, &y, w);
+    text(i18n_tr(L"adv.footer", L"Se abren en su propia ventana; la de actualizar compila en build.next."),
          s_tf_small, R(x, y, w, 20), NC_DESC);
     y += 34.0f;
 
-    new_h3(L"RUTAS", x, &y, w);
+    new_h3(i18n_tr(L"adv.paths", L"RUTAS"), x, &y, w);
     text(root, s_tf_small, R(x, y, w, 20), NC_TEXT2);
     y += 24.0f;
-    new_tool_row(L"Carpeta de logs de la build", L"ABRIR LOGS", 3, x, &y, w);
-    new_tool_row(L"Carpeta del paquete", L"ABRIR", 4, x, &y, w);
+    new_tool_row(i18n_tr(L"adv.tool.logs", L"Carpeta de logs de la build"), i18n_tr(L"adv.open_logs", L"ABRIR LOGS"), 3, x, &y, w);
+    new_tool_row(i18n_tr(L"adv.tool.package", L"Carpeta del paquete"), i18n_tr(L"adv.open", L"ABRIR"), 4, x, &y, w);
 
     s_d->PopAxisAlignedClip();
 
@@ -1413,12 +1419,12 @@ static int new_game_line(wchar_t* b, int n)
         swprintf(b, n, L"%ls \x00B7 %ls", W(g.title_id), game_version());
         return 1;
     }
-    if (g.state == GAME_NO_ELF) { swprintf(b, n, L"Falta GOWA.elf: descifra el juego aqu\x00ED abajo"); return -1; }
-    if (g.state == GAME_INCOMPLETE) { swprintf(b, n, L"Faltan archivos del juego o no son la versi\x00F3n 1.12"); return -1; }
-    if (g.state == GAME_OTHER_BUILD) { swprintf(b, n, L"No es la versi\x00F3n 1.12 de este port"); return -1; }
-    if (g.state == GAME_OTHER_TITLE) { swprintf(b, n, L"Ese juego es %ls; este port es BCUS98232 1.12", W(g.title_id)); return -1; }
-    if (s_find.thread) { swprintf(b, n, L"Buscando el juego\x2026"); return 2; }
-    swprintf(b, n, L"Sin juego: elige la carpeta (PS3_GAME o una que la contenga)");
+    if (g.state == GAME_NO_ELF) { swprintf(b, n, L"%ls", i18n_tr(L"game.missing_elf", L"Falta GOWA.elf: descifra el juego aquí abajo")); return -1; }
+    if (g.state == GAME_INCOMPLETE) { swprintf(b, n, L"%ls", i18n_tr(L"game.incomplete", L"Faltan archivos del juego o no son la versión 1.12")); return -1; }
+    if (g.state == GAME_OTHER_BUILD) { swprintf(b, n, L"%ls", i18n_tr(L"game.other_build", L"No es la versión 1.12 de este port")); return -1; }
+    if (g.state == GAME_OTHER_TITLE) { swprintf(b, n, i18n_tr(L"game.other_title", L"Ese juego es %ls; este port es BCUS98232 1.12"), W(g.title_id)); return -1; }
+    if (s_find.thread) { swprintf(b, n, L"%ls", i18n_tr(L"game.searching", L"Buscando el juego…")); return 2; }
+    swprintf(b, n, L"%ls", i18n_tr(L"game.no_game", L"Sin juego: elige la carpeta (PS3_GAME o una que la contenga)"));
     return -1;
 }
 
@@ -1583,7 +1589,7 @@ static void new_left_page(int p)
         int on = 0;
         for (int i = 0; i < s_npopt; i++) on += opt_on(s_popt[i]);
         wchar_t b[64];
-        swprintf(b, 64, L"%d de %d parches activos", on, s_npopt);
+        swprintf(b, 64, i18n_tr(L"patches.active", L"%d de %d parches activos"), on, s_npopt);
         text(b, s_tf_small, R(34, 108, NC_PANEL_W - 68, 20), NC_GOLD_HI);
     }
 
@@ -1692,7 +1698,7 @@ static void draw_new_shell(void)
     {
         const float y = 24.0f;
         const wchar_t* ver = W("v" AR_VERSION);
-        const wchar_t* lang = L"ESPA\x00D1OL";
+        const wchar_t* lang = i18n_tr(L"lang.name", L"ESPAÑOL");
         const float wl = snap(text_w(lang, s_tf_small) + 26.0f);
         const float wv = snap(text_w(ver, s_tf_small) + 26.0f);
         new_chip(ver, WIN_W - 24 - wl - 10 - wv, y, 1.0f);
