@@ -1,5 +1,5 @@
 {
-  "sha256": "722CB9B7BB95FCF0664C80C32D47FC7FF7DC39C62CCF93307F3A3C1376CB1213",
-  "source": "build/GOWA-cMc.release.exe",
-  "note": "Current full executable, GUI subsystem, disc first-run decryption; no console"
+  "sha256": "E24B35472A537F8E9972C0DFF93B4482B34C53E1F83FA28C1559CAF29C151544",
+  "source": "build/GOWA-cMc.exe",
+  "note": "Exact full-build executable: same behaviour as build, including first-run ELF generation"
 }

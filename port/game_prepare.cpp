@@ -186,9 +186,13 @@ static int run_hidden_in(const wchar_t* exe, wchar_t* cmd, const wchar_t* cwd, D
     si.wShowWindow = SW_HIDE;
     HANDLE in = INVALID_HANDLE_VALUE, nul = INVALID_HANDLE_VALUE;
     BOOL inherit = FALSE;
-    if (stdin_file) {
+    /* Always give RPCS3 three valid handles. A GUI-subsystem launcher has no
+     * console for it to inherit; without this, --decrypt dies with 0xC0000409. */
+    {
         SECURITY_ATTRIBUTES sa = { sizeof sa, NULL, TRUE };
-        in = CreateFileW(stdin_file, GENERIC_READ, FILE_SHARE_READ, &sa, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+        in = stdin_file
+            ? CreateFileW(stdin_file, GENERIC_READ, FILE_SHARE_READ, &sa, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL)
+            : CreateFileW(L"NUL", GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, &sa, OPEN_EXISTING, 0, NULL);
         nul = CreateFileW(L"NUL", GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, &sa, OPEN_EXISTING, 0, NULL);
         if (in == INVALID_HANDLE_VALUE || nul == INVALID_HANDLE_VALUE) {
             if (in != INVALID_HANDLE_VALUE) CloseHandle(in);
