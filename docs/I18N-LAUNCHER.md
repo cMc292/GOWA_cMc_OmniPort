@@ -122,3 +122,15 @@ No se considera terminado hasta que:
 - Páginas: HOME, GRÁFICOS, PANTALLA, CONTROLES, PARCHES, CHEATS, MODS, SISTEMA, AVANZADO, LOG y TROFEOS.
 - Pendiente humano: revisión nativa de cada traducción.
 - Pendiente de release: empaquetar locale/ y probar una versión nueva; no se toca 0.1.6.
+
+## Listas separadas de idioma
+
+Launcher:
+
+```text
+auto, en, es, pt-br, fr, de, it```
+
+Juego (PSARC reales):
+
+```text
+auto, en, fr, pt-br, es   (español de América Latina)```

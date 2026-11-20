@@ -156,13 +156,14 @@ static const char* const k_spk_n[] = { "As Windows has the output device", "Ster
 static const char* const k_spk_s[] = { "Auto", "Stereo", "5.1", "7.1" };
 static const char* const k_grade[] = { "off", "low", "medium", "high", "max" };
 static const char* const k_grade_n[] = { "Off", "Low", "Medium", "High", "Max" };
-static const char* const k_lang[] = { "auto", "en", "en-gb", "fr", "es", "de", "it", "nl", "pt", "pt-br",
-                                      "ru", "ja", "ko", "zh-t", "zh-s", "fi", "sv", "da", "no", "pl", "tr" };
-static const char* const k_lang_n[] = { "Windows language", "English (US)", "English (UK)", "French", "Spanish",
-                                        "German", "Italian", "Dutch", "Portuguese", "Portuguese (Brazil)",
-                                        "Russian", "Japanese", "Korean", "Chinese (traditional)",
-                                        "Chinese (simplified)", "Finnish", "Swedish", "Danish", "Norwegian",
-                                        "Polish", "Turkish" };
+/* The launcher's own UI languages: exactly the six complete locales. */
+static const char* const k_launcher_lang[] = { "auto", "en", "es", "pt-br", "fr", "de", "it" };
+static const char* const k_launcher_lang_n[] = { "Windows language", "English", "Español",
+                                                  "Português (Brasil)", "Français", "Deutsch", "Italiano" };
+/* The languages the BCUS98232 disc actually ships: the four PSARC sets. */
+static const char* const k_game_lang[] = { "auto", "en", "fr", "pt-br", "es" };
+static const char* const k_game_lang_n[] = { "Windows language", "English", "French",
+                                             "Portuguese (Brazil)", "Spanish (Latin America)" };
 
 #define LIST(v, n) v, n, (int)(sizeof v / sizeof v[0])
 #define SW k_onoff, NULL, 2, NULL
@@ -237,9 +238,9 @@ static Opt s_opt[] = {
       "The rage meter stays full." },
     { T_CHEATS, "cheats", "infinite_jumps", "off", "Infinite double jumps", 1, SW,
       "Kratos can jump again in the air, as often as he likes." },
-    { T_SYSTEM, "system", "language", "auto", "Language", 0, LIST(k_lang, k_lang_n), NULL,
+    { T_SYSTEM, "system", "language", "auto", "Game language", 0, LIST(k_game_lang, k_game_lang_n), NULL,
       "The game's language: text and speech." },
-    { T_SYSTEM, "launcher", "language", "auto", "Launcher language", 0, LIST(k_lang, k_lang_n), NULL,
+    { T_SYSTEM, "launcher", "language", "auto", "Launcher language", 0, LIST(k_launcher_lang, k_launcher_lang_n), NULL,
       "The launcher's language. It is separate from the game's language." },
     { T_SYSTEM, "system", "esc_quits", "off", "Esc closes the game", 1, SW,
       "Esc is not a PS3 button; off leaves it free." },
