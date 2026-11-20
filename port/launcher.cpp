@@ -2719,7 +2719,14 @@ static DWORD WINAPI prepare_thread(LPVOID)
     int fetched = 0, ok = 1;
     swprintf(exe, GAME_PATH_MAX, L"%ls", s_prep.rpcs3);
     if (!exe[0]) ok = fetched = game_fetch_rpcs3(s_prep.data, exe, GAME_PATH_MAX, err, 320, &s_prep.progress);
-    if (ok) ok = game_prepare(s_prep.game, exe, s_prep.rap, s_prep.data, err, 320, &s_prep.progress);
+    if (ok && s_game.g.disc) {
+        wchar_t update[GAME_PATH_MAX];
+        if (!game_link_target(s_game.link_hdd0, update, GAME_PATH_MAX))
+            swprintf(update, GAME_PATH_MAX, L"%ls", s_game.link_hdd0);
+        ok = game_prepare_disc(update, exe, s_prep.data, err, 320, &s_prep.progress);
+    } else if (ok) {
+        ok = game_prepare(s_prep.game, exe, s_prep.rap, s_prep.data, err, 320, &s_prep.progress);
+    }
     if (fetched) game_drop_rpcs3(s_prep.data);
     swprintf(s_prep.err, 320, L"%ls", err);
     s_prep.ok = ok;
@@ -2732,9 +2739,11 @@ static void prepare_begin(void)
 {
     if (s_prep.thread || s_game.g.state != GAME_NO_ELF) return;
     if (!s_prep.rpcs3[0]) game_find_rpcs3(s_game.g.dir, s_prep.rpcs3, GAME_PATH_MAX);
-    if (!s_prep.rap[0]) game_find_rap(s_prep.rpcs3[0] ? s_prep.rpcs3 : game_rpcs3_slot(s_game.g.dir), s_game.g.title_id, s_prep.rap, GAME_PATH_MAX);
+    /* A disc is decrypted with the KLIC in its update's EBOOT.BIN: no .rap is needed. */
+    if (!s_game.g.disc && !s_prep.rap[0])
+        game_find_rap(s_prep.rpcs3[0] ? s_prep.rpcs3 : game_rpcs3_slot(s_game.g.dir), s_game.g.title_id, s_prep.rap, GAME_PATH_MAX);
     s_prep.err[0] = 0;
-    if (!s_prep.rap[0] || (!s_prep.rpcs3[0] && !s_prep.download)) return;
+    if ((!s_game.g.disc && !s_prep.rap[0]) || (!s_prep.rpcs3[0] && !s_prep.download)) return;
     data_file(s_prep.data, GAME_PATH_MAX, L"");
     swprintf(s_prep.game, GAME_PATH_MAX, L"%ls", s_game.g.dir);
     memset((void*)&s_prep.progress, 0, sizeof s_prep.progress);

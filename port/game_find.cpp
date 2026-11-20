@@ -535,6 +535,20 @@ static int find_update(const char* id, const wchar_t* disc, const wchar_t* given
 {
     if (given && *given && is_update_of(given, id)) { folder_copy(out, n, given); return 1; }
     std::vector<std::wstring> found;
+    /* A disc copied outside RPCS3: its update is usually Update\<id> beside the disc folder. */
+    {
+        std::wstring base(disc);
+        for (int up = 0; up < 4; up++) {
+            const size_t slash = base.find_last_of(L'\\');
+            if (slash == std::wstring::npos) break;
+            base.resize(slash);
+            wchar_t cand[GAME_PATH_MAX + 64];
+            swprintf(cand, sizeof cand / sizeof cand[0], L"%ls\\Update\\%hs", base.c_str(), id);
+            if (is_update_of(cand, id)) found.push_back(cand);
+            swprintf(cand, sizeof cand / sizeof cand[0], L"%ls\\%hs", base.c_str(), id);
+            if (is_update_of(cand, id)) found.push_back(cand);
+        }
+    }
     for (const std::wstring& r : rpcs3_roots(disc)) {
         wchar_t p[GAME_PATH_MAX + 64];
         swprintf(p, sizeof p / sizeof p[0], L"%ls\\dev_hdd0\\game\\%hs", r.c_str(), id);

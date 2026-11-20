@@ -35,7 +35,7 @@ static const GameTitle k_game_titles[] = {
      * the update's EBOOT.BIN (phase 4). */
     { "BCES01741", L"EU disc", GAME_KIND_DISC, NULL, 1, "BCES01741" },
     /* Not looked at yet: its GOWA.elf at 1.12 and its files. */
-    { "BCUS98232", L"US disc", GAME_KIND_HDD, NULL, 1, "BCUS98232" },
+    { "BCUS98232", L"US disc", GAME_KIND_DISC, NULL, 1, "BCUS98232" },
 };
 enum { GAME_TITLES = (int)(sizeof k_game_titles / sizeof k_game_titles[0]) };
 

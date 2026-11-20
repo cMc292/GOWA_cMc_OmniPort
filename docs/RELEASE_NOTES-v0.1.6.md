@@ -93,3 +93,6 @@ licencia MIT del proyecto no la cubre.
 *God of War* es una marca de Sony Interactive Entertainment LLC /
 Santa Monica Studio. Proyecto de aficionados, sin ánimo de lucro, no afiliado
 a Sony.
+
+> **Nota:** este release todavía incluye `GOWA.elf` de trabajo. una versión futura
+> lo retira y lo genera en la primera ejecución con RPCS3 y la licencia del juego.
