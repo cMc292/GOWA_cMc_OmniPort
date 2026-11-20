@@ -1,4 +1,4 @@
-﻿/*
+/*
  * GOWA-cMc -- the launcher
  *
  * The settings window shown before the game starts. It reads and writes
@@ -491,6 +491,13 @@ static void open_saves(void)
         if (*p == '\\' && p > path && p[-1] != ':') { *p = 0; CreateDirectoryA(path, NULL); *p = '\\'; }
     CreateDirectoryA(path, NULL);
     ShellExecuteA(s_main, "open", path, NULL, NULL, SW_SHOWNORMAL);
+}
+
+/* Apply a launcher language change without restarting the window. */
+static void apply_launcher_language(void)
+{
+    i18n_init(ps3_settings_str("launcher", "language", "GOWA_LAUNCHER_LANGUAGE", NULL));
+    if (s_main) InvalidateRect(s_main, NULL, TRUE);
 }
 
 static int save_all(void)
@@ -3390,7 +3397,7 @@ static void act(int id)
             return;
         }
         if (id == H_NEW_SAVE) {
-            if (save_all()) { toast("Guardado"); s_new_dirty = 0; }
+            if (save_all()) { apply_launcher_language(); toast(U8(i18n_tr(L"common.saved", L"Guardado"))); s_new_dirty = 0; }
             if (s_main) InvalidateRect(s_main, NULL, FALSE);
             return;
         }
@@ -3447,7 +3454,7 @@ static void act(int id)
                 game_link(s_game.link_hdd0, s_game.g.dir, NULL, 0);
             if (save_all()) s_done = 1;
             break;
-case H_SAVE: if (save_all()) { toast(new_ui_on() ? "Guardado" : "Saved"); s_new_dirty = 0; } break;
+case H_SAVE: if (save_all()) { apply_launcher_language(); toast(U8(i18n_tr(L"common.saved", L"Guardado"))); s_new_dirty = 0; } break;
         case H_QUIT: s_done = 2; break;
         case H_KEYS: s_dd = -1; kb_open(); break;
         case H_KB_OK: kb_close(1); break;

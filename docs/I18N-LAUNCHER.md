@@ -134,3 +134,7 @@ Juego (PSARC reales):
 
 ```text
 auto, en, fr, pt-br, es   (español de América Latina)```
+
+## Cambio en caliente
+
+Al pulsar GUARDAR se llama a i18n_init con `launcher.language` y se repinta la ventana. No hace falta reiniciar el launcher.
