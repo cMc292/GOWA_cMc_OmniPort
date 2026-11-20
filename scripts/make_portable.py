@@ -100,6 +100,20 @@ def main() -> int:
         shutil.copy2(loc, out / "locale" / loc.name)
     (out / "mods").mkdir(exist_ok=True)
     shutil.copy2(need(FULL / "scripts" / "mods-LEEME.txt"), out / "mods" / "LEEME-MODS.txt")
+    # A portable release carries a working mods folder and its first mod.
+    src_mod = BUILD / "mods" / "skip-intro"
+    if src_mod.is_dir():
+        dst_mod = out / "mods" / "skip-intro"
+        dst_mod.mkdir(parents=True, exist_ok=True)
+        for name in ("mod.ini", "mod.json"):
+            src = src_mod / name
+            if src.is_file():
+                shutil.copy2(src, dst_mod / name)
+        src_arc = src_mod / "archive"
+        if src_arc.is_dir():
+            shutil.copytree(src_arc, dst_mod / "archive", dirs_exist_ok=True)
+    # Portable mode: settings, logs and caches beside the executable.
+    (out / "portable.txt").write_text("GOWA_cMc_OmniPort portable\n", encoding="utf-8", newline="\n")
 
     exe_src, expected = release_exe(args.exe)
     exe_src = need(exe_src)
@@ -169,7 +183,7 @@ def main() -> int:
     for bad in ("logs",):
         if (out / bad).exists():
             raise SystemExit(f"unexpected generated file in package: {bad}")
-    for cfg in ("ascension-r.ini", "gowa-cmc.ini"):
+    for cfg in ("ascension-r.ini",):
         text = (out / cfg).read_text(encoding="utf-8")
         if "C:\\" in text or "D:\\" in text or "E:\\" in text:
             raise SystemExit(f"absolute path left in {cfg}")

@@ -24,6 +24,8 @@ Repositorio y versiones nuevas:
 
 ## Instalación
 
+El paquete incluye `portable.txt`: la configuración, los logs y el caché quedan junto al ejecutable, no en `%LOCALAPPDATA%`. También incluye una carpeta `mods` funcional con `skip-intro`.
+
 > **No ejecutes la release desde `work\dist`.** Extrae el ZIP en una ruta
 > corta, por ejemplo `C:\GOWA` o el Escritorio. Windows y el juego usan
 > rutas con límite de 260 caracteres; una ruta profunda puede impedir que
