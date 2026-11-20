@@ -112,10 +112,6 @@ def main() -> int:
         src = need(BUILD / n)
         shutil.copy2(src, out / n)
 
-    # Same prebuilt shader cache as the tested full.
-    for cache in sorted(BUILD.glob("d3d12_shader_cache.bin*")):
-        if cache.is_file() and cache.suffix != ".journal":
-            shutil.copy2(cache, out / cache.name)
 
     sys32 = Path(os.environ.get("WINDIR", r"C:\Windows")) / "System32"
     for n in VC_RUNTIME:
