@@ -3,8 +3,8 @@
 **Espacio de trabajo:** `C:\deepseek harness\Port de God of War Ascension BCUS98232`
 **Repositorio:** <https://github.com/cMc292/GOWA_cMc_OmniPort>
 **Rama:** `master`
-**Release actual:** `v0.1.5`
-**Paquete:** `work\dist\GOWA_cMc_OmniPort v0.1.5.zip`
+**Release actual:** `v0.1.6`
+**Paquete:** `work\dist\GOWA_cMc_OmniPort v0.1.6.zip`
 
 Esta sesión es únicamente para publicar releases. No se usa para programar,
 recompilar ni modificar el full.
@@ -32,7 +32,7 @@ Reglas:
 - No guardar tokens ni credenciales.
 - Antes de publicar, leer docs/SESION-PUBLICAR-RELEASES.md.
 
-Tarea inicial: comprobar el ZIP v0.1.5, verificar el hash del ejecutable,
+Tarea inicial: comprobar el ZIP v0.1.6, verificar el hash del ejecutable,
 comprobar git/gh y preparar el release. No ejecutar el release hasta
 confirmación del usuario.
 ```
@@ -42,7 +42,7 @@ confirmación del usuario.
 ## 2. Estado del paquete
 
 ```text
-work\dist\GOWA_cMc_OmniPort v0.1.5.zip
+work\dist\GOWA_cMc_OmniPort v0.1.6.zip
 ```
 
 ```text
@@ -91,7 +91,7 @@ git -C "work\0.2.0-full" status --short
 
 ```powershell
 Get-FileHash `
-  "work\dist\GOWA_cMc_OmniPort v0.1.5\GOWA-cMc.exe" `
+  "work\dist\GOWA_cMc_OmniPort v0.1.6\GOWA-cMc.exe" `
   -Algorithm SHA256
 ```
 
@@ -154,7 +154,7 @@ No publicar si falla.
 ### Opción A: script local
 
 ```powershell
-work\0.2.0-full\scripts\publish_github.ps1 -Version v0.1.5
+work\0.2.0-full\scripts\publish_github.ps1 -Version v0.1.6
 ```
 
 El script crea el tag, lo sube y crea el release con el ZIP.
@@ -163,12 +163,12 @@ El script crea el tag, lo sube y crea el release con el ZIP.
 
 ```powershell
 git -C "work\0.2.0-full" push -u origin master
-git -C "work\0.2.0-full" tag v0.1.5
-git -C "work\0.2.0-full" push origin v0.1.5
-gh release create v0.1.5 `
-  "work\dist\GOWA_cMc_OmniPort v0.1.5.zip" `
+git -C "work\0.2.0-full" tag v0.1.6
+git -C "work\0.2.0-full" push origin v0.1.6
+gh release create v0.1.6 `
+  "work\dist\GOWA_cMc_OmniPort v0.1.6.zip" `
   --repo cMc292/GOWA_cMc_OmniPort `
-  --title "GOWA_cMc_OmniPort v0.1.5" `
+  --title "GOWA_cMc_OmniPort v0.1.6" `
   --generate-notes
 ```
 
@@ -185,7 +185,7 @@ Después:
 
 ```text
 Actions -> Release portable -> Run workflow
-Version: v0.1.5
+Version: v0.1.6
 ```
 
 ---
@@ -196,9 +196,9 @@ Crear `SHA256SUMS.txt`:
 
 ```powershell
 Get-FileHash `
-  "work\dist\GOWA_cMc_OmniPort v0.1.5.zip" `
+  "work\dist\GOWA_cMc_OmniPort v0.1.6.zip" `
   -Algorithm SHA256 |
-  ForEach-Object { "$($_.Hash)  GOWA_cMc_OmniPort v0.1.5.zip" } |
+  ForEach-Object { "$($_.Hash)  GOWA_cMc_OmniPort v0.1.6.zip" } |
   Set-Content -LiteralPath "work\dist\SHA256SUMS.txt" -Encoding ASCII
 ```
 

@@ -26,7 +26,7 @@ Repositorio y versiones nuevas:
 
 El paquete incluye `portable.txt`: la configuración, los logs y el caché quedan junto al ejecutable, no en `%LOCALAPPDATA%`. También incluye una carpeta `mods` funcional con `skip-intro`.
 
-> **No ejecutes la release desde `work\dist`.** Extrae el ZIP en una ruta
+> **No ejecutes la release desde una carpeta muy profunda.** Extrae el ZIP en una ruta
 > corta, por ejemplo `C:\GOWA` o el Escritorio. Windows y el juego usan
 > rutas con límite de 260 caracteres; una ruta profunda puede impedir que
 > se abran WAD, vídeos o parches y dejar la carga bloqueada.
@@ -50,7 +50,7 @@ El paquete incluye `portable.txt`: la configuración, los logs y el caché queda
 - FFmpeg (`avcodec`, `avutil`, `swresample`) — cinemáticas.
 - `dxcompiler.dll` y `dxil.dll` — compilación de pixel shaders.
 - Runtime de Visual C++ — necesario en PCs limpias.
-- `ascension-r.ini` y `gowa-cmc.ini` — configuración sin rutas absolutas.
+- `ascension-r.ini` — configuración sin rutas absolutas.
 - `LICENSE`, `CREDITOS.md`, `THIRD-PARTY.txt` y
   `THIRD_PARTY_NOTICES.md`.
 

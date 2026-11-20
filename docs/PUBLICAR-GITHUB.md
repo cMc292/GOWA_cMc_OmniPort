@@ -20,23 +20,23 @@ work\0.2.0-full
 Desde la raíz del proyecto:
 
 ```powershell
-work\0.2.0-full\tools\python\python.exe work\0.2.0-full\scripts\make_portable.py --version v0.1.5
+work\0.2.0-full\tools\python\python.exe work\0.2.0-full\scripts\make_portable.py --version v0.1.6
 ```
 
 Luego:
 
 ```powershell
-gh release create v0.1.5 `
-  "work\dist\GOWA_cMc_OmniPort v0.1.5.zip" `
+gh release create v0.1.6 `
+  "work\dist\GOWA_cMc_OmniPort v0.1.6.zip" `
   --repo cMc292/GOWA_cMc_OmniPort `
-  --title "GOWA_cMc_OmniPort v0.1.5" `
+  --title "GOWA_cMc_OmniPort v0.1.6" `
   --generate-notes
 ```
 
 O usa el script:
 
 ```powershell
-work\0.2.0-full\scripts\publish_github.ps1 -Version v0.1.5
+work\0.2.0-full\scripts\publish_github.ps1 -Version v0.1.6
 ```
 
 El script:
@@ -76,7 +76,7 @@ Después, desde GitHub:
 
 ```text
 Actions -> Release portable -> Run workflow
-Version: v0.1.5
+Version: v0.1.6
 ```
 
 El workflow genera el paquete y crea el release usando `GH_TOKEN` del runner.

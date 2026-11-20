@@ -32,7 +32,7 @@ publicación siguiente a `v0.1.5` y cumple las dos reglas nuevas:
 ## Primera ejecución
 
 1. Extrae el ZIP en una **ruta corta** (`C:\GOWA`, el Escritorio).
-   No lo ejecutes desde `work\dist`: la ruta profunda puede bloquear la carga.
+   No lo ejecutes desde una carpeta muy profunda: puede bloquear la carga.
 2. Ejecuta `GOWA-cMc.exe`.
 3. Elige la carpeta que contiene `PS3_GAME`.
 4. El launcher busca el Update y genera `GOWA.elf` con RPCS3.
