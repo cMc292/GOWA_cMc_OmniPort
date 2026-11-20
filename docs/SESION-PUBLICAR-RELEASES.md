@@ -1,3 +1,5 @@
+> **Reglas obligatorias:** [REGLAS-PUBLICACION.md](REGLAS-PUBLICACION.md). Mantener la estructura del README y solo agregar funciones/mejoras en cada Release.
+
 # Sesión especial: publicar releases de GOWA_cMc_OmniPort
 
 **Espacio de trabajo:** `C:\deepseek harness\Port de God of War Ascension BCUS98232`
