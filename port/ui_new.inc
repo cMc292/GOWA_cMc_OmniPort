@@ -593,10 +593,10 @@ static void new_save_button(int dirty)
         fill(r, 0x1E1618, 1.0f);
         frame(r, NC_LINE, 0.9f, 2.0f);
     }
-    text(L"GUARDAR", s_tf_ui_b, r, dirty ? 0xFFFFFF : NC_DESC, 1.0f, DWRITE_TEXT_ALIGNMENT_CENTER);
+    text(i18n_tr(L"common.save", L"GUARDAR"), s_tf_ui_b, r, dirty ? 0xFFFFFF : NC_DESC, 1.0f, DWRITE_TEXT_ALIGNMENT_CENTER);
     hit(r, H_NEW_SAVE);
     if (dirty)
-        text(L"CAMBIOS SIN GUARDAR", s_tf_small, R(NC_PANEL_W - 300, 84, 268, 20), NC_RED, 1.0f,
+        text(i18n_tr(L"common.unsaved", L"CAMBIOS SIN GUARDAR"), s_tf_small, R(NC_PANEL_W - 300, 84, 268, 20), NC_RED, 1.0f,
              DWRITE_TEXT_ALIGNMENT_TRAILING);
 }
 
