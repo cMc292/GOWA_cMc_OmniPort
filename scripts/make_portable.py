@@ -161,6 +161,9 @@ def main() -> int:
         shutil.copy2(lic, out / "_src" / "ffmpeg" / "LICENSE.txt")
 
     (out / "ascension-r.ini").write_text(CONFIG, encoding="utf-8", newline="\n")
+    manifest = FULL / "recomplauncher.json"
+    if manifest.is_file():
+        shutil.copy2(manifest, out / "recomplauncher.json")
 
 
     pkg = PROJECT / "GOWA_cMc_OmniPort-0.1.0-alpha.10"

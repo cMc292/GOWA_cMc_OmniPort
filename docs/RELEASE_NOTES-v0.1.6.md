@@ -26,6 +26,7 @@ publicación siguiente a `v0.1.5` y cumple las dos reglas nuevas:
   mods\skip-intro\archive\INTRO\BOOT_BCES01741.TXT
   mods\skip-intro\archive\INTRO\BOOT_BCUS98232.TXT
   ```
+- **RecompLauncher:** incluye `recomplauncher.json`; la ficha pública está pendiente de URL.
 - **No incluye `GOWA.elf`**: se genera en la primera ejecución.
 - **No incluye el caché de shaders**: se genera en la primera ejecución.
 

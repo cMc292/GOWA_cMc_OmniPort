@@ -81,6 +81,13 @@ Repositorio y versiones:
 `portable.txt` está incluido. No borres `portable.txt` si quieres que la
 configuración, los logs y el caché sigan junto al ejecutable.
 
+### RecompLauncher
+
+El Release incluye `recomplauncher.json` con el nombre del proyecto, el
+repositorio, el ejecutable y las rutas de configuración y guardados. La ficha
+pública de RecompLauncher todavía no tiene URL; cuando se publique, esta
+sección tendrá el badge de instalación oficial.
+
 ## Requisitos
 
 - Windows 10 u 11, 64 bits.
