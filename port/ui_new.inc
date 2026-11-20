@@ -206,6 +206,9 @@ static const NewEs k_es[] = {
  * (a GPU's model, a resolution, FSR, XInput: things that read the same in both). */
 static const wchar_t* new_val_es(const wchar_t* en)
 {
+    wchar_t key[256];
+    swprintf(key, sizeof key / sizeof key[0], L"value.%ls", en);
+    if (const wchar_t* translated = i18n_tr(key, NULL)) return translated;
     static const struct { const wchar_t* en; const wchar_t* es; } t[] = {
         { L"Windowed", L"Ventana" },
         { L"Borderless fullscreen", L"Sin bordes (pantalla completa)" },
@@ -626,12 +629,20 @@ static void new_list_row(Opt* o, int rowIndex, float x, float y, float w)
 }
 
 /* One option row: label, description and its control. */
+static const wchar_t* new_opt_tr(const Opt* o, const wchar_t* field, const wchar_t* fallback)
+{
+    wchar_t key[256];
+    swprintf(key, sizeof key / sizeof key[0], L"opt.%hs.%hs.%ls", o->section, o->key, field);
+    return i18n_tr(key, fallback);
+}
+
 static float new_row(Opt* o, int rowIndex, float x, float y, float w)
 {
     const NewEs* es = new_es(o);
-    text(es ? es->label : W(o->label), s_tf_ui, R(x + 12, y, w - 250, 26), NC_TEXT);
+    const wchar_t* label = new_opt_tr(o, L"label", es ? es->label : W(o->label));
+    text(label, s_tf_ui, R(x + 12, y, w - 250, 26), NC_TEXT);
     float h = 44.0f;
-    const wchar_t* d = es ? es->desc : (o->desc ? W(o->desc) : L"");
+    const wchar_t* d = new_opt_tr(o, L"desc", es ? es->desc : (o->desc ? W(o->desc) : L""));
     if (d && d[0]) {
         const float dh = text_h(d, s_tf_desc, w - 250);
         text(d, s_tf_desc, R(x + 12, y + 24, w - 250, dh + 4), NC_DESC);
@@ -1426,12 +1437,12 @@ static void new_game_setup(float x, float y, float w)
 {
     wchar_t b[GAME_PATH_MAX + 128];
     const float bw = 112.0f;
-    text(L"CARPETA DEL JUEGO", s_tf_small, R(x, y, w - 2 * bw - 20, 18), NC_GOLD_HI);
-    new_btn(L"EXAMINAR", R(x + w - 2 * bw - 8, y - 6, bw, 28), H_GAME_BROWSE, 0);
-    new_btn(s_find.thread ? L"PARAR" : L"DETECTAR", R(x + w - bw, y - 6, bw, 28), H_GAME_AUTO, 0);
+    text(i18n_tr(L"sys.game_folder", L"CARPETA DEL JUEGO"), s_tf_small, R(x, y, w - 2 * bw - 20, 18), NC_GOLD_HI);
+    new_btn(i18n_tr(L"sys.browse", L"EXAMINAR"), R(x + w - 2 * bw - 8, y - 6, bw, 28), H_GAME_BROWSE, 0);
+    new_btn(s_find.thread ? i18n_tr(L"sys.stop", L"PARAR") : i18n_tr(L"sys.detect", L"DETECTAR"), R(x + w - bw, y - 6, bw, 28), H_GAME_AUTO, 0);
     y += 28.0f;
     const wchar_t* shown = game_path_shown();
-    if (!wcscmp(shown, L"Not set")) shown = L"Sin elegir";
+    if (!wcscmp(shown, L"Not set")) shown = i18n_tr(L"sys.not_set", L"Sin elegir");
     text(shown, s_tf_small, R(x, y, w, 20), NC_TEXT2);
     y += 24.0f;
     const int level = new_game_line(b, (int)(sizeof b / sizeof b[0]));
@@ -1439,7 +1450,7 @@ static void new_game_setup(float x, float y, float w)
     y += 26.0f;
     if (s_find.thread) {
         AcquireSRWLockShared(&s_find.lock);
-        swprintf(b, sizeof b / sizeof b[0], L"Buscando: %ls", s_find.now);
+        swprintf(b, sizeof b / sizeof b[0], i18n_tr(L"sys.searching", L"Buscando: %ls"), s_find.now);
         ReleaseSRWLockShared(&s_find.lock);
         text(b, s_tf_small, R(x, y, w, 20), NC_TEXT2);
         y += 22.0f;
@@ -1448,7 +1459,7 @@ static void new_game_setup(float x, float y, float w)
     if (!new_need_decrypt()) return;
 
     y += 8.0f;
-    text(L"DESCIFRADO", s_tf_small, R(x, y, w, 18), NC_GOLD_HI);
+    text(i18n_tr(L"sys.decrypt", L"DESCIFRADO"), s_tf_small, R(x, y, w, 18), NC_GOLD_HI);
     y += 22.0f;
     if (s_prep.thread) {
         float f = -1.0f;
@@ -1458,12 +1469,12 @@ static void new_game_setup(float x, float y, float w)
         new_btn(L"PARAR", R(x + w - 90, y - 4, 90, 28), H_PREP_STOP, 0);
         y += 48.0f;
     } else {
-        text(L"RPCS3 + licencia (.rap); un SELF de parche necesita su KLIC:",
+        text(i18n_tr(L"sys.prep_hint", L"RPCS3 + licencia (.rap); un SELF de parche necesita su KLIC:"),
              s_tf_small, R(x, y, w, 20), NC_TEXT2);
         y += 24.0f;
         float bx = x;
         const float gap = 8.0f;
-        const wchar_t* name[4] = { L"ELEGIR RPCS3...", L"DESCARGAR RPCS3", L"ELEGIR .RAP...", L"REINTENTAR" };
+        const wchar_t* name[4] = { i18n_tr(L"sys.pick_rpcs3", L"ELEGIR RPCS3..."), i18n_tr(L"sys.download_rpcs3", L"DESCARGAR RPCS3"), i18n_tr(L"sys.pick_rap", L"ELEGIR .RAP..."), i18n_tr(L"sys.retry", L"REINTENTAR") };
         const int id[4] = { H_PICK_RPCS3, H_GET_RPCS3, H_PICK_RAP, H_PREP_RETRY };
         const int shown[4] = { 1, !s_prep.rpcs3[0], 1, s_prep.err[0] && s_prep.rpcs3[0] && s_prep.rap[0] };
         for (int i = 0; i < 4; i++) {
@@ -1474,9 +1485,9 @@ static void new_game_setup(float x, float y, float w)
         }
         y += 34.0f;
         float bx2 = x;
-        new_btn(L"USAR GOWA.ELF...", R(bx2, y, 168, 28), H_USE_ELF, 0);
+        new_btn(i18n_tr(L"sys.use_elf", L"USAR GOWA.ELF..."), R(bx2, y, 168, 28), H_USE_ELF, 0);
         bx2 += 176.0f;
-        new_btn(L"ELEGIR KLIC...", R(bx2, y, 142, 28), H_PICK_KLIC, 0);
+        new_btn(i18n_tr(L"sys.pick_klic", L"ELEGIR KLIC..."), R(bx2, y, 142, 28), H_PICK_KLIC, 0);
         y += 38.0f;
         if (s_prep.err[0]) new_line(x, y, w, -1, s_prep.err);
     }
@@ -1644,8 +1655,8 @@ static void new_left_page(int p)
         y += h;
     }
     if (p == 7) {
-        static const wchar_t* acts[3] = { L"Abrir carpeta de guardados", L"Informe de problema", L"Salir del launcher" };
-        static const wchar_t* lab[3] = { L"ABRIR", L"ABRIR", L"SALIR" };
+        const wchar_t* acts[3] = { i18n_tr(L"sys.open_saves", L"Abrir carpeta de guardados"), i18n_tr(L"sys.report", L"Informe de problema"), i18n_tr(L"sys.quit", L"Salir del launcher") };
+        const wchar_t* lab[3] = { i18n_tr(L"sys.open", L"ABRIR"), i18n_tr(L"sys.open", L"ABRIR"), i18n_tr(L"sys.exit", L"SALIR") };
         for (int i = 0; i < 3; i++) {
             const D2D1_RECT_F b = R(x + w - 150, y + 4, 140, 32);
             text(acts[i], s_tf_ui, R(x + 12, y + 6, w - 200, 26), NC_TEXT2);
