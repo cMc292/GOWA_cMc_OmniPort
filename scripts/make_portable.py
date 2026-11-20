@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
-"""Build the publishable portable from the current full tree.
+"""Build the publishable portable from the full tree.
 
-Usage (from anywhere):
+The executable is pinned in scripts/release-exe.json because the current build
+can contain a launcher regression. Replace that pin only after a clean-package
+end-to-end test.
+
+Usage:
     python scripts/make_portable.py --version v0.1.5
-
-The output is:
-    <project>/work/dist/GOWA_cMc_OmniPort v0.1.5/
-    <project>/work/dist/GOWA_cMc_OmniPort v0.1.5.zip
-
-Only runtime files are copied. The game itself is never copied; the player
-selects their own game folder on first run.
 """
 from __future__ import annotations
 
 import argparse
 import datetime
 import hashlib
+import json
 import os
 import shutil
 import subprocess
@@ -29,7 +27,6 @@ BUILD = FULL / "build"
 DIST = PROJECT / "work" / "dist"
 
 RUNTIME = [
-    "GOWA-cMc.exe",
     "GOWA.elf",
     "SDL3.dll",
     "avcodec-62.dll",
@@ -69,9 +66,21 @@ def need(path: Path) -> Path:
     return path
 
 
+def release_exe(args_exe: str | None) -> tuple[Path, str | None]:
+    if args_exe:
+        return Path(args_exe).resolve(), None
+    manifest = FULL / "scripts" / "release-exe.json"
+    if manifest.is_file():
+        m = json.loads(manifest.read_text(encoding="utf-8"))
+        src = (FULL / m["source"]).resolve()
+        return src, m.get("sha256")
+    return BUILD / "GOWA-cMc.exe", None
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--version", default="v0.1.5", help="release version, e.g. v0.1.5")
+    ap.add_argument("--exe", default=None, help="override the pinned known-good exe")
     ap.add_argument("--no-zip", action="store_true")
     args = ap.parse_args()
     version = args.version.strip()
@@ -85,43 +94,41 @@ def main() -> int:
         shutil.rmtree(out)
     if zpath.exists():
         zpath.unlink()
-    out.mkdir(parents=True, exist_ok=True)
+    (out / "vfs").mkdir(parents=True, exist_ok=True)
+    (out / "gamedata" / "dev_hdd0").mkdir(parents=True, exist_ok=True)
 
-    # Required runtime, straight from the full build.
-    copied = []
+    exe_src, expected = release_exe(args.exe)
+    exe_src = need(exe_src)
+    shutil.copy2(exe_src, out / "GOWA-cMc.exe")
+    exe_hash = sha256(out / "GOWA-cMc.exe")
+    if expected and exe_hash.lower() != expected.lower():
+        raise SystemExit(f"known-good exe hash mismatch: got {exe_hash}, expected {expected}")
+
     for n in RUNTIME:
         src = need(BUILD / n)
         shutil.copy2(src, out / n)
-        copied.append(n)
 
-    # Visual C++ runtime is not part of the build output; take it from Windows.
     sys32 = Path(os.environ.get("WINDIR", r"C:\Windows")) / "System32"
     for n in VC_RUNTIME:
         src = sys32 / n
         if src.is_file():
             shutil.copy2(src, out / n)
-            copied.append(n)
 
-    # Only the FFmpeg runtime, never include/lib/doc.
     ffroot = FULL / "_src" / "ffmpeg"
     ffbin = out / "_src" / "ffmpeg" / "bin"
     ffbin.mkdir(parents=True, exist_ok=True)
     for n in ("avcodec-62.dll", "avutil-60.dll", "swresample-6.dll"):
         src = ffroot / "bin" / n
         if not src.is_file():
-            # fall back to the build copy
             src = BUILD / n
-        need(src)
-        shutil.copy2(src, ffbin / n)
+        shutil.copy2(need(src), ffbin / n)
     lic = ffroot / "LICENSE.txt"
     if lic.is_file():
         shutil.copy2(lic, out / "_src" / "ffmpeg" / "LICENSE.txt")
 
-    # Empty structure for the first-run links; no game data and no absolute paths.\n    (out / "vfs").mkdir(exist_ok=True)\n    (out / "gamedata" / "dev_hdd0").mkdir(parents=True, exist_ok=True)\n\n    # Configuration: no absolute paths, shader prebuild enabled.
     (out / "ascension-r.ini").write_text(CONFIG, encoding="utf-8", newline="\n")
     (out / "gowa-cmc.ini").write_text(CONFIG, encoding="utf-8", newline="\n")
 
-    # Legal and readme files from the project package.
     pkg = PROJECT / "GOWA_cMc_OmniPort-0.1.0-alpha.10"
     for n in DOCS:
         src = pkg / n
@@ -130,35 +137,28 @@ def main() -> int:
         if src.is_file():
             shutil.copy2(src, out / n)
 
-    # Provenance and an explicit hash check.
-    exe_hash = sha256(out / "GOWA-cMc.exe")
-    full_hash = sha256(BUILD / "GOWA-cMc.exe")
-    if exe_hash != full_hash:
-        raise SystemExit("packaged exe does not match the full build")
+    date = datetime.date.today().isoformat()
+    values = {"{{VERSION}}": version, "{{EXE_SHA256}}": exe_hash, "{{DATE}}": date}
+    for tmpl_name, out_name in (("README-portable.template.md", "README.md"),
+                                ("LEEME-portable.template.txt", "LEEME-PRIMERO.txt")):
+        text = need(FULL / "scripts" / tmpl_name).read_text(encoding="utf-8")
+        for k, v in values.items():
+            text = text.replace(k, v)
+        (out / out_name).write_text(text, encoding="utf-8", newline="\n")
+
     try:
         commit = subprocess.run(["git", "-C", str(FULL), "rev-parse", "--short", "HEAD"],
                                 text=True, capture_output=True, check=False).stdout.strip()
     except Exception:
         commit = ""
-    # Current README/LEEME, generated from templates with this package's data.
-    date = datetime.date.today().isoformat()
-    vars = {"{{VERSION}}": version, "{{EXE_SHA256}}": exe_hash, "{{DATE}}": date}
-    for tmpl_name, out_name in (("README-portable.template.md", "README.md"),
-                                ("LEEME-portable.template.txt", "LEEME-PRIMERO.txt")):
-        tmpl = FULL / "scripts" / tmpl_name
-        text = need(tmpl).read_text(encoding="utf-8")
-        for k, v in vars.items():
-            text = text.replace(k, v)
-        (out / out_name).write_text(text, encoding="utf-8", newline="\n")
-
     (out / "BUILD-INFO.txt").write_text(
         f"Package: {name}\nVersion: {version}\nFull: work/0.2.0-full\n"
-        f"Exe SHA-256: {exe_hash}\nExe bytes: {(out / 'GOWA-cMc.exe').stat().st_size}\n"
+        f"Exe source: {exe_src.relative_to(PROJECT) if exe_src.is_relative_to(PROJECT) else exe_src.name}\nExe SHA-256: {exe_hash}\n"
+        f"Exe bytes: {(out / 'GOWA-cMc.exe').stat().st_size}\n"
         f"Full commit: {commit}\nGame data: not included; selected by the player on first run.\n",
         encoding="utf-8", newline="\n")
 
-    # Hard checks: no cache, logs, links, or absolute paths in config.
-    for bad in ("logs", "d3d12_shader_cache.bin.dxil.prebuilt", "d3d12_shader_cache.bin.fprogs"):
+    for bad in ("d3d12_shader_cache.bin.dxil.prebuilt", "d3d12_shader_cache.bin.fprogs", "logs"):
         if (out / bad).exists():
             raise SystemExit(f"unexpected generated file in package: {bad}")
     for cfg in ("ascension-r.ini", "gowa-cmc.ini"):
@@ -174,6 +174,7 @@ def main() -> int:
 
     total = sum(p.stat().st_size for p in out.rglob("*") if p.is_file())
     print(f"package: {out}")
+    print(f"exe source: {exe_src}")
     print(f"files:   {len([p for p in out.rglob('*') if p.is_file()])}")
     print(f"size:    {total / (1024 * 1024):.1f} MB")
     print(f"exe:     {exe_hash}")
