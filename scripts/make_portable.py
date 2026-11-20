@@ -100,6 +100,18 @@ def main() -> int:
         shutil.copy2(loc, out / "locale" / loc.name)
     (out / "mods").mkdir(exist_ok=True)
     shutil.copy2(need(FULL / "scripts" / "mods-LEEME.txt"), out / "mods" / "LEEME-MODS.txt")
+    # The portable mod packer: mods_pack looks for kit\python and kit\scripts.
+    kit_py = FULL / "tools" / "python"
+    if (kit_py / "python.exe").is_file():
+        shutil.copytree(kit_py, out / "kit" / "python", dirs_exist_ok=True,
+                        ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
+    kit_scripts = out / "kit" / "scripts"
+    kit_scripts.mkdir(parents=True, exist_ok=True)
+    for name in ("modpack.py", "gametext.py"):
+        src = FULL / "scripts" / name
+        if src.is_file():
+            shutil.copy2(src, kit_scripts / name)
+
     # A portable release carries a working mods folder and its first mod.
     src_mod = BUILD / "mods" / "skip-intro"
     if src_mod.is_dir():

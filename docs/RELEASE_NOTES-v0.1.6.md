@@ -48,6 +48,14 @@ La primera compilación es normal y no es un cuelgue.
 
 ## Mods
 
+El paquete incluye `kit\python` y `kit\scripts\modpack.py` para empaquetar los mods en el primer arranque. Probado en el propio paquete:
+
+```text
+archive  skip-intro  2  0  0  -
+TPPS6.PSARC: 2 entries
+```
+`n## Mods
+
 `mods` está activo por defecto. `skip-intro` salta las pantallas de aviso y
 logos; el juego pasa directamente a la pantalla de carga. Se puede desactivar
 en **MODS**, y se pueden añadir más mods en formato `mod.ini` + `archive\` o
