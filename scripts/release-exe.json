@@ -1,5 +1,5 @@
 ﻿{
-    "sha256":  "0703FD9F28D6F697F20EB395A816C0FA5607003A98D1D9311932039AB1BB5B01",
+    "sha256":  "009E86ECF9CE1C5DE3BC1F761D9202F412A1CC5529308F4DB8903F766F04CB4A",
     "source":  "build/GOWA-cMc.known-good.exe",
-    "note":  "Last known-good executable. Replace only after a clean-package end-to-end test."
+    "note":  "Known-good GUI-subsystem executable: no console window"
 }
