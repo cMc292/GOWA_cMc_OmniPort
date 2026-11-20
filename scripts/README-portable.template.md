@@ -20,7 +20,6 @@ Repositorio y versiones nuevas:
 - GPU compatible con Direct3D 12.
 - Tu copia legítima de **BCUS98232 1.12**.
 - Tu `GOWA.elf` descifrado. El paquete incluye el `GOWA.elf` de trabajo
-  que acompaña a esta versión; no incluye archivos del juego.
 - No hace falta instalar Visual C++, FFmpeg ni DXC: van incluidos.
 
 ## Instalación
@@ -115,3 +114,19 @@ Ejecutable:   {{EXE_SHA256}}
 Compilado:    {{DATE}}
 Repositorio:  https://github.com/cMc292/GOWA_cMc_OmniPort
 ```
+
+## Aviso legal
+
+Este release no contiene archivos del juego: ni `PS3_GAME`, ni `*.psarc`, ni
+`EBOOT`, ni vídeos, ni trofeos, ni claves o licencias de la consola.
+
+El ejecutable contiene código traducido del juego, obra derivada de
+*God of War: Ascension*: se ofrece para usarse con una copia legítima y la
+licencia MIT del proyecto no la cubre.
+
+*God of War* es una marca de Sony Interactive Entertainment LLC /
+Santa Monica Studio. Proyecto de aficionados, sin ánimo de lucro, no afiliado
+a Sony.
+
+> **Nota:** si el paquete incluye GOWA.elf, ese ELF de trabajo debe retirarse
+> antes de publicar para que el aviso anterior sea estrictamente literal.

@@ -80,3 +80,16 @@ Subsistema PE: 2 (Windows GUI)
 
 Repositorio y versiones:
 <https://github.com/cMc292/GOWA_cMc_OmniPort>
+
+## Aviso legal
+
+Este release no contiene archivos del juego: ni `PS3_GAME`, ni `*.psarc`, ni
+`EBOOT`, ni vídeos, ni trofeos, ni claves o licencias de la consola.
+
+El ejecutable contiene código traducido del juego, obra derivada de
+*God of War: Ascension*: se ofrece para usarse con una copia legítima y la
+licencia MIT del proyecto no la cubre.
+
+*God of War* es una marca de Sony Interactive Entertainment LLC /
+Santa Monica Studio. Proyecto de aficionados, sin ánimo de lucro, no afiliado
+a Sony.
