@@ -1,5 +1,5 @@
-{
-  "sha256": "E24B35472A537F8E9972C0DFF93B4482B34C53E1F83FA28C1559CAF29C151544",
-  "source": "build/GOWA-cMc.exe",
-  "note": "Exact full-build executable: same behaviour as build, including first-run ELF generation"
+﻿{
+    "sha256":  "A6C3C22E9C7433846773B20C56F0EA47D52BA3DE85556BAE72FD4A48BEF43601",
+    "source":  "build/GOWA-cMc.exe",
+    "note":  "Exact full executable; console auto-hides when GOWA.elf is ready"
 }

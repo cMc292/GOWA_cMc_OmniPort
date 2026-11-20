@@ -2759,6 +2759,7 @@ static void prepare_end(void)
     s_prep.thread = NULL;
 }
 
+static void console_for_prepare(void);
 static void prepare_done(void)
 {
     prepare_end();
@@ -2770,6 +2771,7 @@ static void prepare_done(void)
     }
     game_paths_fill();
     game_refresh();
+    console_for_prepare();
 #ifdef PORT_GAME_MODULE
     if (s_kit.state == 1 || s_kit.state == 2) {   /* the game's code next, built here once */
         kit_start();
@@ -3950,6 +3952,14 @@ static void ui_release(void)
     drop(s_d2d);
 }
 
+/* The launcher keeps the console only while it needs to prepare the game. */
+static void console_for_prepare(void)
+{
+    const HWND c = GetConsoleWindow();
+    if (!c) return;
+    ShowWindow(c, s_rc.elf_ok ? SW_HIDE : SW_SHOW);
+}
+
 extern "C" int gowa_launcher(void)
 {
     s_t0 = GetTickCount64();
@@ -3967,6 +3977,7 @@ extern "C" int gowa_launcher(void)
         opt_set(s_popt[i], ps3_settings_str(s_popt[i].section, s_popt[i].key, NULL, s_popt[i].def));
     i18n_init(ps3_settings_str("launcher", "language", "GOWA_LAUNCHER_LANGUAGE", NULL));
     ready_check();
+    console_for_prepare();
 
     /* COM for WIC, given back before the game starts (its audio takes it multithreaded). */
     const HRESULT com = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
